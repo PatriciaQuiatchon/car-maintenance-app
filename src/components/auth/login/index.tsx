@@ -22,7 +22,10 @@ const SignInForm = () => {
       initialValues={initialValues}
       validationSchema={registerSchema}
       onSubmit={async (values) => {
-          auth.loginAction(values)
+          auth.loginAction({
+            ...values,
+            name: null
+          })
       }}
     >
       {(formik) => {
