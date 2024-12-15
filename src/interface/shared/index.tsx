@@ -1,6 +1,7 @@
 export interface IUserDetails {
     name: string,
     email: string,
+    role: string,
 }
 
 export interface IUserCredentials {

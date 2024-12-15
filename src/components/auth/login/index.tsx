@@ -19,70 +19,74 @@ const SignInForm = () => {
   const auth = useAuth()
   return (
     <Formik
-      initialValues={initialValues}
-      validationSchema={registerSchema}
-      onSubmit={async (values) => {
-          auth.loginAction({
-            ...values,
-            name: null
-          })
-      }}
-    >
-      {(formik) => {
-        const { errors, touched, isValid, dirty } = formik;
-        return (
-          <div className="container">
-            <Typography variant="h3" m={3}>Log In</Typography>
-            <Form>
-              <Stack className="form-row" spacing={2} mb={2}>
-                <TextField
-                  size="medium"
-                  hiddenLabel
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="Email"
+  initialValues={initialValues}
+  validationSchema={registerSchema}
+  onSubmit={async (values) => {
+    console.log({ values });
+    auth.loginAction({
+      ...values,
+      name: null // Check if this is necessary
+    });
+  }}
+>
+  {(formik) => {
+    const { errors, touched, isValid, dirty, handleSubmit, handleChange } = formik;
 
-                  sx={{
-                    color: "white",
-                    backgroundColor: "white"
-                  }}
-                  // className={errors.email && touched.email ? "input-error" : ""}
-                />
-                {/* <ErrorMessage name="email" component="span" className="error" /> */}
-                <TextField
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Password"
-                  sx={{
-                    color: "white",
-                    backgroundColor: "white"
-                  }}
-                  className={
-                    errors.password && touched.password ? "input-error" : ""
-                  }
-                />
-                {/* <ErrorMessage
-                  name="password"
-                  component="span"
-                  className="error"
-                /> */}
-              </Stack>
+    return (
+      <div className="container">
+        <Typography variant="h3" m={3}>Log In</Typography>
+        <Form onSubmit={handleSubmit}>
+          <Stack className="form-row" spacing={2} mb={2}>
+            <TextField
+              size="medium"
+              hiddenLabel
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Email"
+              sx={{
+                color: "white",
+                backgroundColor: "white"
+              }}
+              onChange={handleChange}
+              className={errors.email && touched.email ? "input-error" : ""}
+            />
+            {errors.email && touched.email && (
+              <span className="error">{errors.email}</span>
+            )}
+            
+            <TextField
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password"
+              sx={{
+                color: "white",
+                backgroundColor: "white"
+              }}
+              onChange={handleChange}
+              className={errors.password && touched.password ? "input-error" : ""}
+            />
+            {errors.password && touched.password && (
+              <span className="error">{errors.password}</span>
+            )}
+            
+          <button
+            style={{ color: "whitesmoke" }}
+            type="submit"
+            className={!(dirty && isValid) ? "disabled-btn" : ""}
+            // disabled={!dirty || !isValid}
+          >
+            Sign In
+          </button>
+          </Stack>
 
-              <button
-                style={{color: "whitesmoke"}}
-                type="submit"
-                className={!(dirty && isValid) ? "disabled-btn" : ""}
-                disabled={!(dirty && isValid)}
-              >
-                Sign In
-              </button>
-            </Form>
-          </div>
-        );
-      }}
-    </Formik>
+        </Form>
+      </div>
+    );
+  }}
+</Formik>
+
   );
 };
 

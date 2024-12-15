@@ -5,6 +5,11 @@ import './App.css'
 import AuthProvider from './hooks/authProvider'
 import PrivateRoute from './routes';
 import AuthPage from './pages/auth';
+import Dashboard from "./pages/dashboard";
+import ServiceHistory from "./pages/service-history";
+import RepairRequest from "./pages/repair-request";
+import Settings from "./pages/settings";
+import Users from "./pages/user";
 
 function App() {
 
@@ -14,9 +19,16 @@ function App() {
         <AuthProvider>
           <Routes>
             <Route path="/" element={<AuthPage />} />
+            <Route path="/admin" element={<AuthPage />} />
             <Route path="/register" element={<AuthPage />} />
             <Route element={<PrivateRoute />}>
-              {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/service-history" element={<ServiceHistory />} />
+              <Route path="/service-history/:id" element={<ServiceHistory />} />
+              <Route path="/repair-request" element={<RepairRequest />} />
+              <Route path="/repair-request/:id" element={<RepairRequest />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/users" element={<Users />} />
             </Route>
             {/* Other routes */}
           </Routes>

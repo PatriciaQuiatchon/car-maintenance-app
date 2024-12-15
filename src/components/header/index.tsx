@@ -1,8 +1,15 @@
+import { FC } from 'react';
 import { Avatar, Box, Stack, Typography } from "@mui/material";
 import { blueGrey } from '@mui/material/colors';
 import { useNavigate } from "react-router-dom";
 
-const Header = () => {
+interface IHeader {
+    isAdmin: boolean
+}
+
+const Header:FC<IHeader> = (props) => {
+
+    const { isAdmin } = props
 
     const navigate = useNavigate();
 
@@ -12,10 +19,10 @@ const Header = () => {
                 <Avatar sx={{ bgcolor: blueGrey[500] }}>
                 CM
                 </Avatar>
-                <Stack direction={"row"} spacing={1} display="flex" justifyItems="center" alignItems="center">
+                { !isAdmin && (<Stack direction={"row"} spacing={1} display="flex" justifyItems="center" alignItems="center">
                     <Typography>Log in as Admin?</Typography>
-                    <Typography onClick={() => { navigate("/admin/login") }} sx={{ cursor: "pointer", fontWeight: 700 }}>Login</Typography>
-                </Stack>
+                    <Typography onClick={() => { navigate("/admin") }} sx={{ cursor: "pointer", fontWeight: 700 }}>Login</Typography>
+                </Stack>)}
             </Stack>
         </Box>
     )

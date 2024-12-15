@@ -1,6 +1,7 @@
 import { useContext, createContext, ReactNode, FC, useState } from "react";
 import { IUserCredentials, IUserDetails } from "../interface/shared";
 import { useNavigate } from "react-router-dom";
+import api from "../config/api";
 
 interface AuthContextType {
   user:  IUserDetails | null;
@@ -26,24 +27,16 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const loginAction = async (data: IUserCredentials) => {
     try {
-      const response = await fetch("", {
-        method: "POST",
-        headers:  {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data)
-      })
+      const response = await api.post("/api/auth/login", data);
 
-      const res = await response.json();
-
-      if(res.data) {
-        setUser(res.data.user);
-        setToken(res.token);
-        localStorage.setItem("site", res.token);
+      if(response.data) {
+        setUser(response.data.user);
+        setToken(response.data.token);
+        localStorage.setItem("site", response.data.token);
         navigate("/dashboard");
         return;
       }
-      throw new Error(res.message);
+      throw new Error(response.data.message);
     } catch (err) {
       console.error(err);
     }
@@ -78,7 +71,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     setUser(null);
     setToken("");
     localStorage.removeItem("site");
-    navigate("/login");
+    navigate("/");
   };
 
   const value = { token, user, loginAction, logout, registerAction }
