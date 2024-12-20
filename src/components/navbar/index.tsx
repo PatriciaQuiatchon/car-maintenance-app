@@ -59,7 +59,7 @@ const NavBar = () => {
                         onClick={() => { navigate("/registered-vehicle") }}
                     >Registered Vehicle</StyledButton>
                     <StyledButton
-                        sx={{ backgroundColor: checkCurrentTab("service") ? blue[600] : "" }}
+                        sx={{ backgroundColor: checkCurrentTab("service-history") ? blue[600] : "" }}
                         onClick={() => { navigate("/service-history") }}
                     >Service History</StyledButton>
                     <Tooltip title="Account settings">

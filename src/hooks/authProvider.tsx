@@ -6,6 +6,7 @@ import api from "../config/api";
 interface AuthContextType {
   user:  IUserDetails | null;
   token: string;
+  role: string;
   loginAction: (data: IUserCredentials) => void;
   registerAction: (data: IUserCredentials) => void;
   logout: () => void;
@@ -23,6 +24,9 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const localStorageToken = localStorage.getItem("site") || ""
   const [token, setToken] = useState<string>(localStorageToken)
 
+  const localStorageRole = localStorage.getItem("role") || ""
+  const [role, setRole] = useState<string>(localStorageRole)
+
   const navigate = useNavigate()
 
   const loginAction = async (data: IUserCredentials) => {
@@ -32,7 +36,9 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       if(response.data) {
         setUser(response.data.user);
         setToken(response.data.token);
+        setRole(response.data.user.role);
         localStorage.setItem("site", response.data.token);
+        localStorage.setItem("role", response.data.user.role);
         navigate("/dashboard");
         return;
       }
@@ -48,10 +54,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       const response = await api.post("/api/auth/register", data);
 
       if(response.data) {
-        setUser(response.data.user);
-        setToken(response.data.token);
-        localStorage.setItem("site", response.data.token);
-        navigate("/dashboard");
+        navigate("/");
         return;
       }
       throw new Error(response.data.message);
@@ -67,7 +70,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     navigate("/");
   };
 
-  const value = { token, user, loginAction, logout, registerAction }
+  const value = { token, role, user, loginAction, logout, registerAction }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
