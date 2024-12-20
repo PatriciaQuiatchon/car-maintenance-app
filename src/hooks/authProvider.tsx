@@ -44,24 +44,17 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const registerAction = async (data: IUserCredentials) => {
     try {
-      const response = await fetch("", {
-        method: "POST",
-        headers:  {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data)
-      })
 
-      const res = await response.json();
+      const response = await api.post("/api/auth/register", data);
 
-      if(res.data) {
-        setUser(res.data.user);
-        setToken(res.token);
-        localStorage.setItem("site", res.token);
+      if(response.data) {
+        setUser(response.data.user);
+        setToken(response.data.token);
+        localStorage.setItem("site", response.data.token);
         navigate("/dashboard");
         return;
       }
-      throw new Error(res.message);
+      throw new Error(response.data.message);
     } catch (err) {
       console.error(err);
     }

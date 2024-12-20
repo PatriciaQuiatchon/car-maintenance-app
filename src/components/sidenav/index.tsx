@@ -54,7 +54,7 @@ const SideBar = () => {
                         onClick={() => { navigate("/settings") }}
                     >Settings</StyledButton>
                     <StyledButton
-                        sx={{ backgroundColor: checkCurrentTab("settings") ? blue[600] : "" }}
+                        sx={{ backgroundColor: checkCurrentTab("logout") ? blue[600] : "" }}
                         onClick={() => { auth.logout(); }}
                     >Logout</StyledButton>
                 </Stack>

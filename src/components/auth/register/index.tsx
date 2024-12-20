@@ -2,6 +2,7 @@ import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useAuth } from "../../../hooks/authProvider";
 import { Stack, TextField, Typography } from "@mui/material";
+import './style.css';
 
 const registerSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -28,28 +29,29 @@ const SignUpForm = () => {
         auth.registerAction({
           ...values,
         })
-        console.log(values);
       }}
     >
       {(formik) => {
-        const { errors, touched, isValid, dirty } = formik;
+        const { errors, touched, isValid, dirty, handleChange, handleBlur } = formik;
         return (
           <div className="container">
             <Typography variant="h3" m={3}>Create an account</Typography>
             <Form>
-            <Stack className="form-row" spacing={2} mb={2}>
-            <TextField
-                  size="medium"
-                  hiddenLabel
-                  type="text"
+              <Stack className="form-row" spacing={2} mb={2}>
+                <TextField
+                  label="Name"
                   name="name"
-                  id="name"
-                  placeholder="Name"
+                  fullWidth
+                  variant="outlined"
+                  margin="dense"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                   sx={{
                     color: "white",
-                    backgroundColor: "white",
-                    borderColor: errors.name && touched.name ? "red" : ""
+                    backgroundColor: "white"
                   }}
+                  error={!!(errors.name && touched.name)}
+                  required
                 />
                 <ErrorMessage
                   name="name"
@@ -57,38 +59,39 @@ const SignUpForm = () => {
                   className="error"
                 />
               <TextField
-                  size="medium"
-                  hiddenLabel
-                  type="email"
+                  label="Email"
                   name="email"
-                  id="email"
-                  placeholder="Email"
+                  fullWidth
+                  variant="outlined"
+                  margin="dense"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                   sx={{
                     color: "white",
                     backgroundColor: "white"
                   }}
-                  className={errors.email && touched.email ? "input-error" : ""}
+                  error={!!(errors.email && touched.email)}
+                  required
                 />
-                <span>
-                  {errors.email}
-                </span>
                 <ErrorMessage
                   name="email"
                   component="span"
                   className="error"
                 />
                 <TextField
-                  type="password"
+                  label="Password"
                   name="password"
-                  id="password"
-                  placeholder="Password"
+                  fullWidth
+                  variant="outlined"
+                  margin="dense"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                   sx={{
                     color: "white",
                     backgroundColor: "white"
                   }}
-                  className={
-                    errors.password && touched.password ? "input-error" : ""
-                  }
+                  error={!!(errors.password && touched.password)}
+                  required
                 />
                 <ErrorMessage
                   name="password"
