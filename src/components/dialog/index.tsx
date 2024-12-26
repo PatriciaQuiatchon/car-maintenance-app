@@ -7,15 +7,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import Typography from '@mui/material/Typography';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
-    padding: theme.spacing(2),
-  },
-  '& .MuiDialogActions-root': {
-    padding: theme.spacing(1),
-  },
+    '& .MuiDialogContent-root': {
+        padding: theme.spacing(2),
+    },
+    '& .MuiDialogActions-root': {
+        padding: theme.spacing(1),
+    },
 }));
 
 interface IDialog {
@@ -25,22 +24,23 @@ interface IDialog {
     handleClose: () => void
     handleSubmit: () => void
     children: React.ReactNode
+    isSubmitButtonDisabled:boolean
 }
 
 const CustomDialog:React.FC<IDialog> = (props) => {
 
-    const { title, isOpen, isSubmitting } = props
+    const { title, isOpen, isSubmitting, isSubmitButtonDisabled } = props
 
     const { handleClose, handleSubmit } = props
 
     const { children } = props
 
     return (
-        <React.Fragment>
         <BootstrapDialog
             onClose={handleClose}
             aria-labelledby="customized-dialog-title"
             open={isOpen}
+            fullWidth
         >
             <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
                 {title}
@@ -65,12 +65,11 @@ const CustomDialog:React.FC<IDialog> = (props) => {
             { !isSubmitting && (<Button autoFocus onClick={handleClose}>
                 Cancel
             </Button>)}
-            <Button autoFocus disabled={isSubmitting} onClick={handleSubmit}>
+            <Button type="submit" variant='contained' autoFocus disabled={isSubmitting || isSubmitButtonDisabled} onClick={handleSubmit}>
                 Save changes
             </Button>
             </DialogActions>
         </BootstrapDialog>
-        </React.Fragment>
     );
 }
 

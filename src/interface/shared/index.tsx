@@ -1,18 +1,32 @@
-export interface IUserDetails {
-    name: string,
-    email: string,
-    role: string,
-}
-
 export interface IUserCredentials {
     name: string | null,
     email: string,
     password: string
 }
 
-export interface IService {
-    service_id: string,
+
+export interface IBase {
     name: string,
-    description: string,
-    price: number
 }
+
+export interface IService extends IBase {
+    service_id: string,
+    description: string,
+    price: number,
+}
+
+export interface IUserDetails extends IBase {
+    email: string,
+    role: string,
+    user_id: string,
+    password: string | undefined
+    confirm_password: string | undefined
+}
+
+export type ITable<T> = {
+    type: "IService" | "IUserDetails";
+    headers: (keyof T)[];
+    rows: (string | number)[][];
+    handleEdit: (data: T) => void;
+    handleRemove: (id: string) => void;
+};

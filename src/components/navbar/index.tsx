@@ -40,7 +40,7 @@ const NavBar = () => {
     };
 
     return (
-        <Box position={"absolute"} sx={{ boxShadow: "15px", backgroundColor: blueGrey[500], top: 0, left:0}} width={"100%"}>
+        <Box position={"absolute"} sx={{ top: 0, left:0}} width={"100%"}>
             <Stack direction="row" paddingY={1} width="100%" position={"relative"} justifyContent="space-evenly" display="flex" alignItems="center">
                     <StyledButton 
                         sx={{ backgroundColor: checkCurrentTab("dashboard") ? blue[600] : "" }}

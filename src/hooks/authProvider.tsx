@@ -27,6 +27,9 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const localStorageRole = localStorage.getItem("role") || ""
   const [role, setRole] = useState<string>(localStorageRole)
 
+  const localStorageEmail = localStorage.getItem("email") || ""
+  const [email, setEmail] = useState<string>(localStorageEmail)
+
   const navigate = useNavigate()
 
   const loginAction = async (data: IUserCredentials) => {
@@ -37,8 +40,10 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         setUser(response.data.user);
         setToken(response.data.token);
         setRole(response.data.user.role);
+        setEmail(response.data.user.email);
         localStorage.setItem("site", response.data.token);
         localStorage.setItem("role", response.data.user.role);
+        localStorage.setItem("email", response.data.user.email);
         navigate("/dashboard");
         return;
       }
@@ -67,10 +72,12 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     setUser(null);
     setToken("");
     localStorage.removeItem("site");
+    localStorage.removeItem("email");
+    localStorage.removeItem("role");
     navigate("/");
   };
 
-  const value = { token, role, user, loginAction, logout, registerAction }
+  const value = { token, role, email, user, loginAction, logout, registerAction }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
