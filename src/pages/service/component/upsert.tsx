@@ -3,7 +3,7 @@ import * as Yup from "yup";
 
 import CustomDialog from "../../../components/dialog";
 import { Stack, TextField } from "@mui/material";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import api from "../../../config/api";
 import { IService } from "../../../interface/shared";
 

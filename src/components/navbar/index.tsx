@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, IconButton, ListItemIcon, Menu, MenuItem, Stack, Tooltip } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { blue, blueGrey } from "@mui/material/colors";
+import { blue } from "@mui/material/colors";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/authProvider";
 import { Logout, Settings } from "@mui/icons-material";
