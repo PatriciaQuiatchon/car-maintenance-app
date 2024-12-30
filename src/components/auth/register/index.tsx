@@ -81,6 +81,7 @@ const SignUpForm = () => {
                 <TextField
                   label="Password"
                   name="password"
+                  type="password"
                   fullWidth
                   variant="outlined"
                   margin="dense"

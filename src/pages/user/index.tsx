@@ -1,30 +1,158 @@
-import { Box, Typography } from "@mui/material";
-import CustomTable from "../../components/table"
-import Wrapper from "../../components/wrapper"
+import { useEffect, useState } from "react";
+import Wrapper from "../../components/wrapper";
+import { ITable, IUserDetails } from "../../interface/shared";
+import api from "../../config/api";
+import { TableWrapper } from "../../components/table";
+import { Button, Grid2, MenuItem, Select, Typography } from "@mui/material";
+import { useAuth } from "../../hooks/authProvider";
+import UserUpsert from "./component/upsert";
+import ConfirmationRemove from "../../components/confirmation";
+import EmptyData from "../../components/no-data";
+import handleError from "../../components/error";
+import { AxiosError } from "axios";
 
-const Users = () => {
+const User = () => {
 
-    const headers = ['Name', 'Email', 'Role', 'Action'];
-    const rows = [
-    ['John Doe', 28, 'USA', 'Engineer'],
-    ['Jane Smith', 34, 'Canada', 'Designer'],
-    ['Sam Wilson', 23, 'UK', 'Developer'],
-    ];
+    const auth = useAuth();
+    const hasEditAccess = ['admin', 'employee'].includes(auth.role || "")
+    
+    const initial:IUserDetails = {
+       name: "", email: "", role: "", user_id:"", confirm_password: "", password: "",
+    }
+    
+    const [users, setUsers] = useState<IUserDetails[]>([])
+    const [user, setUser] = useState<IUserDetails>(initial)
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isDelete, setIsDelete] = useState<boolean>(false);
+    const [isSubmitting, _setIsSubmitting] = useState<boolean>(false);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+    const [role, setRole] = useState<string>("admin")
+
+
+    const fetchUsers = async () => {
+        try {
+            setIsLoading(!isLoading)
+            const response = await api.get(`/api/users/${role}`);
+            setUsers(response.data)
+        } catch (error){
+            handleError(error as AxiosError); 
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    const handleChangeRole = (role:string) => {
+        setRole(role)
+    }
+
+    const handleSucces = () => {
+        fetchUsers();
+    }
+
+    const handleEdit = (data: IUserDetails) => {
+        setIsModalOpen(!isModalOpen)
+        setUser(data)
+    }
+
+    const handleRemove = (id: string) => {
+        setUser((prev) => ({
+            ...prev,
+            user_id: id,
+        }))
+        setIsDelete(!isDelete)
+    }
+
+    useEffect(() => {
+        fetchUsers();
+    }, [role])
+
+    const removeUser = async () => {
+        try {
+            const response = await api.delete(`/api/user/${user.user_id}`);
+
+            if (response) {
+                fetchUsers();
+            } else {
+            }
+        } catch (e){
+
+        } finally {
+            setIsDelete(!isDelete)
+            setUser(initial)
+        }
+    }
+
+    const handleChangeModal = () => {
+        setUser(initial)
+        setIsModalOpen(!isModalOpen)
+    }
+
+    const UserTable: ITable<IUserDetails> = {
+        type: "IService",
+        headers: ["user_id", "name", "email", "role"],
+        rows:  users.filter(item => item.email !== auth.user?.email).map(item => [item.user_id, item.name, item.email, item.role]),
+        handleEdit: (data) => handleEdit(data),
+        handleRemove: (id) => handleRemove(id),
+    };
+
     return (
         <Wrapper>
             <>
-                <Box>
-                    <Typography variant="h4">
-                        Manage Users
+            {
+                hasEditAccess && 
+                <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', marginLeft:"20px", width:"100%", justifyContent: 'space-between' }}>
+                    <Grid2 size={ {xs: 11, sm: 11, md: 3} }>
+                        <Select
+                            sx={{ width: "100%", height: "40px" }}
+                            labelId="demo-simple-select-label"
+                            name="role"
+                            id="role"
+                            value={role}
+                            onChange={(event) => handleChangeRole(event.target.value)}
+                        >
+                            <MenuItem value={"admin"}>Admin</MenuItem>
+                            <MenuItem value={"employee"}>Employee</MenuItem>
+                            <MenuItem value={"user"}>User</MenuItem>
+                        </Select>
+
+                    </Grid2>
+                    <Grid2 size={ {xs: 11, sm: 11, md: 3} }>
+                        <Button 
+                            sx={{ width: "100%" }}
+                            variant="contained" color="success" onClick={() => setIsModalOpen(!isModalOpen)}>
+                            New User
+                        </Button>
+                    </Grid2>
+                </Grid2>
+            }
+            { users?.length > 0 ? 
+                <TableWrapper {...UserTable} />
+                : <EmptyData>
+                    <Typography>
+                        No available Users
                     </Typography>
-                </Box>
-                <CustomTable 
-                    headers={headers}
-                    rows={rows}
-                />
+                </EmptyData>
+            }
+            { isModalOpen && (<UserUpsert 
+                handleCloseModal={handleChangeModal}
+                handleSucces={handleSucces}
+                isModalOpen={isModalOpen}
+                isSubmitting={isSubmitting}
+                initialData={user}
+            />)}
             </>
+            {
+                isDelete && (
+                    <ConfirmationRemove 
+                        isOpen={isDelete}
+                        onClose={() => setIsDelete(false)}
+                        onSubmit={removeUser}
+                    />
+                )
+            }
         </Wrapper>
     )
 }
 
-export default Users
+export default User;

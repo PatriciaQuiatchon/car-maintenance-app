@@ -42,13 +42,18 @@ const SideBar = () => {
                         onClick={() => { navigate("/repair-request") }}
                     >Repair Request</StyledButton>
                     <StyledButton
-                        sx={{ backgroundColor: checkCurrentTab("service") ? blue[600] : "" }}
+                        sx={{ backgroundColor: checkCurrentTab("service-history") ? blue[600] : "" }}
                         onClick={() => { navigate("/service-history") }}
                     >Service History</StyledButton>
                     <StyledButton
                         sx={{ backgroundColor: checkCurrentTab("users") ? blue[600] : "" }}
                         onClick={() => { navigate("/users") }}
                     >Users</StyledButton>
+                    <StyledButton
+                        sx={{ backgroundColor: checkCurrentTab("services") ? blue[600] : "" }}
+                        onClick={() => { navigate("/services") }}
+                    >Services</StyledButton>
+                    
                     <StyledButton
                         sx={{ backgroundColor: checkCurrentTab("settings") ? blue[600] : "" }}
                         onClick={() => { navigate("/settings") }}

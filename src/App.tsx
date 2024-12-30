@@ -10,6 +10,7 @@ import ServiceHistory from "./pages/service-history";
 import RepairRequest from "./pages/repair-request";
 import Settings from "./pages/settings";
 import Users from "./pages/user";
+import Service from "./pages/service";
 
 function App() {
 
@@ -29,6 +30,8 @@ function App() {
               <Route path="/repair-request/:id" element={<RepairRequest />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/users" element={<Users />} />
+              <Route path="/services" element={<Service />} />
+
             </Route>
             {/* Other routes */}
           </Routes>

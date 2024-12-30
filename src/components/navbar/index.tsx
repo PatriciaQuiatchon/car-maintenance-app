@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, IconButton, ListItemIcon, Menu, MenuItem, Stack, Tooltip } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { blue, blueGrey } from "@mui/material/colors";
+import { blue } from "@mui/material/colors";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/authProvider";
 import { Logout, Settings } from "@mui/icons-material";
@@ -40,7 +40,7 @@ const NavBar = () => {
     };
 
     return (
-        <Box position={"absolute"} sx={{ boxShadow: "15px", backgroundColor: blueGrey[500], top: 0, left:0}} width={"100%"}>
+        <Box position={"absolute"} sx={{ top: 0, left:0}} width={"100%"}>
             <Stack direction="row" paddingY={1} width="100%" position={"relative"} justifyContent="space-evenly" display="flex" alignItems="center">
                     <StyledButton 
                         sx={{ backgroundColor: checkCurrentTab("dashboard") ? blue[600] : "" }}
@@ -59,7 +59,7 @@ const NavBar = () => {
                         onClick={() => { navigate("/registered-vehicle") }}
                     >Registered Vehicle</StyledButton>
                     <StyledButton
-                        sx={{ backgroundColor: checkCurrentTab("service") ? blue[600] : "" }}
+                        sx={{ backgroundColor: checkCurrentTab("service-history") ? blue[600] : "" }}
                         onClick={() => { navigate("/service-history") }}
                     >Service History</StyledButton>
                     <Tooltip title="Account settings">
