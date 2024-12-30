@@ -3,6 +3,7 @@ import { styled } from '@mui/system';
 import { grey } from '@mui/material/colors';
 import { IBase, ITable } from '../../interface/shared';
 import { useAuth } from '../../hooks/authProvider';
+import { useLocation, useNavigate } from 'react-router-dom';
 // Custom styled components
 const StyledTableContainer = styled(TableContainer)(({ }) => ({
   borderRadius: '8px',
@@ -12,7 +13,6 @@ const StyledTableContainer = styled(TableContainer)(({ }) => ({
 
 const StyledGridContainer = styled(Grid2)(({ }) => ({
   borderRadius: '8px',
-  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
   margin: '20px',
 }));
 
@@ -38,10 +38,27 @@ const CustomRow = styled(TableRow, {
 const CustomTable = <T extends IBase>(props: ITable<T>) => {
   const { headers, rows, handleEdit, handleRemove } = props;
   const auth = useAuth();
-  const hasEditAccess = ["admin", "employee"].includes(auth.role || "");
+  const location = useLocation();
+  const navigation = useNavigate();
+
+  const pathExempted = ["/registered-vehicle",]
+
+  
+  const hasEditAccess = pathExempted.includes(location.pathname) || ["admin", "employee"].includes(auth.role || "");
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+
+  const handleNavigateDetail = (id: string) => {
+    navigation(`${location.pathname}/${id}`)
+  }
+
+  const formatName = (name: string) => {
+    return name
+      .split('_')
+      .join(' ');
+  };
+
   return (
     <>
       {
@@ -52,7 +69,9 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
               <TableRow>
                 <StyledTableCell style={{ display: "none"}} key="header-id">ID</StyledTableCell>
                 {headers.map((header, index) => (
-                <StyledTableCell key={index} style={{ display: index === 0 ? "none" : "" }}>{String(header).toUpperCase()}</StyledTableCell>
+                <StyledTableCell key={index} style={{ display: index === 0 ? "none" : "" }}>
+                  {formatName(String(header).toUpperCase())}
+                  </StyledTableCell>
               ))}
               {
                 hasEditAccess && 
@@ -68,7 +87,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                 return acc;
             }, {} as T);
               return (
-              <CustomRow key={rowIndex} highlight={rowIndex % 2 === 0}>
+              <CustomRow onClick={() => handleNavigateDetail(row[0] as string)} key={rowIndex} highlight={rowIndex % 2 === 0}>
                 {row.map((cell, cellIndex) => {
                   const cellClass = cellIndex === 0 ? "none" : "";
                   return (
@@ -81,12 +100,18 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                     variant='contained'
                     color='info'
                     sx={{ marginRight: '5px' }}
-                    onClick={() => handleEdit(combined)}
+                    onClick={(event) => {  
+                      event.stopPropagation();
+                      handleEdit(combined)}
+                    }
                   >Edit</Button>
                   <Button
                     variant='contained'
                     color='error'
-                    onClick={() => handleRemove(row[0] as string)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleRemove(row[0] as string)
+                    }}
                   >Remove</Button>
                 </TableCell>)}
               </CustomRow>
@@ -103,20 +128,21 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
             }, {} as T);
 
             return (
-              <Grid2 size={12} key={rowIndex}> {/* Adjust column width based on screen size */}
-                <Card >
+              <Grid2 size={{ xs: 12, sm: auth.role === "admin" ? 12 : 6  }} key={rowIndex}>
+                <Card sx={{height: "180px", display: "flex", justifyContent: "center", alignItems: "center", padding:"5px" }}>
                   <CardContent>
                     {headers.slice(1).map((header, index) => {
                       const cellValue = row[index + 1];
                       return (
                         <Typography key={index} variant="body2" color="textSecondary" gutterBottom>
-                          <strong>{String(header).toUpperCase()}:</strong> {cellValue}
+                          <strong>
+                            {formatName(String(header).toUpperCase())}:
+                            </strong> {cellValue}
                         </Typography>
                       );
                     })}
-                  </CardContent>
                   {hasEditAccess && (
-                    <CardActions sx={{ display: "flex", justifyContent: "center" }}>
+                    <CardActions sx={{ display: "flex", justifyContent: "center",  marginTop: 'auto', justifyItems: "flex-end" }}>
                       <Button
                         variant="contained"
                         color="info"
@@ -133,6 +159,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                       </Button>
                     </CardActions>
                   )}
+                  </CardContent>
                 </Card>
               </Grid2>
             );

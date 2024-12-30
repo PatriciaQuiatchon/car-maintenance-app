@@ -23,8 +23,42 @@ export interface IUserDetails extends IBase {
     confirm_password: string | undefined
 }
 
+export interface IVehicle extends IBase {
+    vehicle_id: string,
+    user_id: string,
+    type: string,
+    model: string,
+    plate_number: string,
+}
+
+export interface IRepaireRequestDetails extends IRepaireRequest {
+    available_mechanic?: string,
+    note?: string,
+}
+
+export interface IRepaireRequest extends IBase {
+    request_id: string,
+    service_type: string,
+    date: string,
+    plate_number: string,
+}
+
+export interface IServiceHistory extends IBase {
+    date: string,
+    user_name: string,
+    history_id: string,
+    car_name: string,
+    plate_number: string,
+    service: string,
+    amount: string
+}
+
+export interface IServiceRequested extends IBase {
+    request_id: string
+}
+
 export type ITable<T> = {
-    type: "IService" | "IUserDetails";
+    type: "IService" | "IUserDetails" | "IServiceHistory" | "IServiceRequested" | "IRepaireRequestDetails" | "IVehicle";
     headers: (keyof T)[];
     rows: (string | number)[][];
     handleEdit: (data: T) => void;

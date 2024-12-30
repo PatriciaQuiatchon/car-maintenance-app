@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
 import Wrapper from "../../components/wrapper";
-import { ITable, IRepaireRequest, IRepaireRequestDetails } from "../../interface/shared";
+import { ITable, IVehicle } from "../../interface/shared";
 import api from "../../config/api";
 import { TableWrapper } from "../../components/table";
 import {Button, Grid2, Typography } from "@mui/material";
 import { useAuth } from "../../hooks/authProvider";
-import RepaireRequestUpsert from "./component/upsert";
+import VehicleUpsert from "./component/upsert";
 import ConfirmationRemove from "../../components/confirmation";
 import EmptyData from "../../components/no-data";
 import handleError from "../../components/error";
 import { AxiosError } from "axios";
 import Loader from "../../components/loading";
 
-const RepaireRequest = () => {
+const Vehicle = () => {
 
     const auth = useAuth();
     
-    const initial:IRepaireRequestDetails = {
-       name: "", plate_number: "", service_type: "", date: "", request_id: "",
+    const initial:IVehicle = {
+       name: "", model: "", plate_number: "", type: "", vehicle_id: "", user_id: "",
     }
     
-    const [repaireRequests, setRepaireRequests] = useState<IRepaireRequestDetails[]>([])
-    const [repaireRequest, setRepaireRequest] = useState<IRepaireRequestDetails>(initial)
+    const [vehicles, setVehicles] = useState<IVehicle[]>([])
+    const [vehicle, setVehicle] = useState<IVehicle>(initial)
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDelete, setIsDelete] = useState<boolean>(false);
     const [isSubmitting, _setIsSubmitting] = useState<boolean>(false);
@@ -30,8 +30,8 @@ const RepaireRequest = () => {
     const fetchData = async () => {
         try {
             setIsLoading(!isLoading)
-            const response = await api.get(`/api/service-requests/${auth.user?.user_id}`);
-            setRepaireRequests(response.data?.requests)
+            const response = await api.get(`/api/vehicles/${auth.user?.user_id}`);
+            setVehicles(response.data)
         } catch (error){
             handleError(error as AxiosError); 
         } finally {
@@ -43,15 +43,15 @@ const RepaireRequest = () => {
         fetchData();
     }
 
-    const handleEdit = (data: IRepaireRequest) => {
+    const handleEdit = (data: IVehicle) => {
         setIsModalOpen(!isModalOpen)
-        setRepaireRequest(data)
+        setVehicle(data)
     }
 
     const handleRemove = (id: string) => {
-        setRepaireRequest((prev) => ({
+        setVehicle((prev) => ({
             ...prev,
-            repaireRequest_id: id,
+            vehicle_id: id,
         }))
         setIsDelete(!isDelete)
     }
@@ -67,9 +67,9 @@ const RepaireRequest = () => {
         auth.user?.user_id && fetchData();
     }, [auth.user?.user_id])
 
-    const removeRepaireRequest = async () => {
+    const removeVehicle = async () => {
         try {
-            const response = await api.delete(`/api/repaireRequest/${repaireRequest.request_id}`);
+            const response = await api.delete(`/api/vehicle/${vehicle.vehicle_id}`);
 
             if (response) {
                 fetchData();
@@ -79,19 +79,19 @@ const RepaireRequest = () => {
 
         } finally {
             setIsDelete(!isDelete)
-            setRepaireRequest(initial)
+            setVehicle(initial)
         }
     }
 
     const handleChangeModal = () => {
-        setRepaireRequest(initial)
+        setVehicle(initial)
         setIsModalOpen(!isModalOpen)
     }
 
-    const UserTable: ITable<IRepaireRequest> = {
+    const UserTable: ITable<IVehicle> = {
         type: "IService",
-        headers: ["request_id", "name", "date", "service_type", "plate_number"],
-        rows:  repaireRequests?.map(item => [item.request_id, item.name, item.date, item.service_type, item.plate_number]) || [],
+        headers: ["vehicle_id", "name", "type", "model", "plate_number"],
+        rows:  vehicles.map(item => [item.vehicle_id, item.name, item.type, item.model, item.plate_number]),
         handleEdit: (data) => handleEdit(data),
         handleRemove: (id) => handleRemove(id),
     };
@@ -104,25 +104,25 @@ const RepaireRequest = () => {
                         <Button 
                             sx={{ width: "100%" }}
                             variant="contained" color="success" onClick={() => setIsModalOpen(!isModalOpen)}>
-                            New Request
+                            Register Vehicle
                         </Button>
                     </Grid2>
                 </Grid2>
-            { !isLoading ?  repaireRequests?.length > 0 ? 
+            { !isLoading ?  vehicles?.length > 0 ? 
                 <TableWrapper {...UserTable} />
                 : <EmptyData>
                     <Typography>
-                        No available Requests
+                        No available Vehicles
                     </Typography>
                 </EmptyData>
                 : <Loader />
             }
-            { isModalOpen && (<RepaireRequestUpsert 
+            { isModalOpen && (<VehicleUpsert 
                 handleCloseModal={handleChangeModal}
                 handleSucces={handleSucces}
                 isModalOpen={isModalOpen}
                 isSubmitting={isSubmitting}
-                initialData={repaireRequest}
+                initialData={vehicle}
             />)}
             </>
             {
@@ -130,7 +130,7 @@ const RepaireRequest = () => {
                     <ConfirmationRemove 
                         isOpen={isDelete}
                         onClose={() => setIsDelete(false)}
-                        onSubmit={removeRepaireRequest}
+                        onSubmit={removeVehicle}
                     />
                 )
             }
@@ -138,4 +138,4 @@ const RepaireRequest = () => {
     )
 }
 
-export default RepaireRequest;
+export default Vehicle;

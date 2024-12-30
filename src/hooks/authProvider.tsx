@@ -2,6 +2,8 @@ import { useContext, createContext, ReactNode, FC, useState } from "react";
 import { IUserCredentials, IUserDetails } from "../interface/shared";
 import { useNavigate } from "react-router-dom";
 import api from "../config/api";
+import handleError from "../components/error";
+import { AxiosError } from "axios";
 
 interface AuthContextType {
   user:  IUserDetails | null;
@@ -9,6 +11,7 @@ interface AuthContextType {
   role: string;
   loginAction: (data: IUserCredentials) => void;
   registerAction: (data: IUserCredentials) => void;
+  getUserProfile: () => void;
   logout: () => void;
 }
 
@@ -32,6 +35,19 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const navigate = useNavigate()
 
+  const getUserProfile = async () => {
+    try {
+      if(!user) {
+        const response = await api.get(`/api/user/email/${email}`)
+        if(response.data) {
+          setUser({...response.data});
+        }
+      }
+    } catch (error) {
+        handleError(error as AxiosError)
+    }
+  }
+
   const loginAction = async (data: IUserCredentials) => {
     try {
       const response = await api.post("/api/auth/login", data);
@@ -48,8 +64,8 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         return;
       }
       throw new Error(response.data.message);
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      handleError(error as AxiosError); 
     }
   }
 
@@ -77,7 +93,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     navigate("/");
   };
 
-  const value = { token, role, email, user, loginAction, logout, registerAction }
+  const value = { token, role, email, user, loginAction, logout, registerAction, getUserProfile }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

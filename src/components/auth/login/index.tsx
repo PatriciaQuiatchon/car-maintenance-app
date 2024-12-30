@@ -22,7 +22,6 @@ const SignInForm = () => {
   initialValues={initialValues}
   validationSchema={registerSchema}
   onSubmit={async (values) => {
-    console.log({ values });
     auth.loginAction({
       ...values,
       name: null // Check if this is necessary
