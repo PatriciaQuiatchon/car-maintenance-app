@@ -113,7 +113,8 @@ const User = () => {
                         >
                             <MenuItem value={"admin"}>Admin</MenuItem>
                             <MenuItem value={"employee"}>Employee</MenuItem>
-                            <MenuItem value={"user"}>User</MenuItem>
+                            <MenuItem value={"mechanic"}>Mechanic</MenuItem>
+                            <MenuItem value={"user"}>Customer</MenuItem>
                         </Select>
 
                     </Grid2>

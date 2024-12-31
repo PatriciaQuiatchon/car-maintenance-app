@@ -39,8 +39,10 @@ export interface IRepaireRequestDetails extends IRepaireRequest {
 export interface IRepaireRequest extends IBase {
     request_id: string,
     service_type: string,
-    date: string,
+    preferred_schedule: string,
     plate_number: string,
+    model:string,
+    vehicle_name: string
 }
 
 export interface IServiceHistory extends IBase {

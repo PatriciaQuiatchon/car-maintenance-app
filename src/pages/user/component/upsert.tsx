@@ -134,6 +134,7 @@ const ServiceUpsert:FC<IServiceUpsert> = (props) => {
                             >
                                 <MenuItem value={"admin"}>Admin</MenuItem>
                                 <MenuItem value={"employee"}>Employee</MenuItem>
+                                <MenuItem value={"mechanic"}>Mechanic</MenuItem>
                                 <MenuItem value={"user"}>User</MenuItem>
                             </Select>
                             </FormControl>

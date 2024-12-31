@@ -11,13 +11,14 @@ import EmptyData from "../../components/no-data";
 import handleError from "../../components/error";
 import { AxiosError } from "axios";
 import Loader from "../../components/loading";
+import dayjs from "dayjs";
 
 const RepaireRequest = () => {
 
     const auth = useAuth();
     
     const initial:IRepaireRequestDetails = {
-       name: "", plate_number: "", service_type: "", date: "", request_id: "",
+       name: "", plate_number: "", service_type: "", preferred_schedule: "", request_id: "", model: "", vehicle_name: "",
     }
     
     const [repaireRequests, setRepaireRequests] = useState<IRepaireRequestDetails[]>([])
@@ -90,8 +91,8 @@ const RepaireRequest = () => {
 
     const UserTable: ITable<IRepaireRequest> = {
         type: "IService",
-        headers: ["request_id", "name", "date", "service_type", "plate_number"],
-        rows:  repaireRequests?.map(item => [item.request_id, item.name, item.date, item.service_type, item.plate_number]) || [],
+        headers: ["request_id", "name", "preferred_schedule", "service_type", "plate_number"],
+        rows:  repaireRequests?.map(item => [item.request_id, `${item.vehicle_name} - ${item.model}`, dayjs(item.preferred_schedule).format("DD/MM/YYYY"), item.service_type, item.plate_number]) || [],
         handleEdit: (data) => handleEdit(data),
         handleRemove: (id) => handleRemove(id),
     };

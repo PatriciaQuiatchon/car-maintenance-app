@@ -31,7 +31,7 @@ const CustomRow = styled(TableRow, {
 })<CustomRowProps>(({ highlight }) => ({
   backgroundColor: highlight ? 'whitesmoke' : 'white',
   // '&:nth-of-type(even)': {
-    // backgroundColor: highlight ? theme.palette.action.hover : theme.palette.action.disabledBackground,
+  //   backgroundColor: highlight ? 'gray' : 'white',
   // },
 }));
 
@@ -41,7 +41,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
   const location = useLocation();
   const navigation = useNavigate();
 
-  const pathExempted = ["/registered-vehicle",]
+  const pathExempted = ["/registered-vehicle","/repair-request"]
 
   
   const hasEditAccess = pathExempted.includes(location.pathname) || ["admin", "employee"].includes(auth.role || "");
@@ -54,11 +54,20 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
   }
 
   const formatName = (name: string) => {
+
     return name
       .split('_')
       .join(' ');
   };
 
+  const formatHeaders = (name: string) => {
+    switch(name) {
+      case "preferred_schedule":
+        return "date"
+      default:
+        return name
+    }
+  }
   return (
     <>
       {
@@ -70,7 +79,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                 <StyledTableCell style={{ display: "none"}} key="header-id">ID</StyledTableCell>
                 {headers.map((header, index) => (
                 <StyledTableCell key={index} style={{ display: index === 0 ? "none" : "" }}>
-                  {formatName(String(header).toUpperCase())}
+                  {formatName(formatHeaders(String(header)).toUpperCase())}
                   </StyledTableCell>
               ))}
               {
@@ -136,7 +145,8 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                       return (
                         <Typography key={index} variant="body2" color="textSecondary" gutterBottom>
                           <strong>
-                            {formatName(String(header).toUpperCase())}:
+                            {formatName(formatHeaders(String(header)).toUpperCase())}
+
                             </strong> {cellValue}
                         </Typography>
                       );
