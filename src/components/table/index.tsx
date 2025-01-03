@@ -4,11 +4,15 @@ import { grey } from '@mui/material/colors';
 import { IBase, ITable } from '../../interface/shared';
 import { useAuth } from '../../hooks/authProvider';
 import { useLocation, useNavigate } from 'react-router-dom';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+
 // Custom styled components
 const StyledTableContainer = styled(TableContainer)(({ }) => ({
   borderRadius: '8px',
   boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-  margin: '20px',
+  // margin: '20px',
+  marginTop: "10px",
 }));
 
 const StyledGridContainer = styled(Grid2)(({ }) => ({
@@ -106,6 +110,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                 )})}
                 {hasEditAccess && ( <TableCell sx={{ display:"flex", justifyContent: "center" }}>
                   <Button
+                    startIcon={<EditIcon />}
                     variant='contained'
                     color='info'
                     sx={{ marginRight: '5px' }}
@@ -115,6 +120,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                     }
                   >Edit</Button>
                   <Button
+                    startIcon={<DeleteIcon />}
                     variant='contained'
                     color='error'
                     onClick={(event) => {
@@ -154,6 +160,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                   {hasEditAccess && (
                     <CardActions sx={{ display: "flex", justifyContent: "center",  marginTop: 'auto', justifyItems: "flex-end" }}>
                       <Button
+                        startIcon={<EditIcon />}
                         variant="contained"
                         color="info"
                         onClick={() => handleEdit(combined)}
@@ -161,9 +168,14 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                         Edit
                       </Button>
                       <Button
+                        startIcon={<DeleteIcon />}
                         variant="contained"
                         color="error"
-                        onClick={() => handleRemove(row[0] as string)}
+                        
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handleRemove(row[0] as string)
+                        }}
                       >
                         Remove
                       </Button>

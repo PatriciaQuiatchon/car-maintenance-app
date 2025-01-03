@@ -2,6 +2,8 @@ export interface IUserCredentials {
     name: string | null,
     email: string,
     password: string
+    phone_num?: string,
+    role?: string,
 }
 
 
@@ -21,6 +23,7 @@ export interface IUserDetails extends IBase {
     user_id: string,
     password: string | undefined
     confirm_password: string | undefined
+    phone_num?: string,
 }
 
 export interface IVehicle extends IBase {

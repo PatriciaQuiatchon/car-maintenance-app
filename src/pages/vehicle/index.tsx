@@ -10,7 +10,10 @@ import ConfirmationRemove from "../../components/confirmation";
 import EmptyData from "../../components/no-data";
 import handleError from "../../components/error";
 import { AxiosError } from "axios";
-import Loader from "../../components/loading";
+import TableLoading from "../../components/table-loading";
+import toast from "react-hot-toast";
+import { SAVED_MESSAGE } from "../../constant";
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 
 const Vehicle = () => {
 
@@ -24,7 +27,6 @@ const Vehicle = () => {
     const [vehicle, setVehicle] = useState<IVehicle>(initial)
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDelete, setIsDelete] = useState<boolean>(false);
-    const [isSubmitting, _setIsSubmitting] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const fetchData = async () => {
@@ -40,6 +42,7 @@ const Vehicle = () => {
     }
 
     const handleSucces = () => {
+        toast.success(SAVED_MESSAGE("Vehicle", "saved"))
         fetchData();
     }
 
@@ -72,8 +75,8 @@ const Vehicle = () => {
             const response = await api.delete(`/api/vehicle/${vehicle.vehicle_id}`);
 
             if (response) {
+                toast.success(SAVED_MESSAGE("Vehicle", "removed"))
                 fetchData();
-            } else {
             }
         } catch (e){
 
@@ -88,7 +91,7 @@ const Vehicle = () => {
         setIsModalOpen(!isModalOpen)
     }
 
-    const UserTable: ITable<IVehicle> = {
+    const VehicleTable: ITable<IVehicle> = {
         type: "IService",
         headers: ["vehicle_id", "name", "type", "model", "plate_number"],
         rows:  vehicles.map(item => [item.vehicle_id, item.name, item.type, item.model, item.plate_number]),
@@ -99,29 +102,35 @@ const Vehicle = () => {
     return (
         <Wrapper>
             <>
+            <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
+                Vehicles
+            </Typography>
                 <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', width:"100%", justifyContent: 'end' }}>
                     <Grid2 size={ {xs: 12, sm: 12, md: 3} }>
                         <Button 
+                            startIcon={<DirectionsCarIcon />}
                             sx={{ width: "100%" }}
                             variant="contained" color="success" onClick={() => setIsModalOpen(!isModalOpen)}>
                             Register Vehicle
                         </Button>
                     </Grid2>
                 </Grid2>
-            { !isLoading ?  vehicles?.length > 0 ? 
-                <TableWrapper {...UserTable} />
+            {  
+            
+            isLoading ? <TableLoading columns={VehicleTable.headers.length} />
+            :
+            vehicles?.length > 0 ? 
+                <TableWrapper {...VehicleTable} />
                 : <EmptyData>
                     <Typography>
                         No available Vehicles
                     </Typography>
                 </EmptyData>
-                : <Loader />
             }
             { isModalOpen && (<VehicleUpsert 
                 handleCloseModal={handleChangeModal}
                 handleSucces={handleSucces}
                 isModalOpen={isModalOpen}
-                isSubmitting={isSubmitting}
                 initialData={vehicle}
             />)}
             </>

@@ -2,6 +2,10 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useAuth } from "../../../hooks/authProvider";
 import { Stack, TextField, Typography } from "@mui/material";
+import { useState } from "react";
+import { LoadingButton } from "@mui/lab";
+import { blueGrey } from '@mui/material/colors';
+import LoginIcon from '@mui/icons-material/Login';
 
 const registerSchema = Yup.object().shape({
   email: Yup.string().email().required("Email is required"),
@@ -16,16 +20,26 @@ const initialValues = {
 
 const SignInForm = () => {
 
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+
   const auth = useAuth()
   return (
     <Formik
   initialValues={initialValues}
   validationSchema={registerSchema}
   onSubmit={async (values) => {
-    auth.loginAction({
-      ...values,
-      name: null // Check if this is necessary
-    });
+    try {
+      setIsSubmitting(true)
+      await auth.loginAction({
+        ...values,
+        name: null
+      });
+    } catch (err) {
+
+    } finally {
+      setIsSubmitting(false)
+
+    }
   }}
 >
   {(formik) => {
@@ -70,14 +84,18 @@ const SignInForm = () => {
               <span className="error">{errors.password}</span>
             )}
             
-          <button
+          <LoadingButton
             style={{ color: "whitesmoke" }}
+            sx={{ color: "whitesmoke", backgroundColor: blueGrey[900]}}
+            loading={isSubmitting}
+            loadingPosition="start"
             type="submit"
+            startIcon={<LoginIcon />}
             className={!(dirty && isValid) ? "disabled-btn" : ""}
-            // disabled={!dirty || !isValid}
+            disabled={!dirty || !isValid}
           >
             Sign In
-          </button>
+          </LoadingButton>
           </Stack>
 
         </Form>

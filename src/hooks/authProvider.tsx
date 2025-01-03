@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import api from "../config/api";
 import handleError from "../components/error";
 import { AxiosError } from "axios";
+import toast from "react-hot-toast";
 
 interface AuthContextType {
   user:  IUserDetails | null;
   token: string;
   role: string;
+  isSubmitting: boolean;
   loginAction: (data: IUserCredentials) => void;
   registerAction: (data: IUserCredentials) => void;
   getUserProfile: () => void;
@@ -32,6 +34,8 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const localStorageEmail = localStorage.getItem("email") || ""
   const [email, setEmail] = useState<string>(localStorageEmail)
+
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const navigate = useNavigate()
 
@@ -71,16 +75,19 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const registerAction = async (data: IUserCredentials) => {
     try {
-
+      setIsSubmitting(true)
       const response = await api.post("/api/auth/register", data);
 
       if(response.data) {
+        toast.success("Registered Successfully")
         navigate("/");
         return;
       }
       throw new Error(response.data.message);
     } catch (err) {
-      console.error(err);
+      handleError(err as AxiosError); 
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -93,7 +100,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     navigate("/");
   };
 
-  const value = { token, role, email, user, loginAction, logout, registerAction, getUserProfile }
+  const value = { token, role, email, user, isSubmitting, loginAction, logout, registerAction, getUserProfile }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

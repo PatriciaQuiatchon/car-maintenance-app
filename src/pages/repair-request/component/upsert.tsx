@@ -25,7 +25,6 @@ const schema = Yup.object().shape({
 interface IRepaireRequestUpsert {
     initialData: IRepaireRequestDetails
     isModalOpen: boolean
-    isSubmitting: boolean
     handleCloseModal: () => void
     handleSucces: () => void
 }
@@ -39,7 +38,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
 
     const auth = useAuth();
     
-    const { isModalOpen, isSubmitting, initialData} = props
+    const { isModalOpen, initialData} = props
     const { handleCloseModal, handleSucces } = props
 
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -82,26 +81,18 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
             enableReinitialize={true}
             validationSchema={schema}
             onSubmit={async (values) => {
-                if (initialData.request_id === "") {
-                    try {
-                        const response = await api.post(`/api/service-request/${auth.user?.user_id}`, values);
-                        handleSucces();
-                        handleCloseModal();
-    
-                        throw new Error(response.data.message);
-                      } catch (err) {
-                        console.error(err);
+                try {
+                    if (initialData.request_id === "") {
+                        await api.post(`/api/service-request/${auth.user?.user_id}`, values);
+                    } else {
+                        await api.put(`/api/service-request/${initialData.request_id}`, values);
                     }
-                } else {
-                    try {
-                        const response = await api.put(`/api/service-request/${initialData.request_id}`, values);
-                        handleSucces();
-                        handleCloseModal();
-    
-                        throw new Error(response.data.message);
-                      } catch (err) {
-                        console.error(err);
-                    }
+                    handleSucces();
+                    handleCloseModal();
+                } catch (err) {
+                    handleError(err as AxiosError)
+                } finally {
+                    setIsLoading(!isLoading)
                 }
             }}
             >
@@ -113,7 +104,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                         <CustomDialog 
                             title="Register Vehicle"
                             isOpen={isModalOpen}
-                            isSubmitting={isSubmitting}
+                            isSubmitting={isLoading}
                             handleClose={handleCloseModal}
                             handleSubmit={handleSubmit}
                             isSubmitButtonDisabled={!(dirty && isValid)}

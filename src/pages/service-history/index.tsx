@@ -10,6 +10,7 @@ import ConfirmationRemove from "../../components/confirmation";
 import EmptyData from "../../components/no-data";
 import handleError from "../../components/error";
 import { AxiosError } from "axios";
+import TableLoading from "../../components/table-loading";
 
 const ServiceHistory = () => {
 
@@ -90,7 +91,7 @@ const ServiceHistory = () => {
     //     setIsModalOpen(!isModalOpen)
     // }
 
-    const UserTable: ITable<IServiceHistory> = {
+    const HistoryTable: ITable<IServiceHistory> = {
         type: "IServiceHistory",
         headers: ["history_id", "date", "name", "car_name", "plate_number", "service", "amount"],
         rows:  histories.map(item => [item.history_id, item.date, item.name, item.car_name, item.plate_number, item.service, item.amount]),
@@ -128,8 +129,11 @@ const ServiceHistory = () => {
                     </Grid2>
                 </Grid2>
             }
-            { histories?.length > 0 ? 
-                <TableWrapper {...UserTable} />
+            { 
+            isLoading ? <TableLoading columns={HistoryTable.headers.length} />
+            :
+            histories?.length > 0 ? 
+                <TableWrapper {...HistoryTable} />
                 : <EmptyData>
                     <Typography>
                         No available History

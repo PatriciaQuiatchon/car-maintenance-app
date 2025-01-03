@@ -10,8 +10,11 @@ import ConfirmationRemove from "../../components/confirmation";
 import EmptyData from "../../components/no-data";
 import handleError from "../../components/error";
 import { AxiosError } from "axios";
-import Loader from "../../components/loading";
 import dayjs from "dayjs";
+import TableLoading from "../../components/table-loading";
+import toast from "react-hot-toast";
+import { SAVED_MESSAGE } from "../../constant";
+import CarRepairIcon from '@mui/icons-material/CarRepair';
 
 const RepaireRequest = () => {
 
@@ -25,7 +28,6 @@ const RepaireRequest = () => {
     const [repaireRequest, setRepaireRequest] = useState<IRepaireRequestDetails>(initial)
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDelete, setIsDelete] = useState<boolean>(false);
-    const [isSubmitting, _setIsSubmitting] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const fetchData = async () => {
@@ -41,6 +43,7 @@ const RepaireRequest = () => {
     }
 
     const handleSucces = () => {
+        toast.success(SAVED_MESSAGE("Request", "sent"))
         fetchData();
     }
 
@@ -73,6 +76,8 @@ const RepaireRequest = () => {
             const response = await api.delete(`/api/repaireRequest/${repaireRequest.request_id}`);
 
             if (response) {
+                toast.success(SAVED_MESSAGE("Request", "removed"))
+
                 fetchData();
             } else {
             }
@@ -89,7 +94,7 @@ const RepaireRequest = () => {
         setIsModalOpen(!isModalOpen)
     }
 
-    const UserTable: ITable<IRepaireRequest> = {
+    const RequestTable: ITable<IRepaireRequest> = {
         type: "IService",
         headers: ["request_id", "name", "preferred_schedule", "service_type", "plate_number"],
         rows:  repaireRequests?.map(item => [item.request_id, `${item.vehicle_name} - ${item.model}`, dayjs(item.preferred_schedule).format("DD/MM/YYYY"), item.service_type, item.plate_number]) || [],
@@ -101,28 +106,34 @@ const RepaireRequest = () => {
         <Wrapper>
             <>
                 <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', width:"100%", justifyContent: 'end' }}>
+                    <Grid2 size={ {xs: 12, sm: 12, md: 9} }>
+                        <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
+                            Request Service
+                        </Typography>
+                    </Grid2>
                     <Grid2 size={ {xs: 12, sm: 12, md: 3} }>
                         <Button 
+                            startIcon={<CarRepairIcon />}
                             sx={{ width: "100%" }}
                             variant="contained" color="success" onClick={() => setIsModalOpen(!isModalOpen)}>
                             New Request
                         </Button>
                     </Grid2>
                 </Grid2>
-            { !isLoading ?  repaireRequests?.length > 0 ? 
-                <TableWrapper {...UserTable} />
+            { 
+            isLoading ? <TableLoading columns={RequestTable.headers.length} />
+            :repaireRequests?.length > 0 ? 
+                <TableWrapper {...RequestTable} />
                 : <EmptyData>
                     <Typography>
                         No available Requests
                     </Typography>
                 </EmptyData>
-                : <Loader />
             }
             { isModalOpen && (<RepaireRequestUpsert 
                 handleCloseModal={handleChangeModal}
                 handleSucces={handleSucces}
                 isModalOpen={isModalOpen}
-                isSubmitting={isSubmitting}
                 initialData={repaireRequest}
             />)}
             </>

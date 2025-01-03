@@ -3,10 +3,12 @@ import * as Yup from "yup";
 
 import CustomDialog from "../../../components/dialog";
 import { Stack, TextField } from "@mui/material";
-import { FC } from "react";
+import { FC, useState } from "react";
 import api from "../../../config/api";
 import { IVehicle } from "../../../interface/shared";
 import { useAuth } from "../../../hooks/authProvider";
+import handleError from "../../../components/error";
+import { AxiosError } from "axios";
 
 const schema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -18,7 +20,6 @@ const schema = Yup.object().shape({
 interface IVehicleUpsert {
     initialData: IVehicle
     isModalOpen: boolean
-    isSubmitting: boolean
     handleCloseModal: () => void
     handleSucces: () => void
 }
@@ -27,9 +28,10 @@ const VehicleUpsert:FC<IVehicleUpsert> = (props) => {
 
     const auth = useAuth();
 
-    const { isModalOpen, isSubmitting, initialData} = props
+    const { isModalOpen, initialData} = props
     const { handleCloseModal, handleSucces } = props
 
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
     return (
         <Formik
             key={JSON.stringify(initialData)} 
@@ -37,26 +39,20 @@ const VehicleUpsert:FC<IVehicleUpsert> = (props) => {
             enableReinitialize={true}
             validationSchema={schema}
             onSubmit={async (values) => {
-                if (initialData.user_id === "") {
-                    try {
-                        const response = await api.post(`/api/vehicle/${auth.user?.user_id}`, values);
-                        handleSucces();
-                        handleCloseModal();
-    
-                        throw new Error(response.data.message);
-                      } catch (err) {
-                        console.error(err);
+                try {
+                    setIsSubmitting(!isSubmitting)
+                    if (initialData.user_id === "") {
+                        await api.post(`/api/vehicle/${auth.user?.user_id}`, values);
+
+                    } else {
+                       await api.put(`/api/vehicle/${initialData.vehicle_id}`, values);
                     }
-                } else {
-                    try {
-                        const response = await api.put(`/api/vehicle/${initialData.vehicle_id}`, values);
-                        handleSucces();
-                        handleCloseModal();
-    
-                        throw new Error(response.data.message);
-                      } catch (err) {
-                        console.error(err);
-                    }
+                    handleSucces();
+                    handleCloseModal();
+                } catch(err){
+                    handleError(err as AxiosError)
+                } finally {
+                    setIsSubmitting(!isSubmitting)
                 }
             }}
             >

@@ -7,6 +7,9 @@ import { Box, Button, Paper, Typography } from "@mui/material";
 import { useAuth } from "../../hooks/authProvider";
 import ServiceUpsert from "./component/upsert";
 import ConfirmationRemove from "../../components/confirmation";
+import TableLoading from "../../components/table-loading";
+import { SAVED_MESSAGE } from "../../constant";
+import toast from "react-hot-toast";
 
 const Service = () => {
 
@@ -21,7 +24,7 @@ const Service = () => {
     const [service, setService] = useState<IService>(initial)
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDelete, setIsDelete] = useState<boolean>(false);
-    const [isSubmitting, _setIsSubmitting] = useState<boolean>(false);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
 
@@ -39,6 +42,7 @@ const Service = () => {
     }
 
     const handleSucces = () => {
+        toast.success(SAVED_MESSAGE("Service", "saved"))
         fetchServices();
     }
 
@@ -60,6 +64,7 @@ const Service = () => {
             const response = await api.delete(`/api/service/${service.service_id}`);
 
             if (response) {
+                toast.success(SAVED_MESSAGE("Service", "removed"))
                 fetchServices();
             }
         } catch (e){
@@ -94,6 +99,10 @@ const Service = () => {
     return (
         <Wrapper>
             <>
+            
+            <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
+                Services
+            </Typography>
             {
                 hasEditAccess && 
                 <Box sx={{ display: 'flex', marginBottom:"5px", marginRight:"5px", justifyContent: 'flex-end' }}>
@@ -102,27 +111,21 @@ const Service = () => {
                     </Button>
                 </Box>
             }
-            { services?.length > 0 ? 
-            <TableWrapper {...ServiceTable} />
-            // <CustomTable 
-            //     handleEdit={(data: IService) => handleEdit(data)}
-            //     handleRemove={(id: string) => handleRemove(id)}
-            //     headers={headers}
-            //     rows={
-            //         services.map(item => [item.service_id, item.name, item.description, item.price])
-            //     }
-            // />
-            : <Box component={Paper} height="400px" display="flex" justifyContent="center" alignItems="center" width={"100%"}>
-                <Typography>
-                    No available Services
-                </Typography>
-            </Box>
+            { 
+                isLoading ? <TableLoading columns={ServiceTable.headers.length} />
+                :
+                services?.length > 0 ? 
+                <TableWrapper {...ServiceTable} />
+                : <Box component={Paper} height="400px" display="flex" justifyContent="center" alignItems="center" width={"100%"}>
+                    <Typography>
+                        No available Services
+                    </Typography>
+                </Box>
             }
             { isModalOpen && (<ServiceUpsert 
                 handleCloseModal={handleChangeModal}
                 handleSucces={handleSucces}
                 isModalOpen={isModalOpen}
-                isSubmitting={isSubmitting}
                 initialData={service}
             />)}
             </>
