@@ -55,7 +55,7 @@ const RepaireRequest = () => {
     const handleRemove = (id: string) => {
         setRepaireRequest((prev) => ({
             ...prev,
-            repaireRequest_id: id,
+            request_id: id,
         }))
         setIsDelete(!isDelete)
     }
@@ -73,13 +73,11 @@ const RepaireRequest = () => {
 
     const removeRepaireRequest = async () => {
         try {
-            const response = await api.delete(`/api/repaireRequest/${repaireRequest.request_id}`);
+            const response = await api.delete(`/api/service-request/${repaireRequest.request_id}`);
 
             if (response) {
                 toast.success(SAVED_MESSAGE("Request", "removed"))
-
                 fetchData();
-            } else {
             }
         } catch (e){
 

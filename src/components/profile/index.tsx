@@ -16,7 +16,7 @@ const ProfileForm =() => {
     const [isSaving, setIsSave] = useState<boolean>(false)
 
     const auth = useAuth()
-    console.log({auth})
+
     const schema = Yup.object().shape({
         name: Yup.string().required(requiredField("Name")),
         email: Yup.string().required(requiredField("Email"))

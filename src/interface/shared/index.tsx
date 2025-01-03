@@ -39,6 +39,16 @@ export interface IRepaireRequestDetails extends IRepaireRequest {
     note?: string,
 }
 
+export interface IRepairUpdate {
+    mechanic_id: string,
+    request_id: string,
+    request_status?: string,
+    vehicle_id: string,
+    service_id: string
+    preferred_schedule: string,
+    notes?: string,
+}
+
 export interface IRepaireRequest extends IBase {
     request_id: string,
     service_type: string,
