@@ -27,7 +27,6 @@ const User = () => {
     const [user, setUser] = useState<IUserDetails>(initial)
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDelete, setIsDelete] = useState<boolean>(false);
-    const [isSubmitting, _setIsSubmitting] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const [role, setRole] = useState<string>("admin")

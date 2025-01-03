@@ -1,4 +1,4 @@
-import { useTheme, useMediaQuery, Skeleton, Stack, Paper, Box } from "@mui/material";
+import { useTheme, useMediaQuery, Skeleton, Stack, Paper } from "@mui/material";
 import { FC } from "react";
 
 interface ITableLoading {
