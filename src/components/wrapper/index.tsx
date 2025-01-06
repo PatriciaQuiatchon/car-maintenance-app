@@ -5,6 +5,7 @@ import { useAuth } from "../../hooks/authProvider";
 import SideBar from "../sidenav";
 import NavBar from "../navbar";
 import { blueGrey } from "@mui/material/colors";
+import { Toaster } from 'react-hot-toast';
 
 const drawerWidth = 200;
 
@@ -57,24 +58,26 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
             }}
             
         >
-          {isAdmin && (
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ display: { sm: "none" }, mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ display: { sm: "none" }, mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
           
-          <Typography variant="h6" noWrap component="div">
+          { isAdmin && <Typography variant="h6" noWrap component="div">
             Car Services
-          </Typography>
+          </Typography>}
           {
             !isAdmin && (
+              <Box sx={{
+              display: { xs: "none", sm: "block" },
+              }}>
                 <NavBar />
+              </Box>
             )
           }
         </Toolbar>
@@ -118,6 +121,33 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
         </Box>
       )}
 
+      {
+        !isAdmin && (
+          <Box
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, 
+          display: { xs: "block", sm: "none" },
+          flexShrink: { sm: 0 } }}
+          aria-label="sidebar"
+        >
+          <Drawer
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{ keepMounted: true }} // Better open performance on mobile.
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": { 
+                borderColor: blueGrey[500],
+                boxShadow: "15px", backgroundColor: blueGrey[500],
+                boxSizing: "border-box", width: drawerWidth },
+            }}
+          >
+              <NavBar />
+          </Drawer>
+        </Box>
+        )
+      }
       {/* Main Content */}
       <Box
         component="main"
@@ -130,6 +160,7 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
       >
         {children}
       </Box>
+      <Toaster />
     </Box>
   );
 };

@@ -10,6 +10,9 @@ import ConfirmationRemove from "../../components/confirmation";
 import EmptyData from "../../components/no-data";
 import handleError from "../../components/error";
 import { AxiosError } from "axios";
+import TableLoading from "../../components/table-loading";
+import toast from "react-hot-toast";
+import { SAVED_MESSAGE } from "../../constant";
 
 const User = () => {
 
@@ -24,7 +27,6 @@ const User = () => {
     const [user, setUser] = useState<IUserDetails>(initial)
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDelete, setIsDelete] = useState<boolean>(false);
-    const [isSubmitting, _setIsSubmitting] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const [role, setRole] = useState<string>("admin")
@@ -47,6 +49,7 @@ const User = () => {
     }
 
     const handleSucces = () => {
+        toast.success(SAVED_MESSAGE("User", "saved"))
         fetchUsers();
     }
 
@@ -72,6 +75,7 @@ const User = () => {
             const response = await api.delete(`/api/user/${user.user_id}`);
 
             if (response) {
+                toast.success(SAVED_MESSAGE("User", "removed"))
                 fetchUsers();
             } else {
             }
@@ -99,6 +103,9 @@ const User = () => {
     return (
         <Wrapper>
             <>
+            <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
+                Users
+            </Typography>
             {
                 hasEditAccess && 
                 <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', marginLeft:"20px", width:"100%", justifyContent: 'space-between' }}>
@@ -113,7 +120,8 @@ const User = () => {
                         >
                             <MenuItem value={"admin"}>Admin</MenuItem>
                             <MenuItem value={"employee"}>Employee</MenuItem>
-                            <MenuItem value={"user"}>User</MenuItem>
+                            <MenuItem value={"mechanic"}>Mechanic</MenuItem>
+                            <MenuItem value={"user"}>Customer</MenuItem>
                         </Select>
 
                     </Grid2>
@@ -126,7 +134,10 @@ const User = () => {
                     </Grid2>
                 </Grid2>
             }
-            { users?.length > 0 ? 
+            { 
+                isLoading ? <TableLoading columns={UserTable.headers.length} />
+                :
+                users?.length > 0 ? 
                 <TableWrapper {...UserTable} />
                 : <EmptyData>
                     <Typography>
@@ -138,7 +149,6 @@ const User = () => {
                 handleCloseModal={handleChangeModal}
                 handleSucces={handleSucces}
                 isModalOpen={isModalOpen}
-                isSubmitting={isSubmitting}
                 initialData={user}
             />)}
             </>

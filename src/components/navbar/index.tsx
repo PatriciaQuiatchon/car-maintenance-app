@@ -8,7 +8,9 @@ import { useState } from "react";
 
 const StyledButton = styled(Button)(({ theme }) => ({
     color: "#fff",
-    padding: "10px 20px",
+    // padding: "10px 20px",
+    width:"180px",
+    height:"50px",
     fontSize: "12px",
     borderRadius: "8px",
     "&:hover": {
@@ -40,8 +42,8 @@ const NavBar = () => {
     };
 
     return (
-        <Box position={"absolute"} sx={{ top: 0, left:0}} width={"100%"}>
-            <Stack direction="row" paddingY={1} width="100%" position={"relative"} justifyContent="space-evenly" display="flex" alignItems="center">
+        <Box position={"absolute"} sx={{ top: 0, left:0}} height={{xs: "100vh", sm: "auto"}}>
+            <Stack direction={{xs: "column", sm: "row"}} paddingY={1} position={"relative"} width={{ xs: '200px', md: "100vw" }}  display="flex" alignContent="center" justifyItems="center" justifyContent={{xs:"center", md: "space-evenly"}} spacing={2} alignItems="center"  height={{xs: "100vh", sm: "auto"}}>
                     <StyledButton 
                         sx={{ backgroundColor: checkCurrentTab("dashboard") ? blue[600] : "" }}
                         onClick={() => { navigate("/dashboard") }}
@@ -62,7 +64,7 @@ const NavBar = () => {
                         sx={{ backgroundColor: checkCurrentTab("service-history") ? blue[600] : "" }}
                         onClick={() => { navigate("/service-history") }}
                     >Service History</StyledButton>
-                    <Tooltip title="Account settings">
+                    <Tooltip title="Account settings" sx={{ justifyContent: "flex-end", display:"flex" }}>
                         <IconButton
                             onClick={handleClick}
                             size="small"

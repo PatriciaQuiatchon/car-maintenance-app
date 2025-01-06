@@ -7,6 +7,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { blueGrey } from '@mui/material/colors';
+import { SaveAlt } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -65,9 +68,20 @@ const CustomDialog:React.FC<IDialog> = (props) => {
             { !isSubmitting && (<Button autoFocus onClick={handleClose}>
                 Cancel
             </Button>)}
-            <Button type="submit" variant='contained' autoFocus disabled={isSubmitting || isSubmitButtonDisabled} onClick={handleSubmit}>
+            <LoadingButton
+             type="submit" variant='contained' autoFocus disabled={isSubmitting || isSubmitButtonDisabled}
+            // style={{ color: "whitesmoke" }}
+            sx={{ color: "whitesmoke", backgroundColor: blueGrey[900]}}
+            loading={isSubmitting}
+            loadingPosition="start"
+            startIcon={<SaveAlt />}
+            onClick={handleSubmit}
+          >
+            Save Changes
+          </LoadingButton>
+            {/* <Button type="submit" variant='contained' autoFocus disabled={isSubmitting || isSubmitButtonDisabled} onClick={handleSubmit}>
                 Save changes
-            </Button>
+            </Button> */}
             </DialogActions>
         </BootstrapDialog>
     );

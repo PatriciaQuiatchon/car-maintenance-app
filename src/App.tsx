@@ -11,6 +11,7 @@ import RepairRequest from "./pages/repair-request";
 import Settings from "./pages/settings";
 import Users from "./pages/user";
 import Service from "./pages/service";
+import Vehicle from "./pages/vehicle";
 
 function App() {
 
@@ -28,6 +29,8 @@ function App() {
               <Route path="/service-history/:id" element={<ServiceHistory />} />
               <Route path="/repair-request" element={<RepairRequest />} />
               <Route path="/repair-request/:id" element={<RepairRequest />} />
+              <Route path="/registered-vehicle" element={<Vehicle />} />
+              <Route path="/registered-vehicle/:id" element={<Vehicle />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/users" element={<Users />} />
               <Route path="/services" element={<Service />} />

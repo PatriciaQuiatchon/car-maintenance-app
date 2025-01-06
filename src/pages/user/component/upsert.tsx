@@ -3,9 +3,11 @@ import * as Yup from "yup";
 
 import CustomDialog from "../../../components/dialog";
 import { FormControl, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
-import { FC } from "react";
+import { FC, useState } from "react";
 import api from "../../../config/api";
 import { IUserDetails } from "../../../interface/shared";
+import handleError from "../../../components/error";
+import { AxiosError } from "axios";
 
 const schema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -30,16 +32,16 @@ const newUserSchema = Yup.object().shape({
 interface IServiceUpsert {
     initialData: IUserDetails
     isModalOpen: boolean
-    isSubmitting: boolean
     handleCloseModal: () => void
     handleSucces: () => void
 }
 
 const ServiceUpsert:FC<IServiceUpsert> = (props) => {
 
-    const { isModalOpen, isSubmitting, initialData} = props
+    const { isModalOpen, initialData} = props
     const { handleCloseModal, handleSucces } = props
 
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
     return (
         <Formik
             key={JSON.stringify(initialData)} 
@@ -47,26 +49,20 @@ const ServiceUpsert:FC<IServiceUpsert> = (props) => {
             enableReinitialize={true}
             validationSchema={initialData.user_id === "" ? newUserSchema : schema}
             onSubmit={async (values) => {
-                if (initialData.user_id === "") {
-                    try {
-                        const response = await api.post("/api/user", values);
-                        handleSucces();
-                        handleCloseModal();
-    
-                        throw new Error(response.data.message);
-                      } catch (err) {
-                        console.error(err);
+                try {
+                    setIsSubmitting(!isSubmitting)
+                    if (initialData.user_id === "") {
+                        await api.post("/api/user", values);
+                    } else {
+                        await api.put(`/api/user/${initialData.user_id}`, values);
                     }
-                } else {
-                    try {
-                        const response = await api.put(`/api/user/${initialData.user_id}`, values);
-                        handleSucces();
-                        handleCloseModal();
-    
-                        throw new Error(response.data.message);
-                      } catch (err) {
-                        console.error(err);
-                    }
+                    
+                    handleSucces();
+                    handleCloseModal();
+                } catch(err) {
+                    handleError(err as AxiosError)
+                } finally {
+                    setIsSubmitting(!isSubmitting)
                 }
             }}
             >
@@ -134,6 +130,7 @@ const ServiceUpsert:FC<IServiceUpsert> = (props) => {
                             >
                                 <MenuItem value={"admin"}>Admin</MenuItem>
                                 <MenuItem value={"employee"}>Employee</MenuItem>
+                                <MenuItem value={"mechanic"}>Mechanic</MenuItem>
                                 <MenuItem value={"user"}>User</MenuItem>
                             </Select>
                             </FormControl>

@@ -3,7 +3,9 @@ import * as Yup from "yup";
 import { useAuth } from "../../../hooks/authProvider";
 import { Stack, TextField, Typography } from "@mui/material";
 import './style.css';
-
+import { LoadingButton } from "@mui/lab";
+import { blueGrey } from "@mui/material/colors";
+import PublishIcon from '@mui/icons-material/Publish';
 const registerSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   email: Yup.string().email().required("Email is required"),
@@ -99,14 +101,19 @@ const SignUpForm = () => {
                   component="span"
                   className="error"
                 />
-                <button
-                    type="submit"
-                    style={{color: "whitesmoke"}}
-                    className={!(dirty && isValid) ? "disabled-btn" : ""}
-                    disabled={!(dirty && isValid)}
-                >
-                    Register
-                </button>
+                
+              <LoadingButton
+                style={{ color: "whitesmoke" }}
+                sx={{ color: "whitesmoke", backgroundColor: blueGrey[900]}}
+                loading={auth.isSubmitting}
+                loadingPosition="start"
+                type="submit"
+                startIcon={<PublishIcon />}
+                className={!(dirty && isValid) ? "disabled-btn" : ""}
+                disabled={!dirty || !isValid}
+              >
+                Register
+              </LoadingButton>
             </Stack>
             </Form>
           </div>

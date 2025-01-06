@@ -3,16 +3,20 @@ import { styled } from '@mui/system';
 import { grey } from '@mui/material/colors';
 import { IBase, ITable } from '../../interface/shared';
 import { useAuth } from '../../hooks/authProvider';
+import { useLocation, useNavigate } from 'react-router-dom';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+
 // Custom styled components
 const StyledTableContainer = styled(TableContainer)(({ }) => ({
   borderRadius: '8px',
   boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-  margin: '20px',
+  // margin: '20px',
+  marginTop: "10px",
 }));
 
 const StyledGridContainer = styled(Grid2)(({ }) => ({
   borderRadius: '8px',
-  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
   margin: '20px',
 }));
 
@@ -31,17 +35,43 @@ const CustomRow = styled(TableRow, {
 })<CustomRowProps>(({ highlight }) => ({
   backgroundColor: highlight ? 'whitesmoke' : 'white',
   // '&:nth-of-type(even)': {
-    // backgroundColor: highlight ? theme.palette.action.hover : theme.palette.action.disabledBackground,
+  //   backgroundColor: highlight ? 'gray' : 'white',
   // },
 }));
 
 const CustomTable = <T extends IBase>(props: ITable<T>) => {
   const { headers, rows, handleEdit, handleRemove } = props;
   const auth = useAuth();
-  const hasEditAccess = ["admin", "employee"].includes(auth.role || "");
+  const location = useLocation();
+  const navigation = useNavigate();
+
+  const pathExempted = ["/registered-vehicle","/repair-request"]
+
+  
+  const hasEditAccess = pathExempted.includes(location.pathname) || ["admin", "employee"].includes(auth.role || "");
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+
+  const handleNavigateDetail = (id: string) => {
+    navigation(`${location.pathname}/${id}`)
+  }
+
+  const formatName = (name: string) => {
+
+    return name
+      .split('_')
+      .join(' ');
+  };
+
+  const formatHeaders = (name: string) => {
+    switch(name) {
+      case "preferred_schedule":
+        return "date"
+      default:
+        return name
+    }
+  }
   return (
     <>
       {
@@ -52,7 +82,9 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
               <TableRow>
                 <StyledTableCell style={{ display: "none"}} key="header-id">ID</StyledTableCell>
                 {headers.map((header, index) => (
-                <StyledTableCell key={index} style={{ display: index === 0 ? "none" : "" }}>{String(header).toUpperCase()}</StyledTableCell>
+                <StyledTableCell key={index} style={{ display: index === 0 ? "none" : "" }}>
+                  {formatName(formatHeaders(String(header)).toUpperCase())}
+                  </StyledTableCell>
               ))}
               {
                 hasEditAccess && 
@@ -68,7 +100,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                 return acc;
             }, {} as T);
               return (
-              <CustomRow key={rowIndex} highlight={rowIndex % 2 === 0}>
+              <CustomRow onClick={() => handleNavigateDetail(row[0] as string)} key={rowIndex} highlight={rowIndex % 2 === 0}>
                 {row.map((cell, cellIndex) => {
                   const cellClass = cellIndex === 0 ? "none" : "";
                   return (
@@ -78,15 +110,23 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                 )})}
                 {hasEditAccess && ( <TableCell sx={{ display:"flex", justifyContent: "center" }}>
                   <Button
+                    startIcon={<EditIcon />}
                     variant='contained'
                     color='info'
                     sx={{ marginRight: '5px' }}
-                    onClick={() => handleEdit(combined)}
+                    onClick={(event) => {  
+                      event.stopPropagation();
+                      handleEdit(combined)}
+                    }
                   >Edit</Button>
                   <Button
+                    startIcon={<DeleteIcon />}
                     variant='contained'
                     color='error'
-                    onClick={() => handleRemove(row[0] as string)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleRemove(row[0] as string)
+                    }}
                   >Remove</Button>
                 </TableCell>)}
               </CustomRow>
@@ -103,21 +143,24 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
             }, {} as T);
 
             return (
-              <Grid2 size={12} key={rowIndex}> {/* Adjust column width based on screen size */}
-                <Card >
+              <Grid2 size={{ xs: 12, sm: auth.role === "admin" ? 12 : 6  }} key={rowIndex}>
+                <Card sx={{height: "180px", display: "flex", justifyContent: "center", alignItems: "center", padding:"5px" }}>
                   <CardContent>
                     {headers.slice(1).map((header, index) => {
                       const cellValue = row[index + 1];
                       return (
                         <Typography key={index} variant="body2" color="textSecondary" gutterBottom>
-                          <strong>{String(header).toUpperCase()}:</strong> {cellValue}
+                          <strong>
+                            {formatName(formatHeaders(String(header)).toUpperCase())}
+
+                            </strong> {cellValue}
                         </Typography>
                       );
                     })}
-                  </CardContent>
                   {hasEditAccess && (
-                    <CardActions sx={{ display: "flex", justifyContent: "center" }}>
+                    <CardActions sx={{ display: "flex", justifyContent: "center",  marginTop: 'auto', justifyItems: "flex-end" }}>
                       <Button
+                        startIcon={<EditIcon />}
                         variant="contained"
                         color="info"
                         onClick={() => handleEdit(combined)}
@@ -125,14 +168,20 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                         Edit
                       </Button>
                       <Button
+                        startIcon={<DeleteIcon />}
                         variant="contained"
                         color="error"
-                        onClick={() => handleRemove(row[0] as string)}
+                        
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handleRemove(row[0] as string)
+                        }}
                       >
                         Remove
                       </Button>
                     </CardActions>
                   )}
+                  </CardContent>
                 </Card>
               </Grid2>
             );
