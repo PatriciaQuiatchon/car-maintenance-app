@@ -43,7 +43,7 @@ const NavBar = () => {
 
     return (
         <Box position={"absolute"} sx={{ top: 0, left:0}} height={{xs: "100vh", sm: "auto"}}>
-            <Stack direction={{xs: "column", sm: "row"}} paddingY={1} position={"relative"} width={{ xs: '200px', md: "100vw" }}  display="flex" alignContent="center" justifyItems="center" justifyContent={{xs:"center", md: "space-evenly"}} spacing={2} alignItems="center"  height={{xs: "100vh", sm: "auto"}}>
+            <Stack direction={{xs: "column", sm: "row"}} paddingY={1} position={"relative"} width={{ xs: '200px', sm:"100vw" }}  display="flex" alignContent="center" justifyItems="center" justifyContent={{xs:"center", sm:"space-around", md: "space-evenly"}} spacing={2} alignItems="center"  height={{xs: "100vh", sm: "auto"}}>
                     <StyledButton 
                         sx={{ backgroundColor: checkCurrentTab("dashboard") ? blue[600] : "" }}
                         onClick={() => { navigate("/dashboard") }}
@@ -64,18 +64,20 @@ const NavBar = () => {
                         sx={{ backgroundColor: checkCurrentTab("service-history") ? blue[600] : "" }}
                         onClick={() => { navigate("/service-history") }}
                     >Service History</StyledButton>
-                    <Tooltip title="Account settings" sx={{ justifyContent: "flex-end", display:"flex" }}>
+                    <Box sx={{ justifyContent: "flex-end", display:"flex", width:"100px", paddingRight:"20px"}}>
+                    <Tooltip title="Account settings" sx={{ justifyContent: "center", display:"flex" }}>
                         <IconButton
                             onClick={handleClick}
                             size="small"
-                            sx={{ ml: 2 }}
                             aria-controls={open ? 'account-menu' : undefined}
                             aria-haspopup="true"
                             aria-expanded={open ? 'true' : undefined}
+                        
                         >
-                            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                            <Avatar sx={{ width: 32, height: 32,   }}>{auth?.user?.name.slice(0,1)}</Avatar>
                         </IconButton>
                     </Tooltip>
+                    </Box>
                 </Stack>
                 <Menu
                     anchorEl={anchorEl}

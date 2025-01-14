@@ -56,6 +56,11 @@ export interface IRepaireRequest extends IBase {
     plate_number: string,
     model:string,
     vehicle_name: string
+    vehicle_id: string
+    service_id: string
+    requested_by?: string,
+    requested_by_id?: string,
+    request_status?: string,
 }
 
 export interface IServiceHistory extends IBase {
@@ -78,4 +83,6 @@ export type ITable<T> = {
     rows: (string | number)[][];
     handleEdit: (data: T) => void;
     handleRemove: (id: string) => void;
+    handleChange?: (data: T, status: string) => void;
+    hideUserID?: boolean
 };

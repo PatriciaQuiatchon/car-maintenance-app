@@ -3,7 +3,7 @@ import Wrapper from "../../components/wrapper";
 import { IServiceHistory, ITable } from "../../interface/shared";
 import api from "../../config/api";
 import { TableWrapper } from "../../components/table";
-import { Button, Grid2, MenuItem, Select, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useAuth } from "../../hooks/authProvider";
 // import UserUpsert from "./component/upsert";
 import ConfirmationRemove from "../../components/confirmation";
@@ -15,7 +15,7 @@ import TableLoading from "../../components/table-loading";
 const ServiceHistory = () => {
 
     const auth = useAuth();
-    const hasEditAccess = ['admin', 'employee'].includes(auth.role || "")
+    // const _hasEditAccess = ['admin', 'employee'].includes(auth.role || "")
     
     const initial:IServiceHistory = {
        car_name: "", date: "", history_id: "",
@@ -30,13 +30,14 @@ const ServiceHistory = () => {
     const [_isSubmitting, _setIsSubmitting] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-    const [role, setRole] = useState<string>("admin")
+    // const [_role, setRole] = useState<string>("admin")
 
 
     const fetchServiceHistory = async () => {
         try {
             setIsLoading(!isLoading)
-            const response = await api.get(`/api/history/${role}`);
+            const isUser = auth.role === "customer"
+            const response = await api.get(`/api/history/${isUser ? auth.user?.user_id : ""}`);
             setHistories(response.data)
         } catch (error){
             handleError(error as AxiosError); 
@@ -45,12 +46,8 @@ const ServiceHistory = () => {
         }
     }
 
-    const handleChangeRole = (role:string) => {
-        setRole(role)
-    }
-
-    // const handleSucces = () => {
-    //     fetchServiceHistory();
+    // const _handleChangeRole = (role:string) => {
+    //     setRole(role)
     // }
 
     const handleEdit = (data: IServiceHistory) => {
@@ -66,9 +63,18 @@ const ServiceHistory = () => {
         setIsDelete(!isDelete)
     }
 
+    const refreshPage = async () => {
+        if(!auth.user?.user_id) {
+            await auth.getUserProfile();
+        }
+    }
     useEffect(() => {
-        fetchServiceHistory();
-    }, [role])
+        refreshPage();
+    }, [])
+
+    useEffect(() => {
+        auth.user?.user_id && fetchServiceHistory();
+    }, [auth.user?.user_id])
 
     const removeHistory = async () => {
         try {
@@ -86,11 +92,6 @@ const ServiceHistory = () => {
         }
     }
 
-    // const handleChangeModal = () => {
-    //     setHistory(initial)
-    //     setIsModalOpen(!isModalOpen)
-    // }
-
     const HistoryTable: ITable<IServiceHistory> = {
         type: "IServiceHistory",
         headers: ["history_id", "date", "name", "car_name", "plate_number", "service", "amount"],
@@ -102,7 +103,7 @@ const ServiceHistory = () => {
     return (
         <Wrapper>
             <>
-            {
+            {/* {
                 hasEditAccess && 
                 <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', marginLeft:"20px", width:"100%", justifyContent: 'space-between' }}>
                     <Grid2 size={ {xs: 11, sm: 11, md: 3} }>
@@ -128,7 +129,7 @@ const ServiceHistory = () => {
                         </Button>
                     </Grid2>
                 </Grid2>
-            }
+            } */}
             { 
             isLoading ? <TableLoading columns={HistoryTable.headers.length} />
             :
