@@ -1,11 +1,13 @@
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useAuth } from "../../../hooks/authProvider";
-import { Stack, TextField, Typography } from "@mui/material";
+import { IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import './style.css';
 import { LoadingButton } from "@mui/lab";
 import { blueGrey } from "@mui/material/colors";
 import PublishIcon from '@mui/icons-material/Publish';
+import { useState } from "react";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 const registerSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   email: Yup.string().email().required("Email is required"),
@@ -23,6 +25,8 @@ const initialValues = {
 const SignUpForm = () => {
   const auth = useAuth();
 
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  
   return (
     <Formik
       initialValues={initialValues}
@@ -83,7 +87,7 @@ const SignUpForm = () => {
                 <TextField
                   label="Password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   fullWidth
                   variant="outlined"
                   margin="dense"
@@ -95,6 +99,19 @@ const SignUpForm = () => {
                   }}
                   error={!!(errors.password && touched.password)}
                   required
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                          aria-label="toggle password visibility"
+                        >
+                          {!showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 <ErrorMessage
                   name="password"

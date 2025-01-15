@@ -26,7 +26,7 @@ const AuthPage = () => {
     const isRegister = pathname.includes("register") 
 
     const accountLabel: IAuthPage = isRegister ? {
-        label: "Already have an account?", type: "Login", link: "/"
+        label: "Already have an account?", type: "Login", link: "/login"
     } : {
         label: "No account yet?", type: "Register", link: "/register"
     }
