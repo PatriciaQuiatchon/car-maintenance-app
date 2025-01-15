@@ -2,12 +2,13 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import CustomDialog from "../../../components/dialog";
-import { FormControl, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { FC, useState } from "react";
 import api from "../../../config/api";
 import { IUserDetails } from "../../../interface/shared";
 import handleError from "../../../components/error";
 import { AxiosError } from "axios";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const schema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -42,6 +43,11 @@ const ServiceUpsert:FC<IServiceUpsert> = (props) => {
     const { handleCloseModal, handleSucces } = props
 
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
+
+
     return (
         <Formik
             key={JSON.stringify(initialData)} 
@@ -143,25 +149,51 @@ const ServiceUpsert:FC<IServiceUpsert> = (props) => {
                                     label="Password"
                                     error={errors.password && touched.password || undefined}
                                     helperText={errors.password && touched.password && errors.password}
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     name="password"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.password}
                                     placeholder="Enter password"
                                     className="form-control"
+                                    InputProps={{
+                                        endAdornment: (
+                                          <InputAdornment position="end">
+                                            <IconButton
+                                              onClick={() => setShowPassword(!showPassword)}
+                                              edge="end"
+                                              aria-label="toggle password visibility"
+                                            >
+                                              {!showPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                          </InputAdornment>
+                                        ),
+                                      }}
                                 />
                                 <TextField
                                     label="Confirm Password"
                                     error={errors.confirm_password && touched.confirm_password || undefined}
                                     helperText={errors.confirm_password && touched.confirm_password && errors.confirm_password}
-                                    type="password"
+                                    type={showConfirmPassword ? "text" : "password"}
                                     name="confirm_password"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.confirm_password}
                                     placeholder="Enter confirm password"
                                     className="form-control"
+                                    InputProps={{
+                                        endAdornment: (
+                                          <InputAdornment position="end">
+                                            <IconButton
+                                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                              edge="end"
+                                              aria-label="toggle password visibility"
+                                            >
+                                              {!showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                          </InputAdornment>
+                                        ),
+                                      }}
                                 />
                                 </>
                             }
