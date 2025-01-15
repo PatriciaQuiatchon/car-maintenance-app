@@ -3,7 +3,7 @@ import { styled } from '@mui/system';
 import { green, grey, yellow } from '@mui/material/colors';
 import { IBase, ITable } from '../../interface/shared';
 import { useAuth } from '../../hooks/authProvider';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -13,6 +13,7 @@ const StyledTableContainer = styled(TableContainer)(({ }) => ({
   boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
   // margin: '20px',
   marginTop: "10px",
+  overflowX: 'auto', maxHeight: '65vh' 
 }));
 
 const StyledGridContainer = styled(Grid2)(({ }) => ({
@@ -43,7 +44,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
   const { headers, rows, hideUserID, handleEdit, handleRemove, handleChange } = props;
   const auth = useAuth();
   const location = useLocation();
-  const navigation = useNavigate();
+  // const navigation = useNavigate();
 
   const pathExempted = ["/registered-vehicle","/repair-request"]
 
@@ -53,9 +54,9 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
-  const handleNavigateDetail = (id: string) => {
-    navigation(`${location.pathname}/${id}`)
-  }
+  // const handleNavigateDetail = (id: string) => {
+  //   navigation(`${location.pathname}/${id}`)
+  // }
 
   const formatName = (name: string) => {
 
@@ -118,7 +119,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
       {
         !isMobile ? 
           <StyledTableContainer>
-          <Table>
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
                 <StyledTableCell style={{ display: "none"}} key="header-id">ID</StyledTableCell>
@@ -142,7 +143,8 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
             }, {} as T);
               return (
               <CustomRow onClick={() => {
-                handleNavigateDetail(row[0] as string)}} key={rowIndex} highlight={rowIndex % 2 === 0}>
+                // handleNavigateDetail(row[0] as string)
+                }} key={rowIndex} highlight={rowIndex % 2 === 0}>
                 {row.map((cell, cellIndex) => {
                   const cellClass = cellIndex === 0 || (hideUserID && (cellIndex === 8 || cellIndex === 1 || cellIndex === 2)) ? "none" : "";
                   return (
