@@ -44,7 +44,7 @@ const NavBar = () => {
             <Stack direction="row" spacing={1} >
                 <StyledButton 
                     sx={{ backgroundColor: checkCurrentTab("services") ? blue[600] : "" }}
-                    onClick={() => { navigate("/services") }}
+                    onClick={() => { navigate("/") }}
                 >Servicers</StyledButton>
                 <StyledButton
                     sx={{  }}

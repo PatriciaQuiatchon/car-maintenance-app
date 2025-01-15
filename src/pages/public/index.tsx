@@ -3,6 +3,10 @@ import PublicPageWrapper from "../../components/public-wrapper";
 import { useEffect, useState } from "react";
 import { IService } from "../../interface/shared";
 import { FaOilCan } from "react-icons/fa";
+import { GiFlatTire } from "react-icons/gi";
+import { FaFilter } from "react-icons/fa";
+import { FaCarSide } from "react-icons/fa";
+import { FaCarBattery } from "react-icons/fa";
 
 import api from "../../config/api";
 
@@ -21,6 +25,26 @@ const PublicPage = () => {
         } finally {
             setIsLoading(false)
         }
+    }
+
+    const getIcon = (label: string) => {
+        if (label.toLowerCase().includes("oil")) {
+            return <FaOilCan />
+        }
+
+        if (label.toLowerCase().includes("tire")) {
+            return <GiFlatTire />
+        }
+
+        if (label.toLowerCase().includes("filter")) {
+            return <FaFilter />
+        }
+        
+        if (label.toLowerCase().includes("battery")) {
+            return <FaCarBattery />
+        }
+
+        return <FaCarSide />
     }
 
     useEffect(() => {
@@ -66,7 +90,7 @@ const PublicPage = () => {
                                                 backgroundColor: "#f7f7f6",
                                             }}>
                                                 <CardContent >
-                                                    <FaOilCan />
+                                                    { getIcon(item.name) }
                                                     <Typography variant="body2" color="textSecondary" gutterBottom>
                                                         <strong><span>{item.name}</span></strong>
                                                     </Typography>
