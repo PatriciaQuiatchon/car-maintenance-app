@@ -21,12 +21,6 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
   };
 
   const drawer = (
-    // <Box sx={{ textAlign: "center", padding: 2 }}>
-    //   <Typography variant="h6" noWrap>
-    //     SideBar
-    //   </Typography>
-    //   {/* Add sidebar items here */}
-    // </Box>
     <Box
         sx={{
         }}

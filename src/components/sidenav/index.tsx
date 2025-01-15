@@ -31,7 +31,7 @@ const SideBar = () => {
     return (
         <Box position={"absolute"} sx={{ boxShadow: "15px", backgroundColor: blueGrey[500], top: 0, left:0}} height={"100vh"}>
             <Stack height="100vh" position={"relative"} justifyContent="space-evenly" display="flex" alignItems="center">
-                <Avatar sx={{ padding: "15px", }}>PR</Avatar>
+                <Avatar sx={{ padding: "15px", }}>{auth.user?.name.slice(0,1)}</Avatar>
                 <Stack spacing={2} paddingX={2}>
                     <StyledButton 
                         sx={{ backgroundColor: checkCurrentTab("dashboard") ? blue[600] : "" }}

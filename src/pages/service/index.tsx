@@ -3,13 +3,14 @@ import Wrapper from "../../components/wrapper";
 import { IService, ITable } from "../../interface/shared";
 import api from "../../config/api";
 import { TableWrapper } from "../../components/table";
-import { Box, Button, Paper, Typography } from "@mui/material";
+import { Box, Button, Grid2, Paper, Typography } from "@mui/material";
 import { useAuth } from "../../hooks/authProvider";
 import ServiceUpsert from "./component/upsert";
 import ConfirmationRemove from "../../components/confirmation";
 import TableLoading from "../../components/table-loading";
 import { SAVED_MESSAGE } from "../../constant";
 import toast from "react-hot-toast";
+import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 
 const Service = () => {
 
@@ -99,17 +100,25 @@ const Service = () => {
         <Wrapper>
             <>
             
-            <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
-                Services
-            </Typography>
-            {
-                hasEditAccess && 
-                <Box sx={{ display: 'flex', marginBottom:"5px", marginRight:"5px", justifyContent: 'flex-end' }}>
-                    <Button variant="contained" color="success" onClick={() => setIsModalOpen(!isModalOpen)}>
-                        New Service
-                    </Button>
-                </Box>
-            }
+            <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', width:"100%", justifyContent: 'end' }}>
+                <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 12 : 7} }>
+                    <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
+                    Services
+                    </Typography>
+                </Grid2>
+                
+                {
+                    hasEditAccess && 
+                    <Grid2 size={ {xs: 12, sm: 12, md: 5} }>
+                            <Button 
+                                startIcon={<MiscellaneousServicesIcon />}
+                                sx={{ width: "100%" }}
+                                variant="contained" color="success" onClick={() => setIsModalOpen(!isModalOpen)}>
+                                New Service
+                            </Button>
+                    </Grid2>
+                }
+            </Grid2>
             { 
                 isLoading ? <TableLoading columns={ServiceTable.headers.length} />
                 :

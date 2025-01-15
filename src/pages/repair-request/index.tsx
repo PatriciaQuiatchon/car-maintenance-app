@@ -21,7 +21,9 @@ const RepaireRequest = () => {
     const auth = useAuth();
     
     const initial:IRepaireRequestDetails = {
-       name: "", plate_number: "", service_type: "", preferred_schedule: "", request_id: "", model: "", vehicle_name: "",
+       name: "", plate_number: "", service_type: "", preferred_schedule: "", 
+       request_id: "", model: "", vehicle_name: "",  vehicle_id: "",
+       service_id: "",
     }
     
     const [repaireRequests, setRepaireRequests] = useState<IRepaireRequestDetails[]>([])
@@ -29,11 +31,12 @@ const RepaireRequest = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDelete, setIsDelete] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
+    
     const fetchData = async () => {
         try {
             setIsLoading(!isLoading)
-            const response = await api.get(`/api/service-requests/${auth.user?.user_id}`);
+            const userId = auth.role === "customer" ? auth.user?.user_id : ""
+            const response = await api.get(`/api/service-requests/${userId}`);
             setRepaireRequests(response.data?.requests)
         } catch (error){
             handleError(error as AxiosError); 
@@ -92,31 +95,66 @@ const RepaireRequest = () => {
         setIsModalOpen(!isModalOpen)
     }
 
+    const handleChangeStatus = async (data: IRepaireRequest, status: string) => {
+        await api.post(`/api//service-request/change/${data.request_id}`, {
+            ...data, request_status: status, user_id: data.requested_by_id
+        });
+        toast.success(SAVED_MESSAGE("Status", "changed"))
+        fetchData();
+    }
+
+    const requestHeaders:  (keyof IRepaireRequest)[] = ["request_id","service_id", "vehicle_id", "name", "preferred_schedule", "service_type", "plate_number"]
+    if (auth.role != "customer") {
+        requestHeaders.push("requested_by")
+        requestHeaders.push("requested_by_id")
+    }
+
+    requestHeaders.push("request_status")
+
+    const requestRows = repaireRequests?.map(item => {
+        
+        const data = [
+            item.service_id,
+            item.vehicle_id,
+            item.request_id, `${item.vehicle_name} - ${item.model}`,
+            dayjs(item.preferred_schedule).format("DD/MM/YYYY"), item.service_type, item.plate_number]
+        if (auth.role !== "customer") {
+            data.push(item?.requested_by || "")
+            data.push(item?.requested_by_id || "")
+        }
+        data.push(item.request_status?.toUpperCase() || "PENDING")
+        return data;
+    }
+    
+    ) || []
+
     const RequestTable: ITable<IRepaireRequest> = {
         type: "IService",
-        headers: ["request_id", "name", "preferred_schedule", "service_type", "plate_number"],
-        rows:  repaireRequests?.map(item => [item.request_id, `${item.vehicle_name} - ${item.model}`, dayjs(item.preferred_schedule).format("DD/MM/YYYY"), item.service_type, item.plate_number]) || [],
+        headers: requestHeaders,
+        rows:  requestRows,
         handleEdit: (data) => handleEdit(data),
         handleRemove: (id) => handleRemove(id),
+        handleChange: (data, status) => handleChangeStatus(data, status),
+        hideUserID: true,
     };
-
+    //Note: Edit Upsert for admin view
     return (
         <Wrapper>
             <>
                 <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', width:"100%", justifyContent: 'end' }}>
-                    <Grid2 size={ {xs: 12, sm: 12, md: 9} }>
+                    <Grid2 size={ {xs: 12, sm: 12, md:  auth.role == "customer" ? 8 : 12} }>
                         <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
                             Request Service
                         </Typography>
                     </Grid2>
-                    <Grid2 size={ {xs: 12, sm: 12, md: 3} }>
+                   { auth.role == "customer" && <Grid2 size={ {xs: 12, sm: 12, md: 4} }>
                         <Button 
                             startIcon={<CarRepairIcon />}
                             sx={{ width: "100%" }}
                             variant="contained" color="success" onClick={() => setIsModalOpen(!isModalOpen)}>
                             New Request
                         </Button>
-                    </Grid2>
+                    </Grid2>}
                 </Grid2>
             { 
             isLoading ? <TableLoading columns={RequestTable.headers.length} />

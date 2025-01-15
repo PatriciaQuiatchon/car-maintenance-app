@@ -12,6 +12,7 @@ import Settings from "./pages/settings";
 import Users from "./pages/user";
 import Service from "./pages/service";
 import Vehicle from "./pages/vehicle";
+import PublicPage from "./pages/public";
 
 function App() {
 
@@ -20,7 +21,8 @@ function App() {
       <Router>
         <AuthProvider>
           <Routes>
-            <Route path="/" element={<AuthPage />} />
+            <Route path="/" element={<PublicPage />} />
+            <Route path="/login" element={<AuthPage />} />
             <Route path="/admin" element={<AuthPage />} />
             <Route path="/register" element={<AuthPage />} />
             <Route element={<PrivateRoute />}>

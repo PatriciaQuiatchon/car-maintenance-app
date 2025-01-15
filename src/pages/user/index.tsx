@@ -13,6 +13,7 @@ import { AxiosError } from "axios";
 import TableLoading from "../../components/table-loading";
 import toast from "react-hot-toast";
 import { SAVED_MESSAGE } from "../../constant";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 const User = () => {
 
@@ -127,6 +128,7 @@ const User = () => {
                     </Grid2>
                     <Grid2 size={ {xs: 11, sm: 11, md: 3} }>
                         <Button 
+                            startIcon={<PersonAddIcon />}
                             sx={{ width: "100%" }}
                             variant="contained" color="success" onClick={() => setIsModalOpen(!isModalOpen)}>
                             New User
