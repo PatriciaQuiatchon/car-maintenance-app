@@ -1,13 +1,12 @@
 import React, { FC } from "react";
-import { Box, CssBaseline, Drawer, AppBar, Toolbar, Typography, IconButton } from "@mui/material";
+import { Box, Drawer, AppBar, Toolbar, Typography, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAuth } from "../../hooks/authProvider";
 import SideBar from "../sidenav";
 import NavBar from "../navbar";
-import { blueGrey } from "@mui/material/colors";
 import { Toaster } from 'react-hot-toast';
 
-const drawerWidth = 200;
+const drawerWidth = 250;
 
 interface IWrapper {
     children: React.ReactNode
@@ -34,7 +33,6 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <CssBaseline />
 
       {/* AppBar (NavBar) */}
       <AppBar
@@ -46,8 +44,9 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
       >
         <Toolbar 
             sx={{
-                boxShadow: "15px", backgroundColor: blueGrey[500], border: "0px",
-                borderColor: blueGrey[500],
+                boxShadow: "15px",
+                border: "0px",
+                backgroundColor: "#842433",
                 display: { sm: isAdmin ? "none" : ""}
             }}
             
@@ -92,8 +91,9 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
             sx={{
               display: { xs: "block", sm: "none" },
               "& .MuiDrawer-paper": { 
-                borderColor: blueGrey[500],
-                boxShadow: "15px", backgroundColor: blueGrey[500],
+                // borderColor: blueGrey[500],
+                // boxShadow: "15px", 
+                // backgroundColor: "#842433",
                 boxSizing: "border-box", width: drawerWidth },
             }}
           >
@@ -104,9 +104,12 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
             sx={{
                 display: { xs: "none", sm: "block" },
                 "& .MuiDrawer-paper": {
-                    borderColor: blueGrey[500],
-                    boxShadow: "15px", backgroundColor: blueGrey[500],
-                    boxSizing: "border-box", width: drawerWidth },
+                    // borderColor: blueGrey[500],
+                    boxShadow: "20px", 
+                    // backgroundColor: blueGrey[500],
+                    // boxSizing: "border-box", 
+                    width: drawerWidth, 
+                  },
             }}
             open
           >
@@ -132,9 +135,9 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
             sx={{
               display: { xs: "block", sm: "none" },
               "& .MuiDrawer-paper": { 
-                borderColor: blueGrey[500],
-                boxShadow: "15px", backgroundColor: blueGrey[500],
-                boxSizing: "border-box", width: drawerWidth },
+                // backgroundColor: blueGrey[500],
+                boxShadow: "20px", 
+                width: drawerWidth },
             }}
           >
               <NavBar />

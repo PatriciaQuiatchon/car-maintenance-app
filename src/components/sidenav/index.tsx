@@ -1,16 +1,23 @@
 import { Avatar, Box, Button, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { blue, blueGrey } from "@mui/material/colors";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/authProvider";
+import { MdSpaceDashboard } from "react-icons/md";
+import { GiAutoRepair } from "react-icons/gi";
+import { FaHistory } from "react-icons/fa";
+import { FaUsers } from "react-icons/fa6";
+import { GrServices } from "react-icons/gr";
+import { IoSettings } from "react-icons/io5";
+import { CiLogout } from "react-icons/ci";
 
-const StyledButton = styled(Button)(({ theme }) => ({
+const StyledButton = styled(Button)(({ }) => ({
     color: "#fff",
     padding: "10px 20px",
     fontSize: "12px",
     borderRadius: "8px",
+    justifyContent: "start",
     "&:hover": {
-      backgroundColor: theme.palette.primary.dark,
+      backgroundColor: "#1f222a",
     },
     "&:disabled": {
       backgroundColor: "#cccccc",
@@ -29,37 +36,44 @@ const SideBar = () => {
     }
 
     return (
-        <Box position={"absolute"} sx={{ boxShadow: "15px", backgroundColor: blueGrey[500], top: 0, left:0}} height={"100vh"}>
+        <Box position={"absolute"} sx={{ width:"250px", boxShadow: "15px", backgroundColor: "#842433", top: 0, left:0}} height={"100vh"}>
             <Stack height="100vh" position={"relative"} justifyContent="space-evenly" display="flex" alignItems="center">
-                <Avatar sx={{ padding: "15px", }}>{auth.user?.name.slice(0,1)}</Avatar>
+                <Avatar sx={{ padding: "15px", backgroundColor: "#1f222a" }}>{auth.user?.name.slice(0,1)}</Avatar>
                 <Stack spacing={2} paddingX={2}>
                     <StyledButton 
-                        sx={{ backgroundColor: checkCurrentTab("dashboard") ? blue[600] : "" }}
+                        startIcon={<MdSpaceDashboard />}
+                        sx={{ backgroundColor: checkCurrentTab("dashboard") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/dashboard") }}
                     >Dashboard</StyledButton>
                     <StyledButton 
-                        sx={{ backgroundColor: checkCurrentTab("repair") ? blue[600] : "" }}
+                        startIcon={<GiAutoRepair />}
+                        sx={{ backgroundColor: checkCurrentTab("repair") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/repair-request") }}
                     >Repair Request</StyledButton>
                     <StyledButton
-                        sx={{ backgroundColor: checkCurrentTab("service-history") ? blue[600] : "" }}
+                        startIcon={<FaHistory />}
+                        sx={{ backgroundColor: checkCurrentTab("service-history") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/service-history") }}
                     >Service History</StyledButton>
                     <StyledButton
-                        sx={{ backgroundColor: checkCurrentTab("users") ? blue[600] : "" }}
+                        startIcon={<FaUsers />}
+                        sx={{ backgroundColor: checkCurrentTab("users") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/users") }}
                     >Users</StyledButton>
                     <StyledButton
-                        sx={{ backgroundColor: checkCurrentTab("services") ? blue[600] : "" }}
+                        startIcon={<GrServices />}
+                        sx={{ backgroundColor: checkCurrentTab("services") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/services") }}
                     >Services</StyledButton>
                     
                     <StyledButton
-                        sx={{ backgroundColor: checkCurrentTab("settings") ? blue[600] : "" }}
+                        startIcon={<IoSettings />}
+                        sx={{ backgroundColor: checkCurrentTab("settings") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/settings") }}
                     >Settings</StyledButton>
                     <StyledButton
-                        sx={{ backgroundColor: checkCurrentTab("logout") ? blue[600] : "" }}
+                        startIcon={<CiLogout />}
+                        sx={{ backgroundColor: checkCurrentTab("logout") ? "#1f222a" : "" }}
                         onClick={() => { auth.logout(); }}
                     >Logout</StyledButton>
                 </Stack>

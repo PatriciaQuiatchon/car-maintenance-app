@@ -51,7 +51,7 @@ const AuthPage = () => {
                     </Stack>
                     <Stack spacing={1} alignItems="center" >
                     <Divider sx={{ border:"2px ", width:"200px" }}/>
-                    <Typography variant="caption">
+                    {/* <Typography variant="caption">
                         or {isRegister ? "Sign up" : "Login"} with 
                     </Typography>
                     <button
@@ -59,7 +59,7 @@ const AuthPage = () => {
                         type="submit"
                     >
                         Google
-                    </button>
+                    </button> */}
                     </Stack>
                 </Stack>
             )}
