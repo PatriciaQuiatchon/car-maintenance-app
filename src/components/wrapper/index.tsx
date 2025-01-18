@@ -29,7 +29,7 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
   );
 
   const auth = useAuth();
-  const isAdmin = auth.role === "admin"
+  const isAdmin = ["admin", "employee", "mechanic"].includes(auth.role)
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -151,8 +151,9 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
         sx={{
           flexGrow: 1,
           width: { sm: isAdmin ? `calc(100% - ${drawerWidth}px)` : "100%" },
-          p: 3,
-          mt: 8,
+          p: isAdmin ? 1 : 3,
+          mt: isAdmin ? 7 : 8,
+          mx: isAdmin ? 3 : 1,
         }}
       >
         {children}

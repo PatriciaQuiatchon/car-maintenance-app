@@ -45,7 +45,7 @@ const CustomDialog:React.FC<IDialog> = (props) => {
             open={isOpen}
             fullWidth
         >
-            <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+            <DialogTitle sx={{ m: 0, p: 2, letterSpacing: 2, color: "#1f222a", textTransform: "uppercase" }} id="customized-dialog-title">
                 {title}
             </DialogTitle>
             <IconButton
@@ -65,7 +65,9 @@ const CustomDialog:React.FC<IDialog> = (props) => {
             </DialogContent>
             <DialogActions>
                 
-            { !isSubmitting && (<Button autoFocus onClick={handleClose}>
+            { !isSubmitting && (<Button 
+                sx={{ color: "#1f222a" }}
+                autoFocus onClick={handleClose}>
                 Cancel
             </Button>)}
             <LoadingButton

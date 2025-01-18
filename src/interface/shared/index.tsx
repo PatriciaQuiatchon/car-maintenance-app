@@ -31,6 +31,7 @@ export interface IVehicle extends IBase {
     user_id: string,
     type: string,
     model: string,
+    year?: string,
     plate_number: string,
 }
 
@@ -55,6 +56,7 @@ export interface IRepaireRequest extends IBase {
     preferred_schedule: string,
     plate_number: string,
     model:string,
+    year:string,
     vehicle_name: string
     vehicle_id: string
     service_id: string
@@ -69,8 +71,12 @@ export interface IServiceHistory extends IBase {
     history_id: string,
     car_name: string,
     plate_number: string,
-    service: string,
+    service_name: string,
     amount: string
+    //For Table Header
+    service?:string
+    customer?: string
+    car?: string
 }
 
 export interface IServiceRequested extends IBase {

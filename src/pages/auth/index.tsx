@@ -4,6 +4,7 @@ import SignUpForm from "../../components/auth/register";
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from "../../components/header";
 import { useAuth } from "../../hooks/authProvider";
+import PublicWrapper from "../../components/public-wrapper";
 
 interface IAuthPage {
     label: string
@@ -33,9 +34,9 @@ const AuthPage = () => {
 
     const { label, type, link } = accountLabel
     return (
-        <>
+        <PublicWrapper>
         { <Header isAdmin={isAdmin} /> }
-        <Box display="flex" height="90vh" justifyContent="center" alignItems="center">
+        <Box display="flex" height="100vh" justifyContent="center" justifyItems="center" alignItems="center">
             <Box sx={{width: { xs: "400px", md: "600px"}}}>
                 {
                     isRegister ? <SignUpForm /> : <SignInForm />
@@ -66,7 +67,7 @@ const AuthPage = () => {
                 
             </Box>
         </Box>
-        </>
+        </PublicWrapper>
     )
 }
 

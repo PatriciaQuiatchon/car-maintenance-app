@@ -3,7 +3,7 @@ import Wrapper from "../../components/wrapper";
 import { ITable, IRepaireRequest, IRepaireRequestDetails } from "../../interface/shared";
 import api from "../../config/api";
 import { TableWrapper } from "../../components/table";
-import {Button, Grid2, Typography } from "@mui/material";
+import {Button, Chip, Grid2, Stack, Typography } from "@mui/material";
 import { useAuth } from "../../hooks/authProvider";
 import RepaireRequestUpsert from "./component/upsert";
 import ConfirmationRemove from "../../components/confirmation";
@@ -11,11 +11,11 @@ import EmptyData from "../../components/no-data";
 import handleError from "../../components/error";
 import { AxiosError } from "axios";
 import dayjs from "dayjs";
-import TableLoading from "../../components/table-loading";
 import toast from "react-hot-toast";
 import { SAVED_MESSAGE } from "../../constant";
 import CarRepairIcon from '@mui/icons-material/CarRepair';
-
+import { GiAutoRepair } from "react-icons/gi";
+import Loader from "../../components/loading";
 const RepaireRequest = () => {
 
     const auth = useAuth();
@@ -23,7 +23,7 @@ const RepaireRequest = () => {
     const initial:IRepaireRequestDetails = {
        name: "", plate_number: "", service_type: "", preferred_schedule: "", 
        request_id: "", model: "", vehicle_name: "",  vehicle_id: "",
-       service_id: "",
+       service_id: "", year: "",
     }
     
     const [repaireRequests, setRepaireRequests] = useState<IRepaireRequestDetails[]>([])
@@ -31,12 +31,18 @@ const RepaireRequest = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDelete, setIsDelete] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    
+    const [selectedStatus, setSelectedStatus] = useState<string>("PENDING");
+
     const fetchData = async () => {
+        
         try {
             setIsLoading(!isLoading)
             const userId = auth.role === "customer" ? auth.user?.user_id : ""
-            const response = await api.get(`/api/service-requests/${userId}`);
+            let href = `/api/service-requests/${userId}`
+            if (selectedStatus) {
+                href += `?status=${selectedStatus}`
+            }
+            const response = await api.get(href);
             setRepaireRequests(response.data?.requests)
         } catch (error){
             handleError(error as AxiosError); 
@@ -96,7 +102,7 @@ const RepaireRequest = () => {
     }
 
     const handleChangeStatus = async (data: IRepaireRequest, status: string) => {
-        await api.post(`/api//service-request/change/${data.request_id}`, {
+        await api.post(`/api/service-request/change/${data.request_id}`, {
             ...data, request_status: status, user_id: data.requested_by_id
         });
         toast.success(SAVED_MESSAGE("Status", "changed"))
@@ -112,11 +118,11 @@ const RepaireRequest = () => {
     requestHeaders.push("request_status")
 
     const requestRows = repaireRequests?.map(item => {
-        
         const data = [
+            item.request_id, 
             item.service_id,
             item.vehicle_id,
-            item.request_id, `${item.vehicle_name} - ${item.model}`,
+            `${item.vehicle_name} - ${item.model} - ${item.year || ""}`,
             dayjs(item.preferred_schedule).format("DD/MM/YYYY"), item.service_type, item.plate_number]
         if (auth.role !== "customer") {
             data.push(item?.requested_by || "")
@@ -137,7 +143,11 @@ const RepaireRequest = () => {
         handleChange: (data, status) => handleChangeStatus(data, status),
         hideUserID: true,
     };
-    //Note: Edit Upsert for admin view
+
+    useEffect(() => {
+        selectedStatus && fetchData();
+    }, [selectedStatus])
+
     return (
         <Wrapper>
             <>
@@ -156,15 +166,16 @@ const RepaireRequest = () => {
                         </Button>
                     </Grid2>}
                 </Grid2>
+            <Stack direction="row" spacing={1} marginY={2}>
+                <Chip label={"PENDING"} color={selectedStatus === "PENDING" ? "info" : "default"} onClick={() => { setSelectedStatus("PENDING") }} />
+                <Chip label={"IN PROGRESS"} color={selectedStatus === "IN PROGRESS" ? "info" : "default"} onClick={() => { setSelectedStatus("IN PROGRESS") }} />
+                <Chip label={"DONE"} color={selectedStatus === "DONE" ? "info" : "default"} onClick={() => { setSelectedStatus("DONE") }} />
+            </Stack>
             { 
-            isLoading ? <TableLoading columns={RequestTable.headers.length} />
+            isLoading ? <Loader />
             :repaireRequests?.length > 0 ? 
                 <TableWrapper {...RequestTable} />
-                : <EmptyData>
-                    <Typography>
-                        No available Requests
-                    </Typography>
-                </EmptyData>
+                : <EmptyData icon={<GiAutoRepair />} label="No available Requests" />
             }
             { isModalOpen && (<RepaireRequestUpsert 
                 handleCloseModal={handleChangeModal}
