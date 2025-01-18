@@ -3,11 +3,10 @@ import * as Yup from "yup";
 import { useAuth } from "../../../hooks/authProvider";
 import { IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import './style.css';
-import { LoadingButton } from "@mui/lab";
-import { blueGrey } from "@mui/material/colors";
 import PublishIcon from '@mui/icons-material/Publish';
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import CustomLoadingButton from "../../button/loding-button";
 const registerSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   email: Yup.string().email().required("Email is required"),
@@ -41,9 +40,14 @@ const SignUpForm = () => {
         const { errors, touched, isValid, dirty, handleChange, handleBlur } = formik;
         return (
           <div className="container">
-            <Typography variant="h3" m={3}>Create an account</Typography>
+            <Typography 
+               sx={{ textTransform: "uppercase", letterSpacing: "2px"}} 
+               color="#455a64"
+               fontWeight="600" 
+               variant="h3" component="span"
+            >Create an account</Typography>
             <Form>
-              <Stack className="form-row" spacing={2} mb={2}>
+              <Stack className="form-row" spacing={2} m={2}>
                 <TextField
                   label="Name"
                   name="name"
@@ -119,18 +123,13 @@ const SignUpForm = () => {
                   className="error"
                 />
                 
-              <LoadingButton
-                style={{ color: "whitesmoke" }}
-                sx={{ color: "whitesmoke", backgroundColor: blueGrey[900]}}
-                loading={auth.isSubmitting}
-                loadingPosition="start"
-                type="submit"
-                startIcon={<PublishIcon />}
-                className={!(dirty && isValid) ? "disabled-btn" : ""}
-                disabled={!dirty || !isValid}
-              >
-                Register
-              </LoadingButton>
+              <CustomLoadingButton 
+                dirty={dirty}
+                isSubmitting={auth.isSubmitting}
+                icon={<PublishIcon />}
+                isValid={isValid}
+                label="Register"
+              />
             </Stack>
             </Form>
           </div>

@@ -13,6 +13,7 @@ import Users from "./pages/user";
 import Service from "./pages/service";
 import Vehicle from "./pages/vehicle";
 import PublicPage from "./pages/public";
+import Home from "./pages/home";
 
 function App() {
 
@@ -21,7 +22,8 @@ function App() {
       <Router>
         <AuthProvider>
           <Routes>
-            <Route path="/" element={<PublicPage />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/auto-services" element={<PublicPage />} />
             <Route path="/login" element={<AuthPage />} />
             <Route path="/admin" element={<AuthPage />} />
             <Route path="/register" element={<AuthPage />} />

@@ -1,20 +1,25 @@
 import { Avatar, Box, Button, IconButton, ListItemIcon, Menu, MenuItem, Stack, Tooltip } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { blue } from "@mui/material/colors";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/authProvider";
 import { Logout, Settings } from "@mui/icons-material";
 import { useState } from "react";
+import { MdSpaceDashboard } from "react-icons/md";
+import { GiAutoRepair } from "react-icons/gi";
+import { FaCarAlt } from "react-icons/fa";
+import { FaHistory } from "react-icons/fa";
+import { GrServices } from "react-icons/gr";
 
-const StyledButton = styled(Button)(({ theme }) => ({
+const StyledButton = styled(Button)(({ }) => ({
     color: "#fff",
-    // padding: "10px 20px",
-    width:"180px",
+    padding: "10px 15px",
+    width:"200px",
     height:"50px",
     fontSize: "12px",
     borderRadius: "8px",
+    justifyContent: "start",
     "&:hover": {
-      backgroundColor: theme.palette.primary.dark,
+      backgroundColor: "#1f222a",
     },
     "&:disabled": {
       backgroundColor: "#cccccc",
@@ -42,26 +47,39 @@ const NavBar = () => {
     };
 
     return (
-        <Box position={"absolute"} sx={{ top: 0, left:0}} height={{xs: "100vh", sm: "auto"}}>
-            <Stack direction={{xs: "column", sm: "row"}} paddingY={1} position={"relative"} width={{ xs: '200px', sm:"100vw" }}  display="flex" alignContent="center" justifyItems="center" justifyContent={{xs:"center", sm:"space-around", md: "space-evenly"}} spacing={2} alignItems="center"  height={{xs: "100vh", sm: "auto"}}>
+        <Box position={"absolute"} sx={{ top: 0, left:0,  width:{xs: "250px", sm:"auto"}, backgroundColor: "#842433",}} 
+        height={{xs: "100vh", sm: "auto"}}>
+            <Stack direction={{xs: "column", sm: "row"}} 
+            paddingY={{sm: 1}} 
+            position={"relative"} width={{sm:"100vw" }}  
+            display="flex" alignContent="center" 
+            justifyItems="center" 
+            justifyContent={{xs:"center", sm:"space-around", md: "space-evenly"}} spacing={2} 
+            alignItems="center"  
+            height={{xs: "100vh", sm: "auto"}}>
                     <StyledButton 
-                        sx={{ backgroundColor: checkCurrentTab("dashboard") ? blue[600] : "" }}
+                        startIcon={<MdSpaceDashboard />}
+                        sx={{ backgroundColor: checkCurrentTab("dashboard") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/dashboard") }}
                     >Dashboard</StyledButton>
                     <StyledButton 
-                        sx={{ backgroundColor: checkCurrentTab("services") ? blue[600] : "" }}
+                        startIcon={<GrServices />}
+                        sx={{ backgroundColor: checkCurrentTab("services") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/services") }}
                     >Servicers</StyledButton>
                     <StyledButton 
-                        sx={{ backgroundColor: checkCurrentTab("repair") ? blue[600] : "" }}
+                        startIcon={<GiAutoRepair />}
+                        sx={{ backgroundColor: checkCurrentTab("repair") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/repair-request") }}
                     >Repair Request</StyledButton>
                     <StyledButton 
-                        sx={{ backgroundColor: checkCurrentTab("registered") ? blue[600] : "" }}
+                        startIcon={<FaCarAlt />}
+                        sx={{ backgroundColor: checkCurrentTab("registered") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/registered-vehicle") }}
                     >Registered Vehicle</StyledButton>
                     <StyledButton
-                        sx={{ backgroundColor: checkCurrentTab("service-history") ? blue[600] : "" }}
+                        startIcon={<FaHistory />}
+                        sx={{ backgroundColor: checkCurrentTab("service-history") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/service-history") }}
                     >Service History</StyledButton>
                     <Box sx={{ justifyContent: "flex-end", display:"flex", width:"100px", paddingRight:"20px"}}>

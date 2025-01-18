@@ -7,10 +7,12 @@ import { Box, Button, Grid2, Paper, Typography } from "@mui/material";
 import { useAuth } from "../../hooks/authProvider";
 import ServiceUpsert from "./component/upsert";
 import ConfirmationRemove from "../../components/confirmation";
-import TableLoading from "../../components/table-loading";
 import { SAVED_MESSAGE } from "../../constant";
 import toast from "react-hot-toast";
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
+import ServicesDisplay from "../../components/services";
+import { formatMoney } from "../../utils/helper";
+import Loader from "../../components/loading";
 
 const Service = () => {
 
@@ -92,7 +94,7 @@ const Service = () => {
     const ServiceTable: ITable<IService> = {
         type: "IService",
         headers: ["service_id", "name", "description", "price"],
-        rows: services.map(item => [item.service_id, item.name, item.description, item.price]),
+        rows: services.map(item => [item.service_id, item.name, item.description, formatMoney(item.price)]),
         handleEdit: (data) => handleEdit(data),
         handleRemove: (id) => handleRemove(id),
     };
@@ -120,7 +122,9 @@ const Service = () => {
                 }
             </Grid2>
             { 
-                isLoading ? <TableLoading columns={ServiceTable.headers.length} />
+
+                hasEditAccess ?
+               ( isLoading ? <Loader />
                 :
                 services?.length > 0 ? 
                 <TableWrapper {...ServiceTable} />
@@ -128,6 +132,13 @@ const Service = () => {
                     <Typography>
                         No available Services
                     </Typography>
+                </Box>)
+                :
+                <Box margin={3}>
+                <ServicesDisplay 
+                    isLoading={isLoading}
+                    services={services}
+                />
                 </Box>
             }
             { isModalOpen && (<ServiceUpsert 

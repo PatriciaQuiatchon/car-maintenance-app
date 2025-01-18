@@ -10,10 +10,11 @@ import ConfirmationRemove from "../../components/confirmation";
 import EmptyData from "../../components/no-data";
 import handleError from "../../components/error";
 import { AxiosError } from "axios";
-import TableLoading from "../../components/table-loading";
 import toast from "react-hot-toast";
 import { SAVED_MESSAGE } from "../../constant";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { FaUser } from "react-icons/fa";
+import Loader from "../../components/loading";
 
 const User = () => {
 
@@ -137,15 +138,11 @@ const User = () => {
                 </Grid2>
             }
             { 
-                isLoading ? <TableLoading columns={UserTable.headers.length} />
+                isLoading ? <Loader />
                 :
                 users?.length > 0 ? 
                 <TableWrapper {...UserTable} />
-                : <EmptyData>
-                    <Typography>
-                        No available Users
-                    </Typography>
-                </EmptyData>
+                : <EmptyData icon={<FaUser />} label="No available Users" />
             }
             { isModalOpen && (<UserUpsert 
                 handleCloseModal={handleChangeModal}

@@ -34,10 +34,14 @@ const ConfirmationRemove:FC<IConfirmationRemove> =(props) => {
                 </Typography>
             </DialogContent>
             <DialogActions>
-                {!isRemoving && <Button onClick={onClose}>
+                {!isRemoving && <Button 
+                sx={{ color: "#842433", letterSpacing: 2 }}
+                onClick={onClose}>
                     Cancel
                 </Button>}
-                <LoadingButton loading={isRemoving} onClick={handleSubmit}>
+                <LoadingButton 
+                    sx={{ backgroundColor: "#842433", color: "whitesmoke", letterSpacing: 2 }}
+                    loading={isRemoving} onClick={handleSubmit}>
                     Remove
                 </LoadingButton>
             </DialogActions>

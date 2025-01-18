@@ -10,10 +10,11 @@ import ConfirmationRemove from "../../components/confirmation";
 import EmptyData from "../../components/no-data";
 import handleError from "../../components/error";
 import { AxiosError } from "axios";
-import TableLoading from "../../components/table-loading";
 import toast from "react-hot-toast";
 import { SAVED_MESSAGE } from "../../constant";
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import { FaCar } from "react-icons/fa";
+import Loader from "../../components/loading";
 
 const Vehicle = () => {
 
@@ -93,8 +94,8 @@ const Vehicle = () => {
 
     const VehicleTable: ITable<IVehicle> = {
         type: "IService",
-        headers: ["vehicle_id", "name", "type", "model", "plate_number"],
-        rows:  vehicles.map(item => [item.vehicle_id, item.name, item.type, item.model, item.plate_number]),
+        headers: ["vehicle_id", "name", "type", "model", "year", "plate_number"],
+        rows:  vehicles.map(item => [item.vehicle_id, item.name, item.type, item.model, item.year || "", item.plate_number]),
         handleEdit: (data) => handleEdit(data),
         handleRemove: (id) => handleRemove(id),
     };
@@ -117,15 +118,11 @@ const Vehicle = () => {
                 </Grid2>
             {  
             
-            isLoading ? <TableLoading columns={VehicleTable.headers.length} />
+            isLoading ? <Loader />
             :
             vehicles?.length > 0 ? 
                 <TableWrapper {...VehicleTable} />
-                : <EmptyData>
-                    <Typography>
-                        No available Vehicles
-                    </Typography>
-                </EmptyData>
+                : <EmptyData label='No available Vehicles' icon={<FaCar />} />
             }
             { isModalOpen && (<VehicleUpsert 
                 handleCloseModal={handleChangeModal}

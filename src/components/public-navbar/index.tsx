@@ -1,6 +1,5 @@
 import { Box, Button, Stack, Typography, } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { blue } from "@mui/material/colors";
 import { useLocation, useNavigate } from "react-router-dom";
 import CircleIcon from '@mui/icons-material/Circle';
 const StyledButton = styled(Button)(({  }) => ({
@@ -32,19 +31,19 @@ const NavBar = () => {
     ]
 
     return (
-        <Box position={"absolute"} sx={{ top: 0, left:0, paddingY:"10px"}} height={{ sm: "auto"}}>
-            <Stack direction={{xs: "column", sm: "row"}} 
-                position={"relative"} width={{ xs: '200px', sm:"100vw" }}  display="flex" 
+        <Box position={"absolute"} sx={{ top: 0, left:0, paddingY:"10px"}} width={{ xs: '400px', sm:"100vw" }} height={{ xs: "100vh", sm: "auto"}}>
+            <Stack direction={{ xs: "row"}} 
+                position={"relative"}   display="flex" 
                 alignContent="center" justifyItems="center" justifyContent={{xs:"center", sm:"space-around", }} 
-                spacing={2} alignItems="center"  height={{xs: "100vh", sm: "auto"}}>
+                spacing={2} alignItems="center" >
             <Stack direction="row" spacing={2} >
-                <Typography variant="h6">Perfomance Plus</Typography>
+                <Typography onClick={() => { navigate("/") }} variant="h6">Perfomance Plus</Typography>
             </Stack>
            
             <Stack direction="row" spacing={1} >
                 <StyledButton 
-                    sx={{ backgroundColor: checkCurrentTab("services") ? blue[600] : "" }}
-                    onClick={() => { navigate("/") }}
+                    sx={{ backgroundColor: checkCurrentTab("services") ? "#1f222a" : "" }}
+                    onClick={() => { navigate("/auto-services") }}
                 >Servicers</StyledButton>
                 <StyledButton
                     sx={{  }}
@@ -56,9 +55,9 @@ const NavBar = () => {
                 margin:"0",
                 backgroundColor: "#842433"
             }} direction={{xs: "column", sm: "row"}} paddingY={1} 
-                position={"relative"} width={{ xs: '200px', sm:"100vw" }}  display="flex" 
+                position={"relative"}  display="flex" 
                 alignContent="center" justifyItems="center" justifyContent={{xs:"center", sm:"space-around", md: "space-evenly"}} 
-                spacing={2} alignItems="center"  height={{xs: "100vh", sm: "auto"}}>
+                spacing={2} alignItems="center" >
                 {
                     businessDetails.map((item) => {
                         return (

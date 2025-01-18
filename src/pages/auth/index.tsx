@@ -4,6 +4,7 @@ import SignUpForm from "../../components/auth/register";
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from "../../components/header";
 import { useAuth } from "../../hooks/authProvider";
+import PublicWrapper from "../../components/public-wrapper";
 
 interface IAuthPage {
     label: string
@@ -33,9 +34,9 @@ const AuthPage = () => {
 
     const { label, type, link } = accountLabel
     return (
-        <>
+        <PublicWrapper>
         { <Header isAdmin={isAdmin} /> }
-        <Box display="flex" height="90vh" justifyContent="center" alignItems="center">
+        <Box display="flex" height="100vh" justifyContent="center" justifyItems="center" alignItems="center">
             <Box sx={{width: { xs: "400px", md: "600px"}}}>
                 {
                     isRegister ? <SignUpForm /> : <SignInForm />
@@ -51,7 +52,7 @@ const AuthPage = () => {
                     </Stack>
                     <Stack spacing={1} alignItems="center" >
                     <Divider sx={{ border:"2px ", width:"200px" }}/>
-                    <Typography variant="caption">
+                    {/* <Typography variant="caption">
                         or {isRegister ? "Sign up" : "Login"} with 
                     </Typography>
                     <button
@@ -59,14 +60,14 @@ const AuthPage = () => {
                         type="submit"
                     >
                         Google
-                    </button>
+                    </button> */}
                     </Stack>
                 </Stack>
             )}
                 
             </Box>
         </Box>
-        </>
+        </PublicWrapper>
     )
 }
 

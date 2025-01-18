@@ -10,10 +10,16 @@ import { useAuth } from "../../../hooks/authProvider";
 import handleError from "../../../components/error";
 import { AxiosError } from "axios";
 
+const currentYear = new Date().getFullYear();
+
 const schema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     type: Yup.string().required("Type is required"),
     model: Yup.string().required("Model is required"),
+    year: Yup.number()
+    .required("Year is required")
+    .min(1886, "Year must be 1886 or later")
+    .max(currentYear, `Year must not exceed ${currentYear}`),
     plate_number: Yup.string().required("Plate Number is required"),
 });
 
@@ -119,6 +125,18 @@ const VehicleUpsert:FC<IVehicleUpsert> = (props) => {
                                 className="form-control"
                             />
                             
+                            <TextField
+                                label="Year"
+                                error={errors.year && touched.year || undefined}
+                                helperText={errors.year && touched.year && errors.year}
+                                type="number"
+                                name="year"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.year}
+                                placeholder="Enter Car Year"
+                                className="form-control"
+                            />
                             <TextField
                                 label="Plate Number"
                                 error={errors.plate_number && touched.plate_number || undefined}

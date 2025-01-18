@@ -1,9 +1,15 @@
-import { Box, CircularProgress, Paper } from "@mui/material";
-
+import { Box } from "@mui/material";
+import './style.css'
 const Loader = () => {
     return (
-        <Box component={Paper}  marginTop={"10px"} height="400px" display="flex" justifyContent="center" alignItems="center" width={"100%"}>
-            <CircularProgress />
+        <Box display="flex" 
+        justifyContent="center" 
+        alignItems="center"
+        height="350px" width="100%">
+            <Box width="100%">
+                <div className="loader"></div>
+
+            </Box>
         </Box>
     )
 }

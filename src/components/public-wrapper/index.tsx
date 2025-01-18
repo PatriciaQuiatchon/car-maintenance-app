@@ -1,12 +1,12 @@
 import React, { FC } from "react";
 import { Box, CssBaseline, Drawer, AppBar, Toolbar, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import SideBar from "../sidenav";
+import SideBar from "../sidenav-public";
 import NavBar from "../public-navbar";
 import { blueGrey } from "@mui/material/colors";
 import { Toaster } from 'react-hot-toast';
 
-const drawerWidth = 200;
+const drawerWidth = 250;
 
 interface IWrapper {
     children: React.ReactNode
@@ -29,9 +29,8 @@ const PublicWrapper:FC<IWrapper> = ({ children }) => {
   );
 
   return (
-    <Box sx={{ display: "flex", }}>
+    <Box sx={{ }}>
       <CssBaseline />
-
       <AppBar
         position="fixed"
         sx={{
@@ -91,10 +90,8 @@ const PublicWrapper:FC<IWrapper> = ({ children }) => {
      
       {/* Main Content */}
       <Box
-        component="main"
         sx={{
           flexGrow: 1,
-          pt: 10,
         }}
       >
         {children}

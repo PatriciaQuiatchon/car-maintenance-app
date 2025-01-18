@@ -3,14 +3,16 @@ import Wrapper from "../../components/wrapper";
 import { IServiceHistory, ITable } from "../../interface/shared";
 import api from "../../config/api";
 import { TableWrapper } from "../../components/table";
-import { Typography } from "@mui/material";
+import { Grid2, Typography } from "@mui/material";
 import { useAuth } from "../../hooks/authProvider";
 // import UserUpsert from "./component/upsert";
 import ConfirmationRemove from "../../components/confirmation";
 import EmptyData from "../../components/no-data";
 import handleError from "../../components/error";
 import { AxiosError } from "axios";
-import TableLoading from "../../components/table-loading";
+import dayjs from "dayjs";
+import { FaHistory } from "react-icons/fa";
+import Loader from "../../components/loading";
 
 const ServiceHistory = () => {
 
@@ -20,7 +22,7 @@ const ServiceHistory = () => {
     const initial:IServiceHistory = {
        car_name: "", date: "", history_id: "",
        name: "", plate_number: "", amount: "",
-       service: "", user_name: "",
+       service_name: "", user_name: "",
     }
     
     const [histories, setHistories] = useState<IServiceHistory[]>([])
@@ -29,9 +31,6 @@ const ServiceHistory = () => {
     const [isDelete, setIsDelete] = useState<boolean>(false);
     const [_isSubmitting, _setIsSubmitting] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-    // const [_role, setRole] = useState<string>("admin")
-
 
     const fetchServiceHistory = async () => {
         try {
@@ -94,8 +93,8 @@ const ServiceHistory = () => {
 
     const HistoryTable: ITable<IServiceHistory> = {
         type: "IServiceHistory",
-        headers: ["history_id", "date", "name", "car_name", "plate_number", "service", "amount"],
-        rows:  histories.map(item => [item.history_id, item.date, item.name, item.car_name, item.plate_number, item.service, item.amount]),
+        headers: ["history_id", "date", "customer", "car", "plate_number", "service", "amount"],
+        rows:  histories.map(item => [item.history_id, dayjs(item.date).format("YYYY/MM/DD"), item.user_name, item.car_name, item.plate_number, item.service_name, item.amount]),
         handleEdit: (data) => handleEdit(data),
         handleRemove: (id) => handleRemove(id),
     };
@@ -103,43 +102,19 @@ const ServiceHistory = () => {
     return (
         <Wrapper>
             <>
-            {/* {
-                hasEditAccess && 
-                <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', marginLeft:"20px", width:"100%", justifyContent: 'space-between' }}>
-                    <Grid2 size={ {xs: 11, sm: 11, md: 3} }>
-                        <Select
-                            sx={{ width: "100%", height: "40px" }}
-                            labelId="demo-simple-select-label"
-                            name="role"
-                            id="role"
-                            value={role}
-                            onChange={(event) => handleChangeRole(event.target.value)}
-                        >
-                            <MenuItem value={"admin"}>Admin</MenuItem>
-                            <MenuItem value={"employee"}>Employee</MenuItem>
-                            <MenuItem value={"user"}>User</MenuItem>
-                        </Select>
-
-                    </Grid2>
-                    <Grid2 size={ {xs: 11, sm: 11, md: 3} }>
-                        <Button 
-                            sx={{ width: "100%" }}
-                            variant="contained" color="success" onClick={() => setIsModalOpen(!isModalOpen)}>
-                            New User
-                        </Button>
-                    </Grid2>
+            <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', width:"100%", justifyContent: 'end' }}>
+                <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 12 : 7} }>
+                    <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
+                    History
+                    </Typography>
                 </Grid2>
-            } */}
+            </Grid2>
             { 
-            isLoading ? <TableLoading columns={HistoryTable.headers.length} />
+            isLoading ? <Loader />
             :
             histories?.length > 0 ? 
                 <TableWrapper {...HistoryTable} />
-                : <EmptyData>
-                    <Typography>
-                        No available History
-                    </Typography>
-                </EmptyData>
+                : <EmptyData icon={<FaHistory />} label="No available History" />
             }
             {/* { isModalOpen && (<UserUpsert 
                 handleCloseModal={handleChangeModal}

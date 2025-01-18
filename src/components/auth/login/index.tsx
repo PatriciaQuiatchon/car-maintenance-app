@@ -3,9 +3,8 @@ import * as Yup from "yup";
 import { useAuth } from "../../../hooks/authProvider";
 import { Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import { LoadingButton } from "@mui/lab";
-import { blueGrey } from '@mui/material/colors';
 import LoginIcon from '@mui/icons-material/Login';
+import CustomLoadingButton from "../../button/loding-button";
 
 const registerSchema = Yup.object().shape({
   email: Yup.string().email().required("Email is required"),
@@ -47,9 +46,14 @@ const SignInForm = () => {
 
     return (
       <div className="container">
-        <Typography variant="h3" m={3}>Log In</Typography>
+        <Typography 
+          sx={{ textTransform: "uppercase", letterSpacing: "2px"}} 
+          color="#455a64"
+          fontWeight="700" 
+          variant="h3" component="span"
+        >Log In</Typography>
         <Form onSubmit={handleSubmit}>
-          <Stack className="form-row" spacing={2} mb={2}>
+          <Stack className="form-row" spacing={2} m={2}>
             <TextField
               size="medium"
               hiddenLabel
@@ -83,19 +87,14 @@ const SignInForm = () => {
             {errors.password && touched.password && (
               <span className="error">{errors.password}</span>
             )}
-            
-          <LoadingButton
-            style={{ color: "whitesmoke" }}
-            sx={{ color: "whitesmoke", backgroundColor: blueGrey[900]}}
-            loading={isSubmitting}
-            loadingPosition="start"
-            type="submit"
-            startIcon={<LoginIcon />}
-            className={!(dirty && isValid) ? "disabled-btn" : ""}
-            disabled={!dirty || !isValid}
-          >
-            Sign In
-          </LoadingButton>
+          <CustomLoadingButton 
+            dirty={dirty}
+            isSubmitting={isSubmitting}
+            icon={<LoginIcon />}
+            isValid={isValid}
+            label="Sign In"
+          />
+
           </Stack>
 
         </Form>

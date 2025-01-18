@@ -1,19 +1,35 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, useMediaQuery, useTheme, Grid2, Card, CardContent, Typography, CardActions, FormControl, InputLabel, Select, MenuItem, Tooltip } from '@mui/material';
-import { styled } from '@mui/system';
-import { green, grey, yellow } from '@mui/material/colors';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, useMediaQuery, useTheme, Grid2, Card, CardContent, Typography, CardActions, FormControl, InputLabel, Select, MenuItem, Tooltip, Chip } from '@mui/material';
+import { Stack, styled } from '@mui/system';
+import { green, blue, grey, yellow } from '@mui/material/colors';
 import { IBase, ITable } from '../../interface/shared';
 import { useAuth } from '../../hooks/authProvider';
 import { useLocation } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-// Custom styled components
 const StyledTableContainer = styled(TableContainer)(({ }) => ({
   borderRadius: '8px',
   boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-  // margin: '20px',
   marginTop: "10px",
-  overflowX: 'auto', maxHeight: '65vh' 
+  overflowX: 'auto', 
+  maxHeight: '75vh',
+  scrollBehavior: 'smooth',
+
+  '&::-webkit-scrollbar': {
+    width: '8px', 
+    height: '8px', 
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#ccc',
+    borderRadius: '4px',
+  },
+  '&::-webkit-scrollbar-thumb:hover': {
+    backgroundColor:  '#aaa',
+  },
+  '&::-webkit-scrollbar-track': {
+    backgroundColor:  '#f0f0f0', 
+    borderRadius: '4px',
+  },
 }));
 
 const StyledGridContainer = styled(Grid2)(({ }) => ({
@@ -35,16 +51,12 @@ const CustomRow = styled(TableRow, {
   shouldForwardProp: (prop) => prop !== 'highlight',
 })<CustomRowProps>(({ highlight }) => ({
   backgroundColor: highlight ? 'whitesmoke' : 'white',
-  // '&:nth-of-type(even)': {
-  //   backgroundColor: highlight ? 'gray' : 'white',
-  // },
 }));
 
 const CustomTable = <T extends IBase>(props: ITable<T>) => {
   const { headers, rows, hideUserID, handleEdit, handleRemove, handleChange } = props;
   const auth = useAuth();
   const location = useLocation();
-  // const navigation = useNavigate();
 
   const pathExempted = ["/registered-vehicle","/repair-request"]
 
@@ -78,8 +90,21 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
     switch(status) {
       case "PENDING":
         return yellow[700]
+      case "IN PROGRESS":
+        return blue[700]
       case "DONE":
         return green[500]
+    }
+  }
+
+  const formatChipColor = (status: string) => {
+    switch(status) {
+      case "PENDING":
+        return "warning"
+      case "IN PROGRESS":
+        return "primary"
+      case "DONE":
+        return "success"
     }
   }
 
@@ -121,16 +146,16 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
           <StyledTableContainer>
           <Table stickyHeader>
             <TableHead>
-              <TableRow>
-                <StyledTableCell style={{ display: "none"}} key="header-id">ID</StyledTableCell>
+              <TableRow sx={{ backgroundColor: "#842433",}}>
+                <StyledTableCell style={{ display: "none",}} key="header-id">ID</StyledTableCell>
                 {headers.map((header, index) => (
-                <StyledTableCell key={index} style={{ fontSize: "12px", fontWeight: "bolder", display: index === 0 || hideLabelID.includes(header as string) ? "none" : "" }}>
+                <StyledTableCell key={index} style={{ backgroundColor: "#842433",  letterSpacing: 1.5, fontSize: "10px", fontWeight: "bolder", display: index === 0 || hideLabelID.includes(header as string) ? "none" : "" }}>
                   {formatName(formatHeaders(String(header)).toUpperCase())}
                   </StyledTableCell>
               ))}
               {
-                hasEditAccess && 
-                <StyledTableCell key={"actionCell"} >ACTION</StyledTableCell>
+                (hasEditAccess && props.type !== "IServiceHistory") && 
+                <StyledTableCell sx={{ backgroundColor: "#842433" }} key={"actionCell"} >ACTION</StyledTableCell>
               }
 
             </TableRow>
@@ -155,13 +180,16 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                     align="center" sx={{ display: cellClass, color: statusOptions.includes(String(cell)) ? formatColor(String(cell)) : "" }}>
                     {
                       statusOptions.includes(String(cell)) ? 
-                      SelectStatus(combined, String(cell))
+                        auth.role === "customer"  ?
+                        <Chip color={formatChipColor(String(cell))} label={String(cell)} /> 
+                        :
+                        SelectStatus(combined, String(cell))
                       : 
                       <>{cell}</>
                     }
                   </TableCell>
                 )})}
-                {hasEditAccess && ( <TableCell onClick={(event) => {
+                {(hasEditAccess && props.type !== "IServiceHistory") && ( <TableCell onClick={(event) => {
                               event.stopPropagation();
                 }} sx={{ display:"flex", justifyContent: "center" }}>
                   <Tooltip title="Edit" placement="top">
@@ -178,6 +206,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                   <Tooltip title="Remove" placement="top">
                     <Button
                       variant='contained'
+                      sx={{ backgroundColor: "#842433" }}
                       color='error'
                       onClick={(event) => {
                         event.stopPropagation();
@@ -203,13 +232,17 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
             return (
               <Grid2 size={{ xs: 12, sm: auth.role === "admin" ? 12 : 6  }} key={rowIndex}>
                 <Card key={rowIndex} sx={{height: "auto", display: "flex", justifyContent: "center", alignItems: "center", padding:"5px" }}>
-                  <CardContent key={rowIndex+"card"}>
+                  <CardContent sx={{ textAlign: "left" }}>
+                    <Stack spacing={1.5}>
                     {headers.slice(1).map((header, index) => {
                       const cellValue = row[index + 1];
                       return (
-                        <>
+                        <div key={cellValue}>
                            {
                             statusOptions.includes(String(cellValue)) ? 
+                            auth.role === "customer"  ?
+                            <Chip color={formatChipColor(String(cellValue))} label={String(cellValue)} /> 
+                            :
                             SelectStatus(combined, String(cellValue))
                             : 
                             <Typography display={
@@ -221,11 +254,11 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                                 </strong> <span style={{  color: ["PENDING", "DONE"].includes(String(cellValue)) ? formatColor(String(cellValue)) : "" }}>{cellValue}</span>
                             </Typography>
                           }
-                        </>
+                        </div>
                         
                       );
                     })}
-                  {hasEditAccess && (
+                  {(hasEditAccess && props.type !== "IServiceHistory") && (
                     <CardActions sx={{ display: "flex", justifyContent: "center",  marginTop: 'auto', justifyItems: "flex-end" }}>
                       <Button
                         startIcon={<EditIcon />}
@@ -239,7 +272,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                         startIcon={<DeleteIcon />}
                         variant="contained"
                         color="error"
-                        
+                        sx={{ backgroundColor: "#842433" }}
                         onClick={(event) => {
                           event.stopPropagation();
                           handleRemove(row[0] as string)
@@ -249,6 +282,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                       </Button>
                     </CardActions>
                   )}
+                  </Stack>
                   </CardContent>
                 </Card>
               </Grid2>
