@@ -2,6 +2,7 @@ import PublicWrapper from "../../components/public-wrapper";
 import img1 from '../../assets/img1.jpg'
 import img2 from '../../assets/img2.jpg'
 import img3 from '../../assets/img3.jpg'
+import cover from '../../assets/cover.jpg'
 
 import { Box, 
     // useMediaQuery,
@@ -10,6 +11,7 @@ import { Box,
 
 import { Carousel } from 'antd';
 import { useNavigate } from "react-router-dom";
+import ImageWithTooltips from "../../components/ImageMapping";
 
   
 const Home = () => {
@@ -35,6 +37,14 @@ const Home = () => {
             image: img3
         }
     ]
+    const points = [
+        { id: 1, x: 20, y: 45, description: 'Dent & Paint' },
+        { id: 2, x: 30, y: 40, description: 'Oil / Lube / Filters' },
+        { id: 3, x: 35, y: 45, description: 'Diagnostics' },
+        { id: 4, x: 55, y: 45, description: 'Detailing' },
+        { id: 5, x: 75, y: 47, description: 'Suspension' },
+        { id: 6, x: 78, y: 59, description: 'Brakes' },
+      ];
     return (
         <PublicWrapper>
            <Carousel autoplay>
@@ -91,6 +101,10 @@ const Home = () => {
                 </Box>
             </Box>)})}
             </Carousel>
+            <ImageWithTooltips 
+                imageSrc={cover}
+                points={points}
+            />
         </PublicWrapper>
     )
 }
