@@ -14,6 +14,8 @@ import Service from "./pages/service";
 import Vehicle from "./pages/vehicle";
 import PublicPage from "./pages/public";
 import Home from "./pages/home";
+import VerifyEmail from "./pages/verify-email";
+import ResetPasswordPage from "./components/auth/forgot-password";
 
 function App() {
 
@@ -23,10 +25,12 @@ function App() {
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/verify" element={<VerifyEmail />} />
             <Route path="/auto-services" element={<PublicPage />} />
             <Route path="/login" element={<AuthPage />} />
             <Route path="/admin" element={<AuthPage />} />
             <Route path="/register" element={<AuthPage />} />
+            <Route path="/forgot-password" element={<ResetPasswordPage />} />
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/service-history" element={<ServiceHistory />} />

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Wrapper from "../../components/wrapper";
-import { ITable, IRepaireRequest, IRepaireRequestDetails } from "../../interface/shared";
+import { ITable, IRepaireRequest, IRepaireRequestDetails, IService } from "../../interface/shared";
 import api from "../../config/api";
 import { TableWrapper } from "../../components/table";
 import {Button, Chip, Grid2, Stack, Typography } from "@mui/material";
@@ -27,6 +27,7 @@ const RepaireRequest = () => {
     }
     
     const [repaireRequests, setRepaireRequests] = useState<IRepaireRequestDetails[]>([])
+    const [serviceData, setServiceData] = useState<IService[]>([])
     const [repaireRequest, setRepaireRequest] = useState<IRepaireRequestDetails>(initial)
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDelete, setIsDelete] = useState<boolean>(false);
@@ -37,13 +38,13 @@ const RepaireRequest = () => {
         
         try {
             setIsLoading(!isLoading)
-            const userId = auth.role === "customer" ? auth.user?.user_id : ""
-            let href = `/api/service-requests/${userId}`
+            let href = `/api/service-requests/`
             if (selectedStatus) {
                 href += `?status=${selectedStatus}`
             }
             const response = await api.get(href);
             setRepaireRequests(response.data?.requests)
+            setServiceData(response.data?.services)
         } catch (error){
             handleError(error as AxiosError); 
         } finally {
@@ -117,13 +118,18 @@ const RepaireRequest = () => {
 
     requestHeaders.push("request_status")
 
+    const generateServiceName = (serviceIds: string) => {
+        const dataSplit = serviceIds.split(", ")
+        const serviceNames = dataSplit.map(item => serviceData.find(data => data.service_id === item)?.name || "")
+        return serviceNames.join(", ")
+    }
     const requestRows = repaireRequests?.map(item => {
         const data = [
             item.request_id, 
             item.service_id,
             item.vehicle_id,
             `${item.vehicle_name} - ${item.model} - ${item.year || ""}`,
-            dayjs(item.preferred_schedule).format("DD/MM/YYYY"), item.service_type, item.plate_number]
+            dayjs(item.preferred_schedule).format("DD/MM/YYYY"), generateServiceName(item?.service_ids || ""), item.plate_number]
         if (auth.role !== "customer") {
             data.push(item?.requested_by || "")
             data.push(item?.requested_by_id || "")

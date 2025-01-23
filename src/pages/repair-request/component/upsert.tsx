@@ -2,7 +2,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import CustomDialog from "../../../components/dialog";
-import { FormControl, InputLabel, MenuItem, Select, Stack } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack } from "@mui/material";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 
 import { FC, useEffect, useState } from "react";
@@ -16,10 +16,23 @@ import dayjs from "dayjs";
 
 const schema = Yup.object().shape({
     vehicle_id: Yup.string().required("Vehicle is required"),
-    service_id: Yup.string().required("Service is required"),
+    service_id: Yup.lazy((value) => {
+        if (Array.isArray(value)) {
+            return Yup.string()
+                .transform((val) => val.join(','))
+                .required("Service is required");
+        }
+        return Yup.string().required("Service is required");
+    }),
     mechanic_id: Yup.string().required("Mechanic is required"),
     preferred_schedule: Yup.date().required("Date is required"),
     notes: Yup.string(),
+});
+
+const mechanicSchema = Yup.object().shape({
+    request_status: Yup.string().required("Status is required"),
+    mechanic_notes: Yup.date().required("notes is required"),
+    images: Yup.string(),
 });
 
 interface IRepaireRequestUpsert {
@@ -55,6 +68,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
         vehicle_id:"",
         notes:"",
         request_status:"",
+        mechanic_notes: "",
     })
     const fetchData = async () => {
         try {
@@ -93,6 +107,9 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
         }
         
     }
+
+    const [services, setServices] = useState<string[]>([]);
+
     useEffect(() => {
         if (isModalOpen) {
             fetchData()
@@ -102,13 +119,17 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
         <Formik
             initialValues={editData}
             enableReinitialize={true}
-            validationSchema={schema}
+            validationSchema={ auth.role == "customer" ? schema : mechanicSchema}
             onSubmit={async (values) => {
+                const formValues = {
+                    ...values,
+                    service_id: services.join(", ")
+                }
                 try {
                     if (initialData.request_id === "") {
-                        await api.post(`/api/service-request/${auth.user?.user_id}`, values);
+                        await api.post(`/api/service-request/`, formValues);
                     } else {
-                        await api.put(`/api/service-request/${initialData.request_id}`, values);
+                        await api.put(`/api/service-request/${initialData.request_id}`, formValues);
                     }
                     handleSucces();
                     handleCloseModal();
@@ -121,6 +142,19 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
             >
             {(formik) => {
                 const { errors, touched, isValid, dirty, values, handleSubmit, handleBlur, handleChange, setFieldValue } = formik;
+                
+                const handleSelectChange = (event: SelectChangeEvent<typeof services>) => {
+                    const {
+                    target: { value },
+                    } = event;
+                    setServices(
+                    typeof value === 'string' ? value.split(',') : value,
+                    );
+                    setFieldValue("service_id", 
+                    typeof value === 'string' ? value.split(',') : value,
+                    )
+                };
+
                 return (
                     <Form onSubmit={handleSubmit} style={{width: "1000px"}}>
                         
@@ -164,12 +198,21 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                                     labelId="input-service"
                                     name="service_id"
                                     id="service_id"
-                                    value={values.service_id}
+                                    multiple
+                                    value={services}
                                     label="Service Type"
-                                    onChange={handleChange}
+                                    onChange={handleSelectChange}
                                     error={touched.service_id && Boolean(errors.service_id)}
                                     onBlur={handleBlur}
                                     className={errors.service_id && touched.service_id ? "input-error" : ""}
+                                    MenuProps={{
+                                        PaperProps: {
+                                            style: {
+                                              maxHeight: 48 * 4.5 + 8,
+                                              width: 250,
+                                            },
+                                          },
+                                    }}
                                 >   
                                     {   
                                         serviceTypeOptions.map(({label, value}) => {
@@ -225,6 +268,20 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                                 id="notes"
                                 onBlur={handleBlur}
                                 value={values.notes}
+                                style={{
+                                    color: "black",
+                                    backgroundColor: "white"
+                                }}
+                                onChange={handleChange}
+                                aria-label="enter note" 
+                                minRows={3} 
+                                placeholder="Enter Note" 
+                            />
+                            <TextareaAutosize  
+                                name="mechanic_notes"
+                                id="mechanic_notes"
+                                onBlur={handleBlur}
+                                value={values.mechanic_notes}
                                 style={{
                                     color: "black",
                                     backgroundColor: "white"

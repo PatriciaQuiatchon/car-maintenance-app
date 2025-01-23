@@ -38,6 +38,7 @@ export interface IVehicle extends IBase {
 export interface IRepaireRequestDetails extends IRepaireRequest {
     available_mechanic?: string,
     note?: string,
+    service_ids?: string,
 }
 
 export interface IRepairUpdate {
@@ -48,6 +49,8 @@ export interface IRepairUpdate {
     service_id: string
     preferred_schedule: string,
     notes?: string,
+    mechanic_notes?: string,
+    image?: string
 }
 
 export interface IRepaireRequest extends IBase {

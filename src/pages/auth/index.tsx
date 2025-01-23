@@ -1,4 +1,4 @@
-import { Box, Divider, Stack, Typography } from "@mui/material";
+import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 import SignInForm from "../../components/auth/login"
 import SignUpForm from "../../components/auth/register";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -64,7 +64,18 @@ const AuthPage = () => {
                     </Stack>
                 </Stack>
             )}
-                
+            {
+                !isRegister && (
+                    <Box>
+                        <span>Forgot your password? </span>
+                        <Button variant="text"
+                        onClick={()=> navigate("/forgot-password")}
+                        >
+                            Reset here
+                        </Button>
+                    </Box>
+                )
+            }
             </Box>
         </Box>
         </PublicWrapper>

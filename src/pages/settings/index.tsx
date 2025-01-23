@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import Wrapper from "../../components/wrapper";
-import { useNavigate } from "react-router-dom";
-import { Breadcrumbs, Stack, Box, Tab } from "@mui/material";
-import TextButton from "../../components/text-button";
+import {  Stack, Box, Tab, Grid2, Typography } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import ProfileForm from "../../components/profile";
 import PasswordChangeForm from "../../components/password-form";
@@ -14,7 +12,6 @@ const Settings = () => {
     const handleChangeTabValue = () => {
         setTabValue(tabValue === "user" ? "password" : "user")
     }
-    const navigate = useNavigate()
 
     const auth = useAuth();
 
@@ -31,11 +28,11 @@ const Settings = () => {
                 width: {xs: "calc(100vw - 100px)", sm:`100%`},
             }}>
                 
-            <Breadcrumbs sx={{marginY:"5px"}}>
-                <TextButton isActive={true} onClick={() => navigate("/settings")}>
-                    Settings
-                </TextButton>
-            </Breadcrumbs>
+                <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 12 : 7} }>
+                    <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
+                    Services
+                    </Typography>
+                </Grid2>
         <TabContext value={tabValue} >
                     <Box sx={{ borderBottom: 1, borderColor: 'divider', width:"100%" }}>
                         <TabList onChange={handleChangeTabValue} aria-label="lab API tabs example" 
