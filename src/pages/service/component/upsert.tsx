@@ -8,6 +8,7 @@ import api from "../../../config/api";
 import { IService } from "../../../interface/shared";
 import handleError from "../../../components/error";
 import { AxiosError } from "axios";
+import { parseMoney } from "../../../utils/helper";
 
 const registerSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -27,11 +28,10 @@ const ServiceUpsert: FC<IServiceUpsert> = (props) => {
     const { isModalOpen, initialData } = props
     const { handleCloseModal, handleSucces } = props
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
     return (
         <Formik
             key={JSON.stringify(initialData)}
-            initialValues={initialData}
+            initialValues={{...initialData, price: parseMoney(String(initialData.price))}}
             enableReinitialize={true}
             validationSchema={registerSchema}
             onSubmit={async (values) => {
