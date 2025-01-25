@@ -16,7 +16,7 @@ import { SAVED_MESSAGE } from "../../constant";
 import CarRepairIcon from '@mui/icons-material/CarRepair';
 import { GiAutoRepair } from "react-icons/gi";
 import Loader from "../../components/loading";
-import { formatMoney } from "../../utils/helper";
+import { formatMoney, parseMoney } from "../../utils/helper";
 const RepaireRequest = () => {
 
     const auth = useAuth();
@@ -105,7 +105,7 @@ const RepaireRequest = () => {
 
     const handleChangeStatus = async (data: IRepaireRequest, status: string) => {
         await api.post(`/api/service-request/change/${data.request_id}`, {
-            ...data, request_status: status, user_id: data.requested_by_id
+            ...data, price: parseMoney(data?.price || ""), request_status: status, user_id: data.requested_by_id
         });
         toast.success(SAVED_MESSAGE("Status", "changed"))
         fetchData();

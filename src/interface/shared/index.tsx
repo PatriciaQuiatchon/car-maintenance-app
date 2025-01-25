@@ -76,6 +76,7 @@ export interface IServiceHistory extends IBase {
     car_name: string,
     plate_number: string,
     service_name: string,
+    services?: string,
     amount: string
     //For Table Header
     service?:string

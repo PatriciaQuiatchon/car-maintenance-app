@@ -157,13 +157,14 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                     service_id: isCustomer ? services.join(", ") : "",
                     image: imageUrl
                 }
+                
+                const service_amount = services.map(item => serviceTypeOptions.find(service => service.value == item)?.price || "0")
+                .reduce((acc, price) => acc + Number(price), 0);
                 try {
                     if (initialData.request_id === "") {
-                        const service_amount = services.map(item => serviceTypeOptions.find(service => service.value == item)?.price || "0")
-                                .reduce((acc, price) => acc + Number(price), 0);
                         await api.post(`/api/service-request/`, {...formValues, service_amount});
                     } else {
-                        await api.put(`/api/service-request/${initialData.request_id}`, formValues);
+                        await api.put(`/api/service-request/${initialData.request_id}`, {...formValues, service_amount});
                     }
                     handleSucces();
                     handleCloseModal();

@@ -171,8 +171,8 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                 // handleNavigateDetail(row[0] as string)
                 }} key={rowIndex} highlight={rowIndex % 2 === 0}>
                 {row.map((cell, cellIndex) => {
-                  console.log({row})
-                  const cellClass = cellIndex === 0 || (hideUserID && (cellIndex === 9 || cellIndex === 1 || cellIndex === 2)) ? "none" : "";
+                  
+                  const cellClass = cellIndex === 0 || (hideUserID && (cellIndex === 10 || cellIndex === 1 || cellIndex === 2)) ? "none" : "";
                   return (
                   <TableCell key={cellIndex} 
                     onClick={(event)=> {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Wrapper from "../../components/wrapper";
-import { IServiceHistory, ITable } from "../../interface/shared";
+import { IService, IServiceHistory, ITable } from "../../interface/shared";
 import api from "../../config/api";
 import { TableWrapper } from "../../components/table";
 import { Grid2, Typography } from "@mui/material";
@@ -13,6 +13,7 @@ import { AxiosError } from "axios";
 import dayjs from "dayjs";
 import { FaHistory } from "react-icons/fa";
 import Loader from "../../components/loading";
+import { formatMoney } from "../../utils/helper";
 
 const ServiceHistory = () => {
 
@@ -31,6 +32,7 @@ const ServiceHistory = () => {
     const [isDelete, setIsDelete] = useState<boolean>(false);
     const [_isSubmitting, _setIsSubmitting] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [serviceData, setServiceData] = useState<IService[]>([])
 
     const fetchServiceHistory = async () => {
         try {
@@ -38,6 +40,9 @@ const ServiceHistory = () => {
             const isUser = auth.role === "customer"
             const response = await api.get(`/api/history/${isUser ? auth.user?.user_id : ""}`);
             setHistories(response.data)
+
+            const responseServices = await api.get(`/api/services`);
+            setServiceData(responseServices.data)
         } catch (error){
             handleError(error as AxiosError); 
         } finally {
@@ -91,10 +96,16 @@ const ServiceHistory = () => {
         }
     }
 
+    const generateServiceName = (serviceIds: string) => {
+        const dataSplit = serviceIds.split(", ")
+        const serviceNames = dataSplit.map(item => serviceData.find(data => data.service_id === item)?.name || item)
+        return serviceNames.join(", ")
+    }
     const HistoryTable: ITable<IServiceHistory> = {
         type: "IServiceHistory",
         headers: ["history_id", "date", "customer", "car", "plate_number", "service", "amount"],
-        rows:  histories.map(item => [item.history_id, dayjs(item.date).format("YYYY/MM/DD"), item.user_name, item.car_name, item.plate_number, item.service_name, item.amount]),
+        rows:  histories.map(item => [item.history_id, dayjs(item.date).format("YYYY/MM/DD"), item.user_name, 
+            item.car_name, item.plate_number, generateServiceName(item?.services || ""), formatMoney(Number(item.amount))]),
         handleEdit: (data) => handleEdit(data),
         handleRemove: (id) => handleRemove(id),
     };
