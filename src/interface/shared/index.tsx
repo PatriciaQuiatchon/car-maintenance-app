@@ -49,7 +49,7 @@ export interface IRepairUpdate {
     service_id: string
     preferred_schedule: string,
     notes?: string,
-    mechanic_notes?: string,
+    imageFile?: File,
     image?: string
 }
 
@@ -58,6 +58,7 @@ export interface IRepaireRequest extends IBase {
     service_type: string,
     preferred_schedule: string,
     plate_number: string,
+    price?: string,
     model:string,
     year:string,
     vehicle_name: string

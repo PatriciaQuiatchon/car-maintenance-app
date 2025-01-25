@@ -1,10 +1,11 @@
 import React, { FC } from "react";
-import { Box, Drawer, AppBar, Toolbar, Typography, IconButton } from "@mui/material";
+import { Box, Drawer, AppBar, Toolbar, Typography, IconButton, Alert } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAuth } from "../../hooks/authProvider";
 import SideBar from "../sidenav";
 import NavBar from "../navbar";
 import { Toaster } from 'react-hot-toast';
+import { useLocation } from "react-router-dom";
 
 const drawerWidth = 250;
 
@@ -15,6 +16,7 @@ interface IWrapper {
 const Wrapper:FC<IWrapper> = ({ children }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  const isVerified = localStorage.getItem("is_verified")
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -31,6 +33,7 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
   const auth = useAuth();
   const isAdmin = ["admin", "employee", "mechanic"].includes(auth.role)
 
+  const location = useLocation()
   return (
     <Box sx={{ display: "flex" }}>
 
@@ -69,6 +72,9 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
               <Box sx={{
               display: { xs: "none", sm: "block" },
               }}>
+                { isVerified === "0" && <Alert sx={{ position:"absolute", top: 0, zIndex: 5, }} variant="filled" severity="warning">
+                  Please verify your email.
+              </Alert>}
                 <NavBar />
               </Box>
             )
@@ -140,6 +146,9 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
                 width: drawerWidth },
             }}
           >
+            { isVerified === "0" && <Alert sx={{ position:"absolute", top: 0, zIndex: 5, }} variant="filled" severity="warning">
+                  Please verify your email.
+              </Alert>}
               <NavBar />
           </Drawer>
         </Box>
@@ -156,6 +165,9 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
           mx: isAdmin ? 3 : 1,
         }}
       >
+        {
+         ( isVerified === "0" && !isAdmin && !location.pathname.includes("services")) && <Box sx={{ position: "absolute", height:"100%", width:"100%", zIndex: 9, backgroundColor: "fff", opacity:.5, }} />
+        }
         {children}
       </Box>
       <Toaster />

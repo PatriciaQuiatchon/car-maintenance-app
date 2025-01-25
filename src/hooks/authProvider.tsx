@@ -64,6 +64,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         localStorage.setItem("site", response.data.token);
         localStorage.setItem("role", response.data.user.role);
         localStorage.setItem("email", response.data.user.email);
+        localStorage.setItem("is_verified", response.data.user.is_verified);
         navigate("/dashboard");
         return;
       }
@@ -97,6 +98,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     localStorage.removeItem("site");
     localStorage.removeItem("email");
     localStorage.removeItem("role");
+    localStorage.removeItem("is_verified");
     navigate("/");
   };
 

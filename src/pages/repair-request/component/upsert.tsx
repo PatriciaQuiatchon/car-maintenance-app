@@ -1,15 +1,15 @@
-import { Formik, Form } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import CustomDialog from "../../../components/dialog";
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack } from "@mui/material";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 
 import { FC, useEffect, useState } from "react";
 import api from "../../../config/api";
 import { IRepaireRequestDetails, IRepairUpdate, IService, IUserDetails, IVehicle } from "../../../interface/shared";
 import { useAuth } from "../../../hooks/authProvider";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import handleError from "../../../components/error";
 import ResponsiveDatePickers from "../../../components/datepicker";
 import dayjs from "dayjs";
@@ -26,13 +26,10 @@ const schema = Yup.object().shape({
     }),
     mechanic_id: Yup.string().required("Mechanic is required"),
     preferred_schedule: Yup.date().required("Date is required"),
-    notes: Yup.string(),
 });
 
 const mechanicSchema = Yup.object().shape({
-    request_status: Yup.string().required("Status is required"),
-    mechanic_notes: Yup.date().required("notes is required"),
-    images: Yup.string(),
+    notes: Yup.string().required("notes is required"),
 });
 
 interface IRepaireRequestUpsert {
@@ -45,12 +42,14 @@ interface IRepaireRequestUpsert {
 interface IOptions {
     label: "",
     value:"",
+    price?:"",
 }
 
 const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
 
     const auth = useAuth();
     
+    const isCustomer = auth.role === "customer"
     const { isModalOpen, initialData} = props
     const { handleCloseModal, handleSucces } = props
 
@@ -59,6 +58,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
     const [carOptions, setCarOptions] = useState<IOptions[]>([])
     const [serviceTypeOptions, setServiceTypeptions] = useState<IOptions[]>([])
     const [mechanicOptions, setMechanics] = useState<IOptions[]>([])
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
 
     const [editData, setEditData] = useState<IRepairUpdate>({
         mechanic_id: "",
@@ -68,7 +68,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
         vehicle_id:"",
         notes:"",
         request_status:"",
-        mechanic_notes: "",
+        image:"",
     })
     const fetchData = async () => {
         try {
@@ -78,7 +78,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
             const options = vehicles.map((item:IVehicle) => ({ label: `${item.name} ${item.model} ${item.plate_number}`, value: item.vehicle_id }))
             setCarOptions(options)
 
-            const servicesOptions = services.map((item:IService) => ({ label: `${item.name}`, value: item.service_id }))
+            const servicesOptions: IOptions[] = services.map((item:IService) => ({ label: `${item.name}`, value: item.service_id, price:item.price }))
             setServiceTypeptions(servicesOptions)
 
             
@@ -93,6 +93,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
             setIsLoading(false)
         }
     }
+    const [services, setServices] = useState<string[]>([]);
 
     const fetchRequest = async () => {
         try {
@@ -100,6 +101,10 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
             setEditData({
                 ...response.data
             })
+            setImagePreview(response.data.image)
+            setServices(
+            response.data.service_id.split(', '),
+            );
         } catch (err) {
 
         } finally {
@@ -108,26 +113,55 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
         
     }
 
-    const [services, setServices] = useState<string[]>([]);
-
+    const [isChangeImage, setIsChangeImage] = useState<boolean>(false);
+    
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        setImagePreview(URL.createObjectURL(file));
+      }
+    };
+  
+    const handleImageUpload = async (file: File | undefined) => {
+      // const file = e.target.files?.[0]; 
+      const cloudName = "dgxzrvv7n"
+      const apiKey = '379246439751562';
+      if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('api_key', apiKey);
+        formData.append('upload_preset', 'sample'); 
+  
+        const response = await axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, formData)
+        return response.data.url || ""
+      }
+      return
+    };
+    
     useEffect(() => {
         if (isModalOpen) {
             fetchData()
         }
     }, [isModalOpen])
+
     return (
         <Formik
             initialValues={editData}
             enableReinitialize={true}
-            validationSchema={ auth.role == "customer" ? schema : mechanicSchema}
+            validationSchema={isCustomer ? schema : mechanicSchema}
             onSubmit={async (values) => {
+                const imageUrl = await handleImageUpload(values.imageFile)
+
                 const formValues = {
                     ...values,
-                    service_id: services.join(", ")
+                    service_id: isCustomer ? services.join(", ") : "",
+                    image: imageUrl
                 }
                 try {
                     if (initialData.request_id === "") {
-                        await api.post(`/api/service-request/`, formValues);
+                        const service_amount = services.map(item => serviceTypeOptions.find(service => service.value == item)?.price || "0")
+                                .reduce((acc, price) => acc + Number(price), 0);
+                        await api.post(`/api/service-request/`, {...formValues, service_amount});
                     } else {
                         await api.put(`/api/service-request/${initialData.request_id}`, formValues);
                     }
@@ -142,7 +176,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
             >
             {(formik) => {
                 const { errors, touched, isValid, dirty, values, handleSubmit, handleBlur, handleChange, setFieldValue } = formik;
-                
+
                 const handleSelectChange = (event: SelectChangeEvent<typeof services>) => {
                     const {
                     target: { value },
@@ -167,7 +201,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                             isSubmitButtonDisabled={!(dirty && isValid)}
                         >
                         <Stack className="form-row" spacing={2} mb={2}>
-                             <FormControl fullWidth>
+                            {isCustomer && ( <><FormControl fullWidth>
                                 <InputLabel id="input-car">Car</InputLabel>
                                 <Select
                                     labelId="input-car"
@@ -176,7 +210,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                                     value={values.vehicle_id}
                                     label="Car"
                                     onChange={handleChange}
-                                    error={errors.vehicle_id && touched.vehicle_id || undefined}
+                                    error={touched.vehicle_id && Boolean(errors.vehicle_id)}
                                     onBlur={handleBlur}
                                     className={errors.vehicle_id && touched.vehicle_id ? "input-error" : ""}
                                 >   
@@ -262,35 +296,68 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                                 { errors.preferred_schedule && touched.preferred_schedule && (
                                     <span className="error">{errors.preferred_schedule}</span>
                                 ) }
-                            </FormControl>
-                            <TextareaAutosize  
-                                name="notes"
-                                id="notes"
-                                onBlur={handleBlur}
-                                value={values.notes}
-                                style={{
-                                    color: "black",
-                                    backgroundColor: "white"
-                                }}
-                                onChange={handleChange}
-                                aria-label="enter note" 
-                                minRows={3} 
-                                placeholder="Enter Note" 
+                            </FormControl></>)}
+                            {!isCustomer && (
+                                <>
+                                
+                                <div className="flex flex-col">
+                                    <button 
+                                    type="button"
+                                    onClick={() => {
+                                    setIsChangeImage(!isChangeImage)
+                                    }}>
+                                    {`${ isChangeImage ? 'Cancel Upload' : 'Upload Image' }`}
+                                    </button>
+                                
+                                    { isChangeImage && (
+                                    <Box>
+                                    <Box >
+                                        Upload Image
+                                    </Box>
+                                    <input
+                                        type="file"
+                                        id="imageFile"
+                                        name="imageFile"
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                        const file = e.target.files?.[0] || null;
+                                        setFieldValue('imageFile', file);
+                                        handleImageChange(e);
+                                        }}
+                                    /></Box> )
+                                    }
+                                    {imagePreview && (
+                                    <Box sx={{ width: "100%", overflow: "hidden" }}>
+                                    <img
+                                      src={imagePreview}
+                                      alt="Preview"
+                                      style={{
+                                        width: "100%", 
+                                        height: "100%",
+                                        objectFit: "cover", 
+                                        borderRadius: "8px"
+                                      }}
+                                    />
+                                  </Box>
+                                    )}
+                                    <ErrorMessage name="image" component="div" className="text-red-600 text-sm" />
+                                </div>
+                                <TextareaAutosize  
+                                    name="notes"
+                                    id="notes"
+                                    onBlur={handleBlur}
+                                    value={values.notes}
+                                    style={{
+                                        color: "black",
+                                        backgroundColor: "white"
+                                    }}
+                                    onChange={handleChange}
+                                    aria-label="enter note" 
+                                    minRows={3} 
+                                    placeholder="Enter Note" 
                             />
-                            <TextareaAutosize  
-                                name="mechanic_notes"
-                                id="mechanic_notes"
-                                onBlur={handleBlur}
-                                value={values.mechanic_notes}
-                                style={{
-                                    color: "black",
-                                    backgroundColor: "white"
-                                }}
-                                onChange={handleChange}
-                                aria-label="enter note" 
-                                minRows={3} 
-                                placeholder="Enter Note" 
-                            />
+                            </>
+                            )}
                         </Stack>
                         </CustomDialog>
 

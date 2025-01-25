@@ -16,6 +16,7 @@ import { SAVED_MESSAGE } from "../../constant";
 import CarRepairIcon from '@mui/icons-material/CarRepair';
 import { GiAutoRepair } from "react-icons/gi";
 import Loader from "../../components/loading";
+import { formatMoney } from "../../utils/helper";
 const RepaireRequest = () => {
 
     const auth = useAuth();
@@ -110,13 +111,13 @@ const RepaireRequest = () => {
         fetchData();
     }
 
-    const requestHeaders:  (keyof IRepaireRequest)[] = ["request_id","service_id", "vehicle_id", "name", "preferred_schedule", "service_type", "plate_number"]
+    const requestHeaders:  (keyof IRepaireRequest)[] = ["request_id","service_id", "vehicle_id", "name",  "plate_number", "preferred_schedule", "service_type", "price", "request_status"]
     if (auth.role != "customer") {
         requestHeaders.push("requested_by")
         requestHeaders.push("requested_by_id")
     }
 
-    requestHeaders.push("request_status")
+    requestHeaders.push()
 
     const generateServiceName = (serviceIds: string) => {
         const dataSplit = serviceIds.split(", ")
@@ -124,17 +125,22 @@ const RepaireRequest = () => {
         return serviceNames.join(", ")
     }
     const requestRows = repaireRequests?.map(item => {
+        const formattedMoney = Number(item?.price || 0)
         const data = [
             item.request_id, 
             item.service_id,
             item.vehicle_id,
             `${item.vehicle_name} - ${item.model} - ${item.year || ""}`,
-            dayjs(item.preferred_schedule).format("DD/MM/YYYY"), generateServiceName(item?.service_ids || ""), item.plate_number]
+            item.plate_number,
+            dayjs(item.preferred_schedule).format("DD/MM/YYYY"), 
+            generateServiceName(item?.service_ids || ""),
+            formatMoney(formattedMoney),
+            item.request_status?.toUpperCase() || "PENDING",
+        ]
         if (auth.role !== "customer") {
             data.push(item?.requested_by || "")
             data.push(item?.requested_by_id || "")
         }
-        data.push(item.request_status?.toUpperCase() || "PENDING")
         return data;
     }
     

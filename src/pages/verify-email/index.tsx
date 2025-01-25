@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { AxiosError } from 'axios';
-import handleError from '../../components/error';
+import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../../config/api';
 
 const VerifyEmail = () => {
@@ -9,13 +7,17 @@ const VerifyEmail = () => {
     const { search } = useLocation();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
+    const navigate = useNavigate();
 
     const verifyEmail = async (token: string) => {
         try {
             setIsLoading(!isLoading)
-            await api.get(`/api/verify?token=${token}`);
+            await api.post(`/api/auth/verify?token=${token}`);
+            localStorage.removeItem("is_verified");
+
         } catch (error){
-            handleError(error as AxiosError); 
+            console.log({error})
+            // handleError(error as AxiosError); 
         } finally {
             setIsLoading(false)
         }
@@ -35,7 +37,10 @@ const VerifyEmail = () => {
 
     return (
         <div>
-            <h2>Email Verification</h2>
+            <h2>Email Verification Success</h2>
+            <button onClick={() => navigate("/login")}>
+                Return to login
+            </button>
             <p>{status}</p>
         </div>
     );
