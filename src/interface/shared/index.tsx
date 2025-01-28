@@ -15,6 +15,8 @@ export interface IService extends IBase {
     service_id: string,
     description: string,
     price: number,
+    price_b: number,
+    price_range?: string
 }
 
 export interface IUserDetails extends IBase {
@@ -50,7 +52,8 @@ export interface IRepairUpdate {
     preferred_schedule: string,
     notes?: string,
     imageFile?: File,
-    image?: string
+    image?: string,
+    service_amount?: number,
 }
 
 export interface IRepaireRequest extends IBase {

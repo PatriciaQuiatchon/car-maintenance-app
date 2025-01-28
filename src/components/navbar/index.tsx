@@ -66,7 +66,7 @@ const NavBar = () => {
                         startIcon={<GrServices />}
                         sx={{ backgroundColor: checkCurrentTab("services") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/services") }}
-                    >Servicers</StyledButton>
+                    >Services</StyledButton>
                     <StyledButton 
                         startIcon={<GiAutoRepair />}
                         sx={{ backgroundColor: checkCurrentTab("repair") ? "#1f222a" : "" }}

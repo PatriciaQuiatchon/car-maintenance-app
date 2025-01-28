@@ -103,7 +103,7 @@ const Vehicle = () => {
     return (
         <Wrapper>
             <>
-            <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
+            <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700} color="white" >
                 Vehicles
             </Typography>
                 <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', width:"100%", justifyContent: 'end' }}>

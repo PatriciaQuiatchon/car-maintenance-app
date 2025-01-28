@@ -5,7 +5,7 @@ import Loader from "../../components/loading";
 import EmptyData from "../../components/no-data";
 import handleError from "../../components/error";
 import { AxiosError } from "axios";
-import { Chip, Grid2, Stack, Typography } from "@mui/material";
+import { Box, Chip, Grid2, Stack, styled, Typography } from "@mui/material";
 import { useAuth } from "../../hooks/authProvider";
 import { Line, Pie, Bar } from 'react-chartjs-2';
 import {
@@ -54,6 +54,16 @@ ChartJS.register(
     Tooltip,
     Legend
   );
+
+const GridStyled = styled(Grid2)(({ }) => ({
+    backgroundColor: "whitesmoke",
+    borderRadius: "25px",
+    display: "flex",
+    justifyContent: "center",
+    height: "350px",
+    alignItems: "center",
+}));
+
 const Dashboard = () => {
     const auth = useAuth();
     const isCustomer = auth.role === "customer"
@@ -105,7 +115,7 @@ const Dashboard = () => {
 
         const labels = salesData.totalSales.map((item) =>
             type === 'week'
-            ? `Week ${item.week_number}, ${item.year}`
+            ? `Week ${item.week_number}`
             : type === 'month'
             ? `${item.month_name} ${item.year}`
             : `Year ${item.year}`
@@ -175,10 +185,13 @@ const Dashboard = () => {
 
     return (
         <Wrapper>
-            <>
-                <Grid2 container padding={0} margin={0} sx={{ display: 'flex', width:"100%",  }}>
+            <div 
+                style={{ paddingBottom: "15px" }}
+            >
+                <Grid2 
+                container padding={0} margin={0} sx={{ display: 'flex', width:"100%",  }}>
                     <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 12 : 7} }>
-                        <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
+                        <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700} color="white" >
                         Dashboard
                         </Typography>
                     </Grid2>
@@ -186,10 +199,12 @@ const Dashboard = () => {
                 {
                     isLoading || isLoadingSales ? <Loader /> :
                     <>
-                    <Grid2 container sx={{ mt:5, }} spacing={2}>
-                        <Grid2 size={{ xs: 12, md:6 }}>
+                    <Grid2 container sx={{ mY:5, }} spacing={3}>
+                        <GridStyled size={{ xs: 12, md:!isCustomer ? 6 : 12 }}>
                         {requestChart  ? 
-                        <Stack direction="column" display="flex" justifyContent="center" sx={{ height: { xs: "50vh", md: "50vh" } }} spacing={2}>
+                        <Stack direction="column" display="flex" justifyContent="center" 
+                        // sx={{ height: { xs: "40vh", md: "40vh" } }} 
+                        spacing={2}>
                             <Pie data={requestChart} options={{ responsive: true,
                                 plugins: {
                                     title: {
@@ -212,9 +227,9 @@ const Dashboard = () => {
                             label={"No available request data"}
                         />
                         }
-                        </Grid2>
+                        </GridStyled>
                        {!isCustomer && 
-                        <Grid2 size={{ xs: 12, md:6 }}>
+                        <GridStyled size={{ xs: 12, md:6 }}>
                             {
                                 salesChart && 
                                 <Stack spacing={2}>
@@ -223,10 +238,13 @@ const Dashboard = () => {
                                     <Chip onClick={()=> setType("month")} label="Month" />
                                     <Chip onClick={()=> setType("year")} label="Year" />
                                 </Stack>
+                                <div style={{ position: "relative", height: "250px", width: "100%" }}>
                                 <Line
                                     data={salesChart}
                                     options={{
                                         responsive: true,
+                                        maintainAspectRatio: false,
+                                        aspectRatio: 2,
                                         plugins: {
                                             legend: { position: 'top' },
                                         },
@@ -243,18 +261,23 @@ const Dashboard = () => {
                                         },
                                     }}
                                 />
+                                </div>
                                 </Stack>
                             }
-                        </Grid2>}
-                   </Grid2>
+                        </GridStyled>}
                     {historyChart ? 
-                    <Stack display="flex" justifyContent="center" spacing={1} mt={3}>
+                    <GridStyled size={12}>
                         {
-                            <Stack sx={{ height:"350px" }}>
+                            <Stack sx={{ height:"auto" }}>
+                            <Box sx={{ position: "relative", height: "250px", 
+                                width: { xs: "80vw", sm: "100%", md:"50vw", lg: "70vw"}
+                                }}>
                             <Bar
                                 data={historyChart}
                                 options={{
                                     responsive: true,
+                                    maintainAspectRatio: false, 
+                                    aspectRatio: 2,
                                     plugins: {
                                         legend: { position: 'top' },
                                         // title: {
@@ -282,16 +305,19 @@ const Dashboard = () => {
                                     },
                                 }}
                             />
+                            </Box>
                             </Stack>
                         }
-                    </Stack>
+                    </GridStyled>
+                    
                     :
                     <EmptyData 
                         label={"No available Data"}
                     />}
+                   </Grid2>
                     </>
                 }
-            </>
+            </div>
         </Wrapper>
     )
 }

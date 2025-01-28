@@ -2,7 +2,7 @@ import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import CustomDialog from "../../../components/dialog";
-import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack } from "@mui/material";
+import { Box, FormControl, InputAdornment, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField } from "@mui/material";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 
 import { FC, useEffect, useState } from "react";
@@ -30,6 +30,7 @@ const schema = Yup.object().shape({
 
 const mechanicSchema = Yup.object().shape({
     notes: Yup.string().required("notes is required"),
+    service_amount: Yup.number().required("Amount is required")
 });
 
 interface IRepaireRequestUpsert {
@@ -69,6 +70,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
         notes:"",
         request_status:"",
         image:"",
+        service_amount: 0,
     })
     const fetchData = async () => {
         try {
@@ -98,8 +100,10 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
     const fetchRequest = async () => {
         try {
             const response = await api.get(`/api/service-request/${initialData.request_id}`);
+            const price = Number(response.data.service_amount || '0')
             setEditData({
-                ...response.data
+                ...response.data,
+                service_amount: price
             })
             setImagePreview(response.data.image)
             setServices(
@@ -158,13 +162,13 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                     image: imageUrl
                 }
                 
-                const service_amount = services.map(item => serviceTypeOptions.find(service => service.value == item)?.price || "0")
-                .reduce((acc, price) => acc + Number(price), 0);
+                // const service_amount = services.map(item => serviceTypeOptions.find(service => service.value == item)?.price || "0")
+                // .reduce((acc, price) => acc + Number(price), 0);
                 try {
                     if (initialData.request_id === "") {
-                        await api.post(`/api/service-request/`, {...formValues, service_amount});
+                        await api.post(`/api/service-request/`, {...formValues});
                     } else {
-                        await api.put(`/api/service-request/${initialData.request_id}`, {...formValues, service_amount});
+                        await api.put(`/api/service-request/${initialData.request_id}`, {...formValues});
                     }
                     handleSucces();
                     handleCloseModal();
@@ -177,7 +181,6 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
             >
             {(formik) => {
                 const { errors, touched, isValid, dirty, values, handleSubmit, handleBlur, handleChange, setFieldValue } = formik;
-
                 const handleSelectChange = (event: SelectChangeEvent<typeof services>) => {
                     const {
                     target: { value },
@@ -191,7 +194,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                 };
 
                 return (
-                    <Form onSubmit={handleSubmit} style={{width: "1000px"}}>
+                    <Form onSubmit={handleSubmit} style={{width: "auto"}}>
                         
                         <CustomDialog 
                             title="Service Request"
@@ -356,7 +359,36 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                                     aria-label="enter note" 
                                     minRows={3} 
                                     placeholder="Enter Note" 
-                            />
+                                />
+                                <TextField
+                                    type="number"
+                                    name="service_amount"
+                                    id="service_amount"
+                                    InputProps={{
+                                        inputMode: 'decimal', 
+                                        inputProps: {
+                                            step: "0.01", 
+                                        },
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                ₱
+                                            </InputAdornment>
+                                            ),
+                                    }}
+                                    placeholder="Price Amount"
+                                    sx={{
+                                        color: "white",
+                                        width: "100%",
+                                        backgroundColor: "white"
+                                    }}
+                                    value={values.service_amount}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    className={errors.service_amount && touched.service_amount ? "input-error" : ""}
+                                />
+                                {errors.service_amount && touched.service_amount && (
+                                    <span className="error">{errors.service_amount}</span>
+                                )}
                             </>
                             )}
                         </Stack>

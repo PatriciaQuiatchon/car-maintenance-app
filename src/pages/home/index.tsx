@@ -3,22 +3,32 @@ import img1 from '../../assets/img1.jpg'
 import img2 from '../../assets/img2.jpg'
 import img3 from '../../assets/img3.jpg'
 import cover from '../../assets/cover.jpg'
-
-import { Box, 
+import hood from '../../assets/hood.png'
+import { Box, Button, 
     // useMediaQuery,
     // useTheme 
 } from "@mui/material";
 
 import { Carousel } from 'antd';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ImageWithTooltips from "../../components/ImageMapping";
+import { useEffect, useRef } from "react";
+import Footer from "../../components/Footer";
 
   
 const Home = () => {
-    //   const theme = useTheme();
     
-    // const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const location = useLocation();
 
+  // Scroll to the anchor div when hash changes
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.querySelector(location.hash);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location.hash]);
     const navigate = useNavigate()
     const heroSections = [
         {
@@ -38,13 +48,31 @@ const Home = () => {
         }
     ]
     const points = [
-        { id: 1, x: 20, y: 45, description: 'Dent & Paint' },
+        { id: 1, x: 20, y: 40, description: 'Hood' },
         { id: 2, x: 30, y: 40, description: 'Oil / Lube / Filters' },
         { id: 3, x: 35, y: 45, description: 'Diagnostics' },
-        { id: 4, x: 55, y: 45, description: 'Detailing' },
         { id: 5, x: 75, y: 47, description: 'Suspension' },
         { id: 6, x: 78, y: 59, description: 'Brakes' },
       ];
+
+    const hoodSectionRef = useRef<HTMLDivElement>(null);
+    const imageWithTooltipRef = useRef<HTMLDivElement>(null);
+
+    const handleScrollToHood = () => {
+    if (hoodSectionRef.current) {
+        hoodSectionRef.current.scrollIntoView({
+        behavior: 'smooth'  // Add smooth scrolling
+        });
+    }
+    };
+
+    const handleScrollToImageTooltip = () => {
+        if (imageWithTooltipRef.current) {
+            imageWithTooltipRef.current.scrollIntoView({
+            behavior: 'smooth'  // Add smooth scrolling
+            });
+        }
+    };
     return (
         <PublicWrapper>
            <Carousel autoplay>
@@ -84,27 +112,77 @@ const Home = () => {
                 >
                     <h1 style={{ fontSize: '48px', margin: '0 0 20px' }}>{title}</h1>
                     <p style={{ fontSize: '18px', margin: '0 0 20px' }}>{ subtitle }</p>
-                    <button
-                        style={{
+                    <Button variant="contained" size="large" 
+                        sx={{
                             padding: '12px 24px',
                             fontSize: '16px',
-                            backgroundColor: '#007BFF',
+                            backgroundColor: '#842433',
+                            // boxShadow: "5px 5px #842400",
+                            boxShadow: '7px 10px 20px 4px rgba(0,0,0,0.7)',
                             color: '#fff',
                             border: 'none',
                             borderRadius: '4px',
                             cursor: 'pointer',
                         }}
-                        onClick={() => navigate("/auto-services")}
+                        onClick={handleScrollToImageTooltip}
                     >
                         Learn More
-                    </button>
+                    </Button>
                 </Box>
             </Box>)})}
             </Carousel>
+            <div id="imageTooltip" 
+            ref={imageWithTooltipRef}
+            style={{
+                minHeight: '100vh',        
+                width: '100%',             
+                backgroundColor: 'black',
+                display: 'flex',           
+                alignItems: 'center',      
+                justifyContent: 'center'  
+              }}
+            >
             <ImageWithTooltips 
                 imageSrc={cover}
                 points={points}
+                handleNavigate={handleScrollToHood}
             />
+            </div>
+            <div id="underTheHood"
+                ref={hoodSectionRef}
+                style={{
+                    minHeight: '100vh',        
+                    width: '100%',            
+                    backgroundImage: `url(${hood})`, 
+                    backgroundSize: 'cover',   
+                    backgroundPosition: 'center', 
+                    backgroundRepeat: 'no-repeat',
+                    backgroundColor: '#f0f0f0',
+                    backgroundAttachment: 'fixed', 
+                    display: 'flex',           
+                    alignItems: 'center',      
+                    justifyContent: 'center'   
+                  }}
+            >
+                <Button variant="contained" size="large" 
+                    sx={{
+                        padding: '12px 24px',
+                        fontSize: '16px',
+                        boxShadow: '7px 10px 20px 4px rgba(0,0,0,0.7)',
+                        backgroundColor: '#842433',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        textTransform: "uppercase",
+
+                    }}
+                    onClick={()=> navigate("/login")}
+                >
+                    Get Started
+                </Button>
+            </div>
+            <Footer />
         </PublicWrapper>
     )
 }

@@ -17,6 +17,8 @@ import CarRepairIcon from '@mui/icons-material/CarRepair';
 import { GiAutoRepair } from "react-icons/gi";
 import Loader from "../../components/loading";
 import { formatMoney, parseMoney } from "../../utils/helper";
+
+
 const RepaireRequest = () => {
 
     const auth = useAuth();
@@ -134,7 +136,7 @@ const RepaireRequest = () => {
             item.plate_number,
             dayjs(item.preferred_schedule).format("DD/MM/YYYY"), 
             generateServiceName(item?.service_ids || ""),
-            formatMoney(formattedMoney),
+            formattedMoney != 0 ? formatMoney(formattedMoney) : "Price not set",
             item.request_status?.toUpperCase() || "PENDING",
         ]
         if (auth.role !== "customer") {
@@ -165,7 +167,7 @@ const RepaireRequest = () => {
             <>
                 <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', width:"100%", justifyContent: 'end' }}>
                     <Grid2 size={ {xs: 12, sm: 12, md:  auth.role == "customer" ? 8 : 12} }>
-                        <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
+                        <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700} color="white" >
                             Request Service
                         </Typography>
                     </Grid2>
@@ -179,9 +181,23 @@ const RepaireRequest = () => {
                     </Grid2>}
                 </Grid2>
             <Stack direction="row" spacing={1} marginY={2}>
-                <Chip label={"PENDING"} color={selectedStatus === "PENDING" ? "info" : "default"} onClick={() => { setSelectedStatus("PENDING") }} />
-                <Chip label={"IN PROGRESS"} color={selectedStatus === "IN PROGRESS" ? "info" : "default"} onClick={() => { setSelectedStatus("IN PROGRESS") }} />
-                <Chip label={"DONE"} color={selectedStatus === "DONE" ? "info" : "default"} onClick={() => { setSelectedStatus("DONE") }} />
+                {
+                    ["PENDING", "IN PROGRESS", "DONE"].map((item) => {
+                        return (
+                            <Chip label={item} 
+                            id={item}
+                            color={selectedStatus === item ? "info" : "primary"} 
+                            variant={selectedStatus === item ? "filled" : "outlined"} 
+                            sx={{ fontSize:"16px", fontWeight: 700 }}
+                            onClick={() => { setSelectedStatus(item) }} />
+                        )
+                    })
+                }
+                {/* <Chip label={"PENDING"} 
+                    sx=
+                    color={selectedStatus === "PENDING" ? "primary" : "default"} onClick={() => { setSelectedStatus("PENDING") }} />
+                <Chip label={"IN PROGRESS"} color={selectedStatus === "IN PROGRESS" ? "primary" : "default"} onClick={() => { setSelectedStatus("IN PROGRESS") }} />
+                <Chip label={"DONE"} color={selectedStatus === "DONE" ? "primary" : "default"} onClick={() => { setSelectedStatus("DONE") }} /> */}
             </Stack>
             { 
             isLoading ? <Loader />

@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Header from "../../components/header";
 import { useAuth } from "../../hooks/authProvider";
 import PublicWrapper from "../../components/public-wrapper";
+import Footer from "../../components/Footer";
 
 interface IAuthPage {
     label: string
@@ -78,6 +79,7 @@ const AuthPage = () => {
             }
             </Box>
         </Box>
+        <Footer />
         </PublicWrapper>
     )
 }

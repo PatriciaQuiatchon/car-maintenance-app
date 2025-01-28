@@ -29,12 +29,12 @@ const Settings = () => {
             }}>
                 
                 <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 12 : 7} }>
-                    <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
-                    Services
+                    <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700} color="white" >
+                    Settings
                     </Typography>
                 </Grid2>
         <TabContext value={tabValue} >
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider', width:"100%" }}>
+                    <Box sx={{ borderBottom: 2, borderBottomColor: "white", borderColor: 'divider', width:"100%" }}>
                         <TabList onChange={handleChangeTabValue} aria-label="lab API tabs example" 
                             TabIndicatorProps={{
                                 // sx: { backgroundColor: "#700E1C"}
@@ -44,9 +44,9 @@ const Settings = () => {
                             <Tab label="Profile" value="user"
                                  sx={{
                                     fontWeight: "700",
-                                    // color: "white", // Inactive tab color
+                                    color: "grey", // Inactive tab color
                                     "&.Mui-selected": {
-                                      color: "black", // Active tab color
+                                      color: "white", // Active tab color
                                     },
                                   }}
                                 
@@ -54,9 +54,9 @@ const Settings = () => {
                             <Tab label="Password" value="password" 
                                  sx={{
                                     fontWeight: "700",
-                                    // color: "white", // Inactive tab color
+                                    color: "grey", // Inactive tab color
                                     "&.Mui-selected": {
-                                      color: "black ", // Active tab color
+                                      color: "white ", // Active tab color
                                     },
                                   }}
                             />

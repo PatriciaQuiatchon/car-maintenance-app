@@ -2,7 +2,7 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useLocation, useNavigate } from "react-router-dom";
 import CircleIcon from '@mui/icons-material/Circle';
-
+import Logo from '../../assets/logo.jpg'
 
 const StyledButton = styled(Button)(({ }) => ({
     color: "#fff",
@@ -28,8 +28,8 @@ const SideBar = () => {
         return location.pathname.includes(tab)
     }
 
-    const businessDetails = ["Working Hours: Mon-Fri 9 AM - 6 PM",
-        "Location: 123 Business St, City", "Phone: (123) 456-7890"
+    const businessDetails = ["Mon-Sat 8 AM - 5 PM",
+        "Angeles City, Pampanga", "+639 952 121 974"
     ]
     return (
         <Box position={"absolute"} sx={{ width:"250px", boxShadow: "15px", backgroundColor: "#842433", top: 0, left:0}} height={"100vh"}
@@ -41,14 +41,23 @@ const SideBar = () => {
                     alignContent="center" justifyItems="center" justifyContent={{xs:"center", sm:"space-around", }} 
                     spacing={2} alignItems="center"  height={{xs: "100vh", sm: "auto"}}>
                 <Stack direction="row" spacing={2} >
-                    <Typography onClick={() => { navigate("/") }} variant="h6">Perfomance Plus</Typography>
+                    
+                        <img
+                            src={Logo}
+                            loading="lazy"
+                            width={180}
+                            style={{
+                                // mixBlendMode: "multiply",
+                                filter: "brightness(1) contrast(1)",
+                            }}
+                        />
                 </Stack>
             
                 <Stack direction="column" spacing={1} >
                     <StyledButton 
                         sx={{ backgroundColor: checkCurrentTab("services") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/auto-services") }}
-                    >Servicers</StyledButton>
+                    >Services</StyledButton>
                     <StyledButton
                         sx={{  }}
                         onClick={() => { navigate("/login") }}

@@ -49,6 +49,7 @@ const ServiceUpsert:FC<IServiceUpsert> = (props) => {
 
 
     return (
+        <Stack>
         <Formik
             key={JSON.stringify(initialData)} 
             initialValues={initialData}
@@ -75,7 +76,7 @@ const ServiceUpsert:FC<IServiceUpsert> = (props) => {
             {(formik) => {
                 const { errors, touched, isValid, dirty, values, handleSubmit, handleBlur, handleChange } = formik;
                 return (
-                    <Form onSubmit={handleSubmit} style={{width: "1000px"}}>
+                    <Form onSubmit={handleSubmit} style={{width: "auto"}}>
                         
                         <CustomDialog 
                             title="New Users"
@@ -204,6 +205,7 @@ const ServiceUpsert:FC<IServiceUpsert> = (props) => {
                 );
             }}
         </Formik>
+        </Stack>
     )
 }
 

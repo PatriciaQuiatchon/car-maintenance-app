@@ -160,15 +160,18 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
         sx={{
           flexGrow: 1,
           width: { sm: isAdmin ? `calc(100% - ${drawerWidth}px)` : "100%" },
-          p: isAdmin ? 1 : 3,
-          mt: isAdmin ? 7 : 8,
-          mx: isAdmin ? 3 : 1,
+          backgroundColor: '#282828',
+          pt: isAdmin ? 7 : 8,
+          px: isAdmin ? 3 : 1,
+          minHeight: '100vh',
         }}
       >
         {
          ( isVerified === "0" && !isAdmin && !location.pathname.includes("services")) && <Box sx={{ position: "absolute", height:"100%", width:"100%", zIndex: 9, backgroundColor: "fff", opacity:.5, }} />
         }
+        <Box sx={{ paddingTop:5 }}>
         {children}
+        </Box>
       </Box>
       <Toaster />
     </Box>

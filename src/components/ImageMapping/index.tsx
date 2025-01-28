@@ -11,9 +11,11 @@ interface Point {
 interface ImageWithTooltipsProps {
   imageSrc: string;
   points: Point[];
+  handleNavigate: () => void
 }
 
-const ImageWithTooltips: React.FC<ImageWithTooltipsProps> = ({ imageSrc, points }) => {
+const ImageWithTooltips: React.FC<ImageWithTooltipsProps> = ({ imageSrc, points, handleNavigate }) => {
+
   return (
     <div className="image-container">
       <img src={imageSrc} alt="Interactive" className="interactive-image" />
@@ -22,6 +24,7 @@ const ImageWithTooltips: React.FC<ImageWithTooltipsProps> = ({ imageSrc, points 
           key={point.id}
           className="point"
           style={{ left: `${point.x}%`, top: `${point.y}%` }}
+          onClick={handleNavigate}
         >
           <span className="tooltip">{point.description}</span>
         </div>

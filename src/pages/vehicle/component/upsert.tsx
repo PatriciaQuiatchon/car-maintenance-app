@@ -65,7 +65,7 @@ const VehicleUpsert:FC<IVehicleUpsert> = (props) => {
             {(formik) => {
                 const { errors, touched, isValid, dirty, values, handleSubmit, handleBlur, handleChange } = formik;
                 return (
-                    <Form onSubmit={handleSubmit} style={{width: "1000px"}}>
+                    <Form onSubmit={handleSubmit} style={{width: "auto"}}>
                         
                         <CustomDialog 
                             title="Register Vehicle"

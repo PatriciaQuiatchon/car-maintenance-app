@@ -105,7 +105,7 @@ const User = () => {
     return (
         <Wrapper>
             <>
-            <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
+            <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700} color="white" >
                 Users
             </Typography>
             {
@@ -113,7 +113,9 @@ const User = () => {
                 <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', marginLeft:"20px", width:"100%", justifyContent: 'space-between' }}>
                     <Grid2 size={ {xs: 11, sm: 11, md: 3} }>
                         <Select
-                            sx={{ width: "100%", height: "40px" }}
+                            sx={{ width: "100%", height: "40px", 
+                                backgroundColor: "whitesmoke"
+                             }}
                             labelId="demo-simple-select-label"
                             name="role"
                             id="role"

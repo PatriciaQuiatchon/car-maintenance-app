@@ -11,7 +11,7 @@ import { SAVED_MESSAGE } from "../../constant";
 import toast from "react-hot-toast";
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 import ServicesDisplay from "../../components/services";
-import { formatMoney } from "../../utils/helper";
+import { formatMoney, parseMoney } from "../../utils/helper";
 import Loader from "../../components/loading";
 
 const Service = () => {
@@ -20,7 +20,7 @@ const Service = () => {
     const hasEditAccess = ['admin', 'employee'].includes(auth.role || "")
     
     const initial = {
-        description: "", name: "", price: 0, service_id: "",
+        description: "", name: "", price: 0, service_id: "", price_b:0,
     }
     
     const [services, setServices] = useState<IService[]>([])
@@ -50,7 +50,14 @@ const Service = () => {
 
     const handleEdit = (data: IService) => {
         setIsModalOpen(!isModalOpen)
-        setService(data)
+        console.log({data})
+        const { price_range } = data
+        const prices = price_range ? price_range.split(" - ") : ['0','0']
+        
+        setService({...data,
+            price: parseMoney(prices[1]),
+            price_b: parseMoney(prices[0]),
+        })
     }
 
     const handleRemove = (id: string) => {
@@ -93,8 +100,8 @@ const Service = () => {
 
     const ServiceTable: ITable<IService> = {
         type: "IService",
-        headers: ["service_id", "name", "description", "price"],
-        rows: services.map(item => [item.service_id, item.name, item.description, formatMoney(item.price)]),
+        headers: ["service_id", "name", "description", "price_range"],
+        rows: services.map(item => [item.service_id, item.name, item.description,`${formatMoney(item.price_b)} - ${formatMoney(item.price)}`]),
         handleEdit: (data) => handleEdit(data),
         handleRemove: (id) => handleRemove(id),
     };
@@ -104,7 +111,7 @@ const Service = () => {
             
             <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', width:"100%", justifyContent: 'end' }}>
                 <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 12 : 7} }>
-                    <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
+                    <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700} color="white" >
                     Services
                     </Typography>
                 </Grid2>

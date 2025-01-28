@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { IService } from "../../interface/shared";
 import api from "../../config/api";
 import ServicesDisplay from "../../components/services";
+import Footer from "../../components/Footer";
 
 const PublicPage = () => {
     
@@ -34,7 +35,7 @@ const PublicPage = () => {
     return (
         <>
             <PublicPageWrapper>
-                <Box>
+                <Box mb={3}>
                     {/* <Typography variant="h4" paddingY={2} fontWeight={600}>
                         Available Services
                     </Typography> */}
@@ -57,6 +58,8 @@ const PublicPage = () => {
                         services={services}
                     />
                 </Box>
+                <Footer />
+
             </PublicPageWrapper>
         </>
     )

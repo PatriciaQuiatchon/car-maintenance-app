@@ -115,7 +115,7 @@ const ServiceHistory = () => {
             <>
             <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', width:"100%", justifyContent: 'end' }}>
                 <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 12 : 7} }>
-                    <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700}>
+                    <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700} color="white" >
                     History
                     </Typography>
                 </Grid2>
