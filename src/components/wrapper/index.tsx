@@ -161,7 +161,7 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
           flexGrow: 1,
           width: { sm: isAdmin ? `calc(100% - ${drawerWidth}px)` : "100%" },
           backgroundColor: '#282828',
-          pt: isAdmin ? 7 : 8,
+          pt: 5,
           px: isAdmin ? 3 : 1,
           minHeight: '100vh',
         }}

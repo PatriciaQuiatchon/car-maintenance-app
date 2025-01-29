@@ -6,7 +6,7 @@ import AuthProvider from './hooks/authProvider'
 import PrivateRoute from './routes';
 import AuthPage from './pages/auth';
 import Dashboard from "./pages/dashboard";
-import ServiceHistory from "./pages/service-history";
+import ServiceHistory from "./pages/service-records";
 import RepairRequest from "./pages/repair-request";
 import Settings from "./pages/settings";
 import Users from "./pages/user";
@@ -33,8 +33,8 @@ function App() {
             <Route path="/forgot-password" element={<ResetPasswordPage />} />
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/service-history" element={<ServiceHistory />} />
-              <Route path="/service-history/:id" element={<ServiceHistory />} />
+              <Route path="/service-records" element={<ServiceHistory />} />
+              <Route path="/service-records/:id" element={<ServiceHistory />} />
               <Route path="/repair-request" element={<RepairRequest />} />
               <Route path="/repair-request/:id" element={<RepairRequest />} />
               <Route path="/registered-vehicle" element={<Vehicle />} />

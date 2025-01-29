@@ -41,7 +41,9 @@ const SideBar = () => {
                     alignContent="center" justifyItems="center" justifyContent={{xs:"center", sm:"space-around", }} 
                     spacing={2} alignItems="center"  height={{xs: "100vh", sm: "auto"}}>
                 <Stack direction="row" spacing={2} >
-                    
+                    <Button
+                        onClick={() => { navigate("/") }}
+                    >
                         <img
                             src={Logo}
                             loading="lazy"
@@ -51,6 +53,7 @@ const SideBar = () => {
                                 filter: "brightness(1) contrast(1)",
                             }}
                         />
+                    </Button>
                 </Stack>
             
                 <Stack direction="column" spacing={1} >

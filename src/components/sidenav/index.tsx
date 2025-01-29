@@ -52,9 +52,9 @@ const SideBar = () => {
                     >Repair Request</StyledButton>
                     <StyledButton
                         startIcon={<FaHistory />}
-                        sx={{ backgroundColor: checkCurrentTab("service-history") ? "#1f222a" : "" }}
-                        onClick={() => { navigate("/service-history") }}
-                    >Service History</StyledButton>
+                        sx={{ backgroundColor: checkCurrentTab("service-records") ? "#1f222a" : "" }}
+                        onClick={() => { navigate("/service-records") }}
+                    >Service Records</StyledButton>
                     <StyledButton
                         startIcon={<FaUsers />}
                         sx={{ backgroundColor: checkCurrentTab("users") ? "#1f222a" : "" }}

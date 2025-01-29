@@ -79,9 +79,9 @@ const NavBar = () => {
                     >Registered Vehicle</StyledButton>
                     <StyledButton
                         startIcon={<FaHistory />}
-                        sx={{ backgroundColor: checkCurrentTab("service-history") ? "#1f222a" : "" }}
-                        onClick={() => { navigate("/service-history") }}
-                    >Service History</StyledButton>
+                        sx={{ backgroundColor: checkCurrentTab("service-records") ? "#1f222a" : "" }}
+                        onClick={() => { navigate("/service-records") }}
+                    >Service Records</StyledButton>
                     <Box sx={{ justifyContent: "flex-end", display:"flex", width:"100px", paddingRight:"20px"}}>
                     <Tooltip title="Account settings" sx={{ justifyContent: "center", display:"flex" }}>
                         <IconButton
