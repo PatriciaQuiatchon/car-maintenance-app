@@ -136,7 +136,6 @@ const ServiceUpsert:FC<IServiceUpsert> = (props) => {
                                 className={errors.role && touched.role ? "input-error" : ""}
                             >
                                 <MenuItem value={"admin"}>Admin</MenuItem>
-                                <MenuItem value={"employee"}>Employee</MenuItem>
                                 <MenuItem value={"mechanic"}>Mechanic</MenuItem>
                                 <MenuItem value={"customer"}>User</MenuItem>
                             </Select>

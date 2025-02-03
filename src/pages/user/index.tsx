@@ -123,7 +123,6 @@ const User = () => {
                             onChange={(event) => handleChangeRole(event.target.value)}
                         >
                             <MenuItem value={"admin"}>Admin</MenuItem>
-                            <MenuItem value={"employee"}>Employee</MenuItem>
                             <MenuItem value={"mechanic"}>Mechanic</MenuItem>
                             <MenuItem value={"customer"}>Customer</MenuItem>
                         </Select>

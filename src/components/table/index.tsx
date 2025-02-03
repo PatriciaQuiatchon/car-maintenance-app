@@ -108,7 +108,8 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
     }
   }
 
-  const statusOptions: string[] = ["PENDING", "IN PROGRESS"]
+  const statusOptions: string[] = ["PENDING", "IN PROGRESS", "DONE"]
+  const statusOptionsNoDone: string[] = ["PENDING", "IN PROGRESS"]
   const hideLabelID: string[] = ["vehicle_id", "requested_by_id", "service_id"]
   const SelectStatus = (data: T, defaultValue: string) => {
     return (
@@ -180,7 +181,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                     }}
                     align="center" sx={{ display: cellClass, color: statusOptions.includes(String(cell)) ? formatColor(String(cell)) : "" }}>
                     {
-                      statusOptions.includes(String(cell)) ? 
+                      statusOptionsNoDone.includes(String(cell)) ? 
                         auth.role === "customer"  ?
                         <Chip color={formatChipColor(String(cell))} label={String(cell)} /> 
                         :
