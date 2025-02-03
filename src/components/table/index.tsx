@@ -108,7 +108,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
     }
   }
 
-  const statusOptions: string[] = ["PENDING", "IN PROGRESS", "DONE"]
+  const statusOptions: string[] = ["PENDING", "IN PROGRESS"]
   const hideLabelID: string[] = ["vehicle_id", "requested_by_id", "service_id"]
   const SelectStatus = (data: T, defaultValue: string) => {
     return (
