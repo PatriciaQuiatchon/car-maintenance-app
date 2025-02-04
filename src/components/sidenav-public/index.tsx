@@ -29,7 +29,7 @@ const SideBar = () => {
     }
 
     const businessDetails = ["Mon-Sat 8 AM - 5 PM",
-        "Angeles City, Pampanga", "+639 952 121 974"
+        "Angeles City, Pampanga", "+639 566 121 974"
     ]
     return (
         <Box position={"absolute"} sx={{ width:"250px", boxShadow: "15px", backgroundColor: "#842433", top: 0, left:0}} height={"100vh"}
