@@ -13,7 +13,8 @@ import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices
 import ServicesDisplay from "../../components/services";
 import { formatMoney, parseMoney } from "../../utils/helper";
 import Loader from "../../components/loading";
-
+import _ from 'lodash'
+import SearchBar from "../../components/SearchBar";
 const Service = () => {
 
     const auth = useAuth();
@@ -24,6 +25,7 @@ const Service = () => {
     }
     
     const [services, setServices] = useState<IService[]>([])
+    const [origData, setData] = useState<IService[]>([])
     const [service, setService] = useState<IService>(initial)
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDelete, setIsDelete] = useState<boolean>(false);
@@ -36,12 +38,29 @@ const Service = () => {
             setIsLoading(!isLoading)
             const response = await api.get("/api/services");
             setServices(response.data)
+            setData(response.data)
         } catch (e){
 
         } finally {
             setIsLoading(false)
         }
     }
+
+    const handleSearch = _.debounce((query) => {
+        const smallQuery = _.toLower(query)
+        const filteredResults = _.filter(origData, (user) => {
+          return (
+            _.includes(_.toLower(user.name), smallQuery) ||
+            _.includes(_.toString(_.toLower(user.description)), smallQuery)
+          );
+        });
+        setServices(filteredResults);
+      }, 300);
+    
+    const handleInputChange = (event:any) => {
+        const newQuery = event.target.value;
+        handleSearch(newQuery);
+    };
 
     const handleSucces = () => {
         toast.success(SAVED_MESSAGE("Service", "saved"))
@@ -110,15 +129,20 @@ const Service = () => {
             <>
             
             <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', width:"100%", justifyContent: 'end' }}>
-                <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 12 : 7} }>
+                <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 6 : 4} }>
                     <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700} color="white" >
                     Services
                     </Typography>
+
                 </Grid2>
-                
+                <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 6 : 4} }>
+                    <SearchBar 
+                        handleSearch={handleInputChange}
+                    />
+                </Grid2>
                 {
                     hasEditAccess && 
-                    <Grid2 size={ {xs: 12, sm: 12, md: 5} }>
+                    <Grid2 size={ {xs: 12, sm: 12, md:4} }>
                             <Button 
                                 startIcon={<MiscellaneousServicesIcon />}
                                 sx={{ width: "100%" }}
@@ -135,7 +159,7 @@ const Service = () => {
                 :
                 services?.length > 0 ? 
                 <TableWrapper {...ServiceTable} />
-                : <Box component={Paper} height="400px" display="flex" justifyContent="center" alignItems="center" width={"100%"}>
+                : <Box component={Paper} marginTop={2} height="400px" display="flex" justifyContent="center" alignItems="center" width={"100%"}>
                     <Typography>
                         No available Services
                     </Typography>

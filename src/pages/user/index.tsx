@@ -15,6 +15,8 @@ import { SAVED_MESSAGE } from "../../constant";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { FaUser } from "react-icons/fa";
 import Loader from "../../components/loading";
+import _ from "lodash";
+import SearchBar from "../../components/SearchBar";
 
 const User = () => {
 
@@ -26,6 +28,7 @@ const User = () => {
     }
     
     const [users, setUsers] = useState<IUserDetails[]>([])
+    const [origData, setOrigData] = useState<IUserDetails[]>([])
     const [user, setUser] = useState<IUserDetails>(initial)
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDelete, setIsDelete] = useState<boolean>(false);
@@ -39,13 +42,30 @@ const User = () => {
             setIsLoading(!isLoading)
             const response = await api.get(`/api/users/${role}`);
             setUsers(response.data)
+            setOrigData(response.data)
         } catch (error){
             handleError(error as AxiosError); 
         } finally {
             setIsLoading(false)
         }
     }
-
+    
+    const handleSearch = _.debounce((query) => {
+        const smallQuery = _.toLower(query)
+        const filteredResults = _.filter(origData, (user) => {
+            return (
+            _.includes(_.toLower(user.name), smallQuery) ||
+            _.includes(_.toLower(user.email), smallQuery)
+            );
+        });
+        setUsers(filteredResults);
+        }, 300);
+    
+    const handleInputChange = (event:any) => {
+        const newQuery = event.target.value;
+        handleSearch(newQuery);
+    };
+    
     const handleChangeRole = (role:string) => {
         setRole(role)
     }
@@ -127,6 +147,11 @@ const User = () => {
                             <MenuItem value={"customer"}>Customer</MenuItem>
                         </Select>
 
+                    </Grid2>
+                    <Grid2 size={ {xs: 11, sm: 11, md: 3} }>
+                        <SearchBar 
+                            handleSearch={handleInputChange}
+                        />
                     </Grid2>
                     <Grid2 size={ {xs: 11, sm: 11, md: 3} }>
                         <Button 
