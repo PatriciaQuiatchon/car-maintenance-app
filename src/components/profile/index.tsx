@@ -34,6 +34,7 @@ const ProfileForm =() => {
         role: auth.user?.role || "",
         phone_num: auth.user?.phone_num || "",
         password:"",
+        address: auth.user?.address || "",
     }
     return (
         <Box sx={{ padding:3, boxShadow: 2}} component={Paper}>
@@ -93,6 +94,18 @@ const ProfileForm =() => {
                                     value={values.name}
                                     placeholder="Enter Name"
                                     id="name"
+                                />
+                                <TextField
+                                    error={errors.address && touched.address || undefined}
+                                    label="Address"
+                                    helperText={errors.address && touched.address && errors.address}
+                                    type="text"
+                                    name="address"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.address}
+                                    placeholder="Enter Address"
+                                    id="address"
                                 />
                                 <TextField
                                     error={errors.phone_num && touched.phone_num || undefined}

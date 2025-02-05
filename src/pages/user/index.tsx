@@ -24,7 +24,7 @@ const User = () => {
     const hasEditAccess = ['admin', 'employee'].includes(auth.role || "")
     
     const initial:IUserDetails = {
-       name: "", email: "", role: "", user_id:"", confirm_password: "", password: "",
+       name: "", email: "", role: "", user_id:"", confirm_password: "", password: "", address: ""
     }
     
     const [users, setUsers] = useState<IUserDetails[]>([])
@@ -77,7 +77,8 @@ const User = () => {
 
     const handleEdit = (data: IUserDetails) => {
         setIsModalOpen(!isModalOpen)
-        setUser(data)
+        const userRole = users.find(item => item.user_id = data.user_id)?.role || ""
+        setUser({...data, role: userRole})
     }
 
     const handleRemove = (id: string) => {
@@ -116,8 +117,8 @@ const User = () => {
 
     const UserTable: ITable<IUserDetails> = {
         type: "IService",
-        headers: ["user_id", "name", "email", "role"],
-        rows:  users.filter(item => item.email !== auth.user?.email).map(item => [item.user_id, item.name, item.email, item.role]),
+        headers: ["user_id", "name", "email", "address", "phone_number",],
+        rows:  users.filter(item => item.email !== auth.user?.email).map(item => [item.user_id, item.name, item.email, item.address || "-", item.phone_num || "-"]),
         handleEdit: (data) => handleEdit(data),
         handleRemove: (id) => handleRemove(id),
     };

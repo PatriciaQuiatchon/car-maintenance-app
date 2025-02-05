@@ -14,6 +14,12 @@ const schema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     email: Yup.string().required("Email is required"),
     role: Yup.string().required("Role is required"),
+    address: Yup.string().required("Addres is required"),
+    phone_num: Yup.number().test(
+        "len",
+        "Phone number must be exactly 10 digits",
+        (value) => value?.toString().length === 10
+    ).typeError("Phone number must be a valid number")
 });
 
 const newUserSchema = Yup.object().shape({
@@ -28,6 +34,12 @@ const newUserSchema = Yup.object().shape({
     
     confirm_password: Yup.string()
         .oneOf([Yup.ref('password'), undefined], 'Passwords must match'),
+    address: Yup.string().required("Addres is required"),
+    phone_num: Yup.number().test(
+        "len",
+        "Phone number must be exactly 10 digits",
+        (value) => value?.toString().length === 10
+    ).typeError("Phone number must be a valid number")
 });
 
 interface IServiceUpsert {
@@ -52,7 +64,7 @@ const ServiceUpsert:FC<IServiceUpsert> = (props) => {
         <Stack>
         <Formik
             key={JSON.stringify(initialData)} 
-            initialValues={initialData}
+            initialValues={{...initialData, phone_num: initialData.phone_number }}
             enableReinitialize={true}
             validationSchema={initialData.user_id === "" ? newUserSchema : schema}
             onSubmit={async (values) => {
@@ -121,6 +133,41 @@ const ServiceUpsert:FC<IServiceUpsert> = (props) => {
                                 value={values.email}
                                 onChange={handleChange}
                                 className={errors.email && touched.email ? "input-error" : ""}
+                            />
+                            <TextField
+                                type="text"
+                                name="address"
+                                id="address"
+                                placeholder="Address"
+                                sx={{
+                                    color: "white",
+                                    backgroundColor: "white"
+                                }}
+                                error={errors.address && touched.address || undefined}
+                                helperText={errors.address && touched.address && errors.address}
+                                onBlur={handleBlur}
+                                value={values.address}
+                                onChange={handleChange}
+                                className={errors.address && touched.address ? "input-error" : ""}
+                            />
+                            <TextField
+                                error={errors.phone_num && touched.phone_num || undefined}
+                                label="Phone Number"
+                                helperText={errors.phone_num && touched.phone_num && errors.phone_num}
+                                type="text"
+                                name="phone_num"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.phone_num}
+                                placeholder="Enter Phone Number"
+                                id="phone_num"
+                                InputProps={{
+                                }}
+                                slotProps={{
+                                    input: {
+                                        startAdornment: <InputAdornment position="start">+63</InputAdornment>,
+                                    }
+                                }}
                             />
                             <FormControl fullWidth>
                             <InputLabel id="input-role">Role</InputLabel>

@@ -31,7 +31,8 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
   );
 
   const auth = useAuth();
-  const isAdmin = ["admin", "employee", "mechanic"].includes(auth.role)
+  const isAdmin = auth.role.toLowerCase() === "admin"
+  const isCustomer = auth.role.toLowerCase() === "customer"
 
   const location = useLocation()
   return (
@@ -162,7 +163,7 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
           width: { sm: isAdmin ? `calc(100% - ${drawerWidth}px)` : "100%" },
           backgroundColor: '#282828',
           pt: 5,
-          px: isAdmin ? 3 : 1,
+          px: isCustomer ? 10 : isAdmin ? 3 : 1,
           minHeight: '100vh',
         }}
       >

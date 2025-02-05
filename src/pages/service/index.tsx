@@ -69,7 +69,6 @@ const Service = () => {
 
     const handleEdit = (data: IService) => {
         setIsModalOpen(!isModalOpen)
-        console.log({data})
         const { price_range } = data
         const prices = price_range ? price_range.split(" - ") : ['0','0']
         
@@ -131,7 +130,7 @@ const Service = () => {
             <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', width:"100%", justifyContent: 'end' }}>
                 <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 6 : 4} }>
                     <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700} color="white" >
-                    Services
+                    Services Offers
                     </Typography>
 
                 </Grid2>
@@ -147,7 +146,7 @@ const Service = () => {
                                 startIcon={<MiscellaneousServicesIcon />}
                                 sx={{ width: "100%" }}
                                 variant="contained" color="success" onClick={() => setIsModalOpen(!isModalOpen)}>
-                                New Service
+                                New Services Offers
                             </Button>
                     </Grid2>
                 }

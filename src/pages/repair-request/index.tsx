@@ -36,7 +36,6 @@ const RepaireRequest = () => {
     const [isDelete, setIsDelete] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [selectedStatus, setSelectedStatus] = useState<string>("PENDING");
-
     const fetchData = async () => {
         
         try {
@@ -168,7 +167,7 @@ const RepaireRequest = () => {
                 <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', width:"100%", justifyContent: 'end' }}>
                     <Grid2 size={ {xs: 12, sm: 12, md:  auth.role == "customer" ? 8 : 12} }>
                         <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700} color="white" >
-                            Request Service
+                        Repair and Maintenance Request
                         </Typography>
                     </Grid2>
                    { auth.role == "customer" && <Grid2 size={ {xs: 12, sm: 12, md: 4} }>
@@ -202,7 +201,7 @@ const RepaireRequest = () => {
             { 
             isLoading ? <Loader />
             :repaireRequests?.length > 0 ? 
-                <TableWrapper {...RequestTable} />
+                <TableWrapper {...RequestTable} selectedStatus={selectedStatus} />
                 : <EmptyData icon={<GiAutoRepair />} label="No available Requests" />
             }
             { isModalOpen && (<RepaireRequestUpsert 
@@ -210,6 +209,9 @@ const RepaireRequest = () => {
                 handleSucces={handleSucces}
                 isModalOpen={isModalOpen}
                 initialData={repaireRequest}
+                pending={repaireRequests.filter(item => item.request_status === "PENDING")
+                    .map(item => item.vehicle_id)
+                }
             />)}
             </>
             {

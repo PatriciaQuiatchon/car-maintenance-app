@@ -3,7 +3,7 @@ import Wrapper from "../../components/wrapper";
 import { IService, IServiceHistory, ITable } from "../../interface/shared";
 import api from "../../config/api";
 import { TableWrapper } from "../../components/table";
-import { Grid2, Typography } from "@mui/material";
+import { Button, Grid2, Typography } from "@mui/material";
 import { useAuth } from "../../hooks/authProvider";
 // import UserUpsert from "./component/upsert";
 import ConfirmationRemove from "../../components/confirmation";
@@ -14,6 +14,11 @@ import dayjs from "dayjs";
 import { FaHistory } from "react-icons/fa";
 import Loader from "../../components/loading";
 import { formatMoney } from "../../utils/helper";
+// import DownloadIcon from '@mui/icons-material/Download';
+import PrintIcon from '@mui/icons-material/Print';
+import Print from "./components/Print";
+
+
 
 const ServiceHistory = () => {
 
@@ -26,6 +31,8 @@ const ServiceHistory = () => {
        service_name: "", user_name: "",
     }
     
+    const [showPrintModal, setShowPrintModal] = useState(false)
+
     const [histories, setHistories] = useState<IServiceHistory[]>([])
     const [_serviceHistory, setHistory] = useState<IServiceHistory>(initial)
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -119,6 +126,16 @@ const ServiceHistory = () => {
                     Records
                     </Typography>
                 </Grid2>
+                <Grid2>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        type="button"
+                        onClick={()=> setShowPrintModal(!showPrintModal)}
+                    >
+                        <PrintIcon /> Print
+                    </Button>
+                </Grid2>
             </Grid2>
             { 
             isLoading ? <Loader />
@@ -141,6 +158,15 @@ const ServiceHistory = () => {
                         isOpen={isDelete}
                         onClose={() => setIsDelete(false)}
                         onSubmit={removeHistory}
+                    />
+                )
+            }
+            {
+                showPrintModal && (
+                    <Print 
+                        isOpen={showPrintModal}
+                        toggleModal={()=>setShowPrintModal(!showPrintModal)}
+                        records={histories}
                     />
                 )
             }

@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
+
 const StyledTableContainer = styled(TableContainer)(({ }) => ({
   borderRadius: '8px',
   boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
@@ -54,14 +55,13 @@ const CustomRow = styled(TableRow, {
 }));
 
 const CustomTable = <T extends IBase>(props: ITable<T>) => {
-  const { headers, rows, hideUserID, handleEdit, handleRemove, handleChange } = props;
+  const { headers, rows, hideUserID, selectedStatus, handleEdit, handleRemove, handleChange } = props;
   const auth = useAuth();
   const location = useLocation();
-
   const pathExempted = ["/registered-vehicle","/repair-request"]
 
   
-  const hasEditAccess = pathExempted.includes(location.pathname) || ["admin", "employee"].includes(auth.role || "");
+  const hasEditAccess = pathExempted.includes(location.pathname) || ["admin"].includes(auth.role || "");
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
@@ -194,7 +194,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                 {(hasEditAccess && props.type !== "IServiceHistory") && ( <TableCell onClick={(event) => {
                               event.stopPropagation();
                 }} sx={{ display:"flex", justifyContent: "center" }}>
-                  <Tooltip title="Edit" placement="top">
+                  {!(auth.role !== "admin" && selectedStatus === "DONE") && <Tooltip title="Edit" placement="top">
                     <Button
                       variant='contained'
                       color='info'
@@ -204,8 +204,8 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                         handleEdit(combined)}
                       }
                     ><EditIcon /></Button>
-                  </Tooltip>
-                  <Tooltip title="Remove" placement="top">
+                  </Tooltip>}
+                  {!(auth.role === "customer" && (props.type === "IService" || props.type === "IVehicle")) && <Tooltip title="Remove" placement="top">
                     <Button
                       variant='contained'
                       sx={{ backgroundColor: "#842433" }}
@@ -215,7 +215,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                         handleRemove(row[0] as string)
                       }}
                     ><DeleteIcon /></Button>
-                  </Tooltip>
+                  </Tooltip>}
 
                 </TableCell>)}
               </CustomRow>
@@ -262,15 +262,15 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                     })}
                   {(hasEditAccess && props.type !== "IServiceHistory") && (
                     <CardActions sx={{ display: "flex", justifyContent: "center",  marginTop: 'auto', justifyItems: "flex-end" }}>
-                      <Button
+                      {!(auth.role !== "admin" && selectedStatus === "DONE ") && (<Button
                         startIcon={<EditIcon />}
                         variant="contained"
                         color="info"
                         onClick={() => handleEdit(combined)}
                       >
                         Edit
-                      </Button>
-                      <Button
+                      </Button>)}
+                      {!(auth.role === "customer" && props.type === "IService" || props.type === "IVehicle") && <Button
                         startIcon={<DeleteIcon />}
                         variant="contained"
                         color="error"
@@ -281,7 +281,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                         }}
                       >
                         Remove
-                      </Button>
+                      </Button>}
                     </CardActions>
                   )}
                   </Stack>
@@ -307,6 +307,7 @@ export const TableWrapper = <T extends IBase>(props: ITable<T>) => {
       handleChange={props.handleChange}
       hideUserID={props.hideUserID}
       type={props.type}      
+      selectedStatus={props.selectedStatus}
       />
   );
 };

@@ -33,10 +33,9 @@ const SignInForm = () => {
       setIsSubmitting(true)
       await auth.loginAction({
         ...values,
-        name: null
+        name: null,
       });
     } catch (err) {
-
     } finally {
       setIsSubmitting(false)
 

@@ -60,7 +60,7 @@ const SideBar = () => {
                     <StyledButton 
                         sx={{ backgroundColor: checkCurrentTab("services") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/auto-services") }}
-                    >Services</StyledButton>
+                    >Services Offers</StyledButton>
                     <StyledButton
                         sx={{  }}
                         onClick={() => { navigate("/login") }}

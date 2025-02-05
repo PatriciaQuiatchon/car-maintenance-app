@@ -93,7 +93,7 @@ const Vehicle = () => {
     }
 
     const VehicleTable: ITable<IVehicle> = {
-        type: "IService",
+        type: "IVehicle",
         headers: ["vehicle_id", "name", "type", "model", "year", "plate_number"],
         rows:  vehicles.map(item => [item.vehicle_id, item.name, item.type, item.model, item.year || "", item.plate_number]),
         handleEdit: (data) => handleEdit(data),

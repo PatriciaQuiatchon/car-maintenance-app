@@ -4,6 +4,7 @@ export interface IUserCredentials {
     password: string
     phone_num?: string,
     role?: string,
+    address?: string,
 }
 
 
@@ -26,6 +27,8 @@ export interface IUserDetails extends IBase {
     password: string | undefined
     confirm_password: string | undefined
     phone_num?: string,
+    phone_number?: string,
+    address: string,
 }
 
 export interface IVehicle extends IBase {
@@ -80,7 +83,9 @@ export interface IServiceHistory extends IBase {
     plate_number: string,
     service_name: string,
     services?: string,
-    amount: string
+    amount: string,
+    created_at?: string,
+    updated_at?: Date,
     //For Table Header
     service?:string
     customer?: string
@@ -99,4 +104,5 @@ export type ITable<T> = {
     handleRemove: (id: string) => void;
     handleChange?: (data: T, status: string) => void;
     hideUserID?: boolean
+    selectedStatus?: string
 };

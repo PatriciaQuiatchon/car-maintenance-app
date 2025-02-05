@@ -79,7 +79,7 @@ const Footer = () => {
                 },
               }}
             >
-              Services
+              Services Offers
             </Link>
             <Link
               onClick={()=> navigate("/login")}

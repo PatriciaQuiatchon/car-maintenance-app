@@ -10,7 +10,7 @@ const handleError = (error: AxiosError) => {
 
     toast.error("Access Forbidden! Token has been removed.")
   } else {
-    toast.error("An error occurred:" + error.message)
+    toast.error("" + error.response?.data || "An error occurred:" +error.message)
   }
 };
 

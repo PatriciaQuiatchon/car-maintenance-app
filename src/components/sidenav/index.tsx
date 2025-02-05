@@ -64,7 +64,7 @@ const SideBar = () => {
                         startIcon={<GrServices />}
                         sx={{ backgroundColor: checkCurrentTab("services") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/services") }}
-                    >Services</StyledButton>
+                    >Services Offers</StyledButton>
                     
                     <StyledButton
                         startIcon={<IoSettings />}

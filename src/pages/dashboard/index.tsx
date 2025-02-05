@@ -128,7 +128,7 @@ const Dashboard = () => {
             {
                 label: 'Total Sales',
                 data: values,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                backgroundColor: 'rgba(49, 158, 158, 0.8)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
             },
@@ -149,16 +149,16 @@ const Dashboard = () => {
                         request.find(item => item.name.toLowerCase() === "in progress")?.count || 0,
                         request.find(item => item.name.toLowerCase() === "done")?.count || 0,
                         ],
-                    backgroundColor: [
-                      'rgba(255, 206, 86, 0.2)',
-                      'rgba(54, 162, 235, 0.2)',
-                      'rgba(75, 192, 192, 0.2)',
-                    ],
-                    borderColor: [
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(75, 192, 192, 1)',
-                    ],
+                        backgroundColor: [
+                            'rgba(226, 170, 28, 0.8)',  
+                            'rgba(204, 99, 24, 0.8)',    
+                            'rgba(16, 165, 16, 0.8)',    
+                        ],
+                        borderColor: [
+                            'rgb(139, 101, 8)', 
+                            'rgb(153, 64, 0)',  
+                            'rgb(0, 75, 0)',
+                        ],
                     borderWidth: 1,
                 },
                 ],
@@ -171,7 +171,7 @@ const Dashboard = () => {
             {
                 label: 'Total History',
                 data: history.map(item => item?.count || 0), 
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                backgroundColor: 'rgba(49, 158, 158, 0.8)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
             },
@@ -200,7 +200,7 @@ const Dashboard = () => {
                     isLoading || isLoadingSales ? <Loader /> :
                     <>
                     <Grid2 container sx={{ mY:5, }} spacing={3}>
-                        <GridStyled size={{ xs: 12, md:!isAdmin ? 6 : 12 }}>
+                        <GridStyled size={{ xs: 12, md:isAdmin ? 6 : 12 }}>
                         {requestChart  ? 
                         <Stack direction="column" display="flex" justifyContent="center" 
                         // sx={{ height: { xs: "40vh", md: "40vh" } }} 
@@ -249,15 +249,28 @@ const Dashboard = () => {
                                             legend: { position: 'top' },
                                         },
                                         scales: {
-                                            x: { title: { display: true, text: type === 'week' ? 'Week' : type === 'month' ? 'Month' : 'Year' } },
-                                            y: { title: { display: true, text: 'Total Sales', font: {
-                                                size: 18, 
-                                                weight: "bold", 
-                                              },
-                                              padding: {
-                                                top: 10,
-                                                bottom: 20,
-                                              }, } },
+                                            x: { 
+                                                title: { display: true, text: type === 'week' ? 'Week' : type === 'month' ? 'Month' : 'Year' },
+                                                ticks: {
+                                                    font: {
+                                                        size: 15,
+                                                    },
+                                                },
+                                            },
+                                            y: { 
+                                                ticks: {
+                                                    font: {
+                                                        size: 15,
+                                                    },
+                                                },
+                                                title: { display: true, text: 'Total Sales', font: {
+                                                    size: 18, 
+                                                    weight: "bold", 
+                                                },
+                                                padding: {
+                                                    top: 10,
+                                                    bottom: 20,
+                                                }, } },
                                         },
                                     }}
                                 />
@@ -294,8 +307,23 @@ const Dashboard = () => {
                                         // },
                                       },
                                     scales: {
-                                        y: { title: { display: true, text: 'Total History', font: {
-                                            size: 18, 
+                                        x: {
+                                            ticks: {
+                                                font: {
+                                                    size: 15,
+                                                },
+                                            },
+                                        },
+                                        y: { 
+                                            ticks: {
+                                                stepSize: 1, 
+                                                precision: 0,
+                                                font: {
+                                                    size: 15,
+                                                },
+                                            },
+                                            title: { display: true, text: 'Total History', font: {
+                                            size: 25, 
                                             weight: "bold", 
                                           },
                                           padding: {

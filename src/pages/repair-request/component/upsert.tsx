@@ -38,6 +38,7 @@ interface IRepaireRequestUpsert {
     isModalOpen: boolean
     handleCloseModal: () => void
     handleSucces: () => void
+    pending: string[]
 }
 
 interface IOptions {
@@ -51,7 +52,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
     const auth = useAuth();
     
     const isCustomer = auth.role === "customer"
-    const { isModalOpen, initialData} = props
+    const { isModalOpen, initialData, pending} = props
     const { handleCloseModal, handleSucces } = props
 
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -78,7 +79,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
             const response = await api.get(`/api/service-requests/${auth.user?.user_id}`);
             const { mechanics, services, vehicles } = response.data
             const options = vehicles.map((item:IVehicle) => ({ label: `${item.name} ${item.model} ${item.plate_number}`, value: item.vehicle_id }))
-            setCarOptions(options)
+            setCarOptions(options.filter((item: any) => item.value === initialData.vehicle_id || !pending.includes(item.value)))
 
             const servicesOptions: IOptions[] = services.map((item:IService) => ({ label: `${item.name}`, value: item.service_id, price:item.price }))
             setServiceTypeptions(servicesOptions)
@@ -219,11 +220,12 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                                     className={errors.vehicle_id && touched.vehicle_id ? "input-error" : ""}
                                 >   
                                     {   
-                                        carOptions.map(({label, value}) => {
+                                        carOptions?.length ? carOptions.map(({label, value}) => {
                                             return (
                                                 <MenuItem value={value}>{label}</MenuItem>
                                             )
-                                        })
+                                        }) :
+                                        <MenuItem value="">No available vehicle</MenuItem>
                                     }
                                 </Select>
                                 </FormControl>
@@ -292,6 +294,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                             <FormControl fullWidth>
                                 <ResponsiveDatePickers 
                                     label="Select a Date"
+                                    isNew={!editData}
                                     value={dayjs(values.preferred_schedule)}
                                     onChange={(newValue) => setFieldValue('preferred_schedule', newValue)} // Update Formik state
                                     error={touched.preferred_schedule && Boolean(errors.preferred_schedule)} // Show error if touched and invalid
