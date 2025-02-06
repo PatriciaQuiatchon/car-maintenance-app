@@ -163,7 +163,7 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
           width: { sm: isAdmin ? `calc(100% - ${drawerWidth}px)` : "100%" },
           backgroundColor: '#282828',
           pt: 5,
-          px: isCustomer ? 10 : isAdmin ? 3 : 1,
+          px: isCustomer ? {xs: 1, sm: 5, md: 8, lg:10} : isAdmin ? 3 : 1,
           minHeight: '100vh',
         }}
       >

@@ -70,7 +70,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       }
       throw new Error(response.data.message);
     } catch (error) {
-      handleError(error as AxiosError); 
+      toast.error("Invalid email or password")
     }
   }
 

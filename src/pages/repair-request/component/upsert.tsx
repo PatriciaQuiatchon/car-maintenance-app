@@ -294,7 +294,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                             <FormControl fullWidth>
                                 <ResponsiveDatePickers 
                                     label="Select a Date"
-                                    isNew={!editData}
+                                    isNew={true}
                                     value={dayjs(values.preferred_schedule)}
                                     onChange={(newValue) => setFieldValue('preferred_schedule', newValue)} // Update Formik state
                                     error={touched.preferred_schedule && Boolean(errors.preferred_schedule)} // Show error if touched and invalid
