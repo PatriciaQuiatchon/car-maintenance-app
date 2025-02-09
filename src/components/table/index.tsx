@@ -147,16 +147,16 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
           <StyledTableContainer>
           <Table stickyHeader>
             <TableHead>
-              <TableRow sx={{ backgroundColor: "#842433",}}>
+              <TableRow sx={{ backgroundColor: "#b10000",}}>
                 <StyledTableCell style={{ display: "none",}} key="header-id">ID</StyledTableCell>
                 {headers.map((header, index) => (
-                <StyledTableCell key={index} style={{ backgroundColor: "#842433",  letterSpacing: 1.5, fontSize: "10px", fontWeight: "bolder", display: index === 0 || hideLabelID.includes(header as string) ? "none" : "" }}>
+                <StyledTableCell key={index} style={{ backgroundColor: "#b10000",  letterSpacing: 1.5, fontSize: "10px", fontWeight: "bolder", display: index === 0 || hideLabelID.includes(header as string) ? "none" : "" }}>
                   {formatName(formatHeaders(String(header)).toUpperCase())}
                   </StyledTableCell>
               ))}
               {
                 (hasEditAccess && props.type !== "IServiceHistory") && 
-                <StyledTableCell sx={{ backgroundColor: "#842433" }} key={"actionCell"} >ACTION</StyledTableCell>
+                <StyledTableCell sx={{ backgroundColor: "#b10000" }} key={"actionCell"} >ACTION</StyledTableCell>
               }
 
             </TableRow>
@@ -208,7 +208,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                   {!(auth.role === "customer" && (props.type === "IService" || props.type === "IVehicle")) && <Tooltip title="Remove" placement="top">
                     <Button
                       variant='contained'
-                      sx={{ backgroundColor: "#842433" }}
+                      sx={{ backgroundColor: "#b10000" }}
                       color='error'
                       onClick={(event) => {
                         event.stopPropagation();
@@ -274,7 +274,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                         startIcon={<DeleteIcon />}
                         variant="contained"
                         color="error"
-                        sx={{ backgroundColor: "#842433" }}
+                        sx={{ backgroundColor: "#b10000" }}
                         onClick={(event) => {
                           event.stopPropagation();
                           handleRemove(row[0] as string)

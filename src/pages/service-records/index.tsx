@@ -17,7 +17,8 @@ import { formatMoney } from "../../utils/helper";
 // import DownloadIcon from '@mui/icons-material/Download';
 import PrintIcon from '@mui/icons-material/Print';
 import Print from "./components/Print";
-
+import _ from 'lodash'
+import SearchBar from "../../components/SearchBar";
 
 
 const ServiceHistory = () => {
@@ -33,6 +34,7 @@ const ServiceHistory = () => {
     
     const [showPrintModal, setShowPrintModal] = useState(false)
 
+    const [Ohistories, setOrigHistories] = useState<IServiceHistory[]>([])
     const [histories, setHistories] = useState<IServiceHistory[]>([])
     const [_serviceHistory, setHistory] = useState<IServiceHistory>(initial)
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -47,6 +49,7 @@ const ServiceHistory = () => {
             const isUser = auth.role === "customer"
             const response = await api.get(`/api/history/${isUser ? auth.user?.user_id : ""}`);
             setHistories(response.data)
+            setOrigHistories(response.data)
 
             const responseServices = await api.get(`/api/services`);
             setServiceData(responseServices.data)
@@ -60,6 +63,25 @@ const ServiceHistory = () => {
     // const _handleChangeRole = (role:string) => {
     //     setRole(role)
     // }
+
+    console.log({Ohistories})
+    const handleSearch = _.debounce((query) => {
+        const smallQuery = _.toLower(query)
+        const filteredResults = _.filter(Ohistories, (item) => {
+            return (
+            _.includes(_.toLower(item.user_name), smallQuery) ||
+            _.includes(_.toLower(item.car_name), smallQuery) ||
+            _.includes(_.toLower(item.services), smallQuery) ||
+            _.includes(_.toLower(item.plate_number), smallQuery)
+            );
+        });
+        setHistories(filteredResults);
+        }, 300);
+    
+    const handleInputChange = (event:any) => {
+        const newQuery = event.target.value;
+        handleSearch(newQuery);
+    };
 
     const handleEdit = (data: IServiceHistory) => {
         setIsModalOpen(!isModalOpen)
@@ -121,10 +143,15 @@ const ServiceHistory = () => {
         <Wrapper>
             <>
             <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', width:"100%", justifyContent: 'end' }}>
-                <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 12 : 7} }>
+                <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 6 : 4} }>
                     <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700} color="white" >
                     Records
                     </Typography>
+                </Grid2>
+                <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 6 : 4} }>
+                    <SearchBar 
+                        handleSearch={handleInputChange}
+                    />
                 </Grid2>
                 <Grid2>
                     <Button

@@ -38,7 +38,7 @@ const NavBar = () => {
             <Stack sx={{
                 borderBottom: ".5px solid",
                 margin: "0",
-                backgroundColor: "#842433"
+                backgroundColor: "#b10000"
             }} direction={{ xs: "column", sm: "row" }} paddingY={1}
                 position={"relative"} display="flex"
                 alignContent="center" justifyItems="center" justifyContent={{ xs: "center", sm: "space-around", md: "space-evenly" }}
@@ -57,7 +57,7 @@ const NavBar = () => {
                 spacing={2} alignItems="center"
                 px={2}
                 sx={{
-                    backgroundColor: "#842433"
+                    backgroundColor: "#b10000"
                 }}
             >
                 <Stack direction="row" spacing={2} py={1} >

@@ -45,7 +45,7 @@ const PublicPage = () => {
                             sx={{
                                 marginTop: isMobile ? "5rem" : "8rem",
                                 marginBottom: "35px",
-                                backgroundColor: "#842433",
+                                backgroundColor: "#b10000",
                                 color: "whitesmoke",
                                 fontSize: "35px",
                                 padding: "30px",

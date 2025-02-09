@@ -1,7 +1,7 @@
-import { Formik } from "formik";
+import { ErrorMessage, Formik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
-import { Box, InputAdornment, Paper, Stack, TextField } from "@mui/material";
+import { Box, FormControl, Grid2, InputAdornment, InputLabel, MenuItem, Paper, Select, Stack, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import toast from "react-hot-toast";
 import { useAuth } from "../../hooks/authProvider";
@@ -9,6 +9,7 @@ import { IUserCredentials } from "../../interface/shared";
 import api from "../../config/api";
 import handleError from "../error";
 import { AxiosError } from "axios";
+import { validIds } from "../auth/register";
 
 const ProfileForm =() => {
     const requiredField = (name: string) => `${name} is a required field`
@@ -25,7 +26,9 @@ const ProfileForm =() => {
                         "len",
                         "Phone number must be exactly 10 digits",
                         (value) => value?.toString().length === 10
-                    ).typeError("Phone number must be a valid number")
+                    ).typeError("Phone number must be a valid number"),
+        validId: Yup.string().required("Valid ID Type is required"),
+        validIdNumber: Yup.string().required("Valid ID Number is required"),
     });
 
     const initialValues: IUserCredentials = {
@@ -35,6 +38,8 @@ const ProfileForm =() => {
         phone_num: auth.user?.phone_num || "",
         password:"",
         address: auth.user?.address || "",
+        validIdNumber: auth.user?.validIdNumber || "",
+        validId:auth.user?.validId || "",
     }
     return (
         <Box sx={{ padding:3, boxShadow: 2}} component={Paper}>
@@ -126,6 +131,57 @@ const ProfileForm =() => {
                                         }
                                     }}
                                 />
+                                
+                                <Grid2 spacing={1} container >
+                                <Grid2 size={{ xs: 12, sm: 6 }} marginTop={1}>
+                                <FormControl fullWidth>
+                                <InputLabel id="validId">Valid ID Type</InputLabel>
+                                <Select
+                                    labelId="validId"
+                                    id="validId"
+                                    name="validId"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    label="Valid ID"
+                                    value={values.validId}
+                                    sx={{ textAlign: "start" }}
+                                >
+                                    {
+                                        validIds.map(item =>  <MenuItem value={item}>{item}</MenuItem>)
+                                    }
+                                </Select>
+                                
+                                <ErrorMessage
+                                    name="validId"
+                                    component="span"
+                                    className="error"
+                                />
+                                </FormControl>
+                                </Grid2>
+                                <Grid2 size={{ xs: 12, sm: 6 }}>
+                                <TextField
+                                label="Valid Id Number"
+                                name="validIdNumber"
+                                fullWidth
+                                variant="outlined"
+                                margin="dense"
+                                value={values.validIdNumber}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                sx={{
+                                    color: "white",
+                                    backgroundColor: "white"
+                                }}
+                                error={!!(errors.validIdNumber && touched.validIdNumber)}
+                                required
+                                />
+                                <ErrorMessage
+                                name="validIdNumber"
+                                component="span"
+                                className="error"
+                                />
+                                </Grid2>
+                                </Grid2>
                                 <LoadingButton
                                     type="submit"
                                     loading={isSaving}

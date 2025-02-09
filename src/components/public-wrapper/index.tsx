@@ -41,7 +41,7 @@ const PublicWrapper:FC<IWrapper> = ({ children }) => {
         <Toolbar 
             sx={{
                 // boxShadow: "15px",
-                 backgroundColor: "#842433", border: "0px",
+                 backgroundColor: "#b10000", border: "0px",
                 display: { sm: ""}
             }}
             

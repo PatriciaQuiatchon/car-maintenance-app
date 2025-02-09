@@ -44,6 +44,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       if(!user) {
         const response = await api.get(`/api/user/email/${email}`)
         if(response.data) {
+          console.log({asd:response.data})
           setUser({...response.data});
         }
       }

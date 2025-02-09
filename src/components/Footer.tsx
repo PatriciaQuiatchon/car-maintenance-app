@@ -4,7 +4,7 @@ import Logo from '../assets/logo.jpg'
 import { useNavigate } from 'react-router-dom';
 
 const FooterContainer = styled(Box)(({ theme }) => ({
-  backgroundColor: "#842433",
+  backgroundColor: "#b10000",
   color: theme.palette.common.white,
   padding: theme.spacing(2),
   justifyContent: "center",

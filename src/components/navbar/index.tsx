@@ -47,7 +47,7 @@ const NavBar = () => {
     };
 
     return (
-        <Box position={"absolute"} sx={{ top: 0, left:0,  width:{xs: "250px", sm:"auto"}, backgroundColor: "#842433",}} 
+        <Box position={"absolute"} sx={{ top: 0, left:0,  width:{xs: "250px", sm:"auto"}, backgroundColor: "#b10000",}} 
         height={{xs: "100vh", sm: "auto"}}>
             <Stack direction={{xs: "column", sm: "row"}} 
             paddingY={{sm: 1}} 

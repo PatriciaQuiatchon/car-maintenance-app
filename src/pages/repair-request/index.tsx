@@ -17,12 +17,22 @@ import CarRepairIcon from '@mui/icons-material/CarRepair';
 import { GiAutoRepair } from "react-icons/gi";
 import Loader from "../../components/loading";
 import { formatMoney, parseMoney } from "../../utils/helper";
+import { useSearchParams } from "react-router-dom";
 
 
 const RepaireRequest = () => {
 
     const auth = useAuth();
     
+    const [searchParams, _setSearchParams] = useSearchParams();
+    const query = searchParams.get('query');
+
+    useEffect(() => {
+        if(query === "openForm"){
+            setIsModalOpen(true)
+        }
+    }, [query])
+
     const initial:IRepaireRequestDetails = {
        name: "", plate_number: "", service_type: "", preferred_schedule: "", 
        request_id: "", model: "", vehicle_name: "",  vehicle_id: "",

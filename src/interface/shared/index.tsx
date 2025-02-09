@@ -5,6 +5,8 @@ export interface IUserCredentials {
     phone_num?: string,
     role?: string,
     address?: string,
+    validId?:string,
+    validIdNumber?: string,
 }
 
 
@@ -29,6 +31,9 @@ export interface IUserDetails extends IBase {
     phone_num?: string,
     phone_number?: string,
     address: string,
+    validId?: string,
+    validIdNumber?: string,
+
 }
 
 export interface IVehicle extends IBase {

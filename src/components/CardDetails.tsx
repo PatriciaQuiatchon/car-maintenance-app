@@ -39,7 +39,7 @@ const CardDetails: FC<ICardDetails> = ({
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            bgcolor: "#842433",
+                            bgcolor: "#b10000",
                             color: 'white',
                             borderRadius: '50%',
                             width: 48,
@@ -100,13 +100,13 @@ const CardDetails: FC<ICardDetails> = ({
                     variant="contained"
                     size="large"
                 
-                    onClick={() => navigate(`/${navigateTo}`)}
+                    onClick={() => navigate(`/${navigateTo}?query=openForm`)}
                     sx={{
                         py: 1.5,
                         fontSize: '1.1rem',
                         letterSpacing: '1px',
                         textTransform: 'uppercase',
-                        backgroundColor:'#842433',
+                        backgroundColor:'#b10000',
                     }}
                 >
                     Request a Repair

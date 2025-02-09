@@ -32,7 +32,7 @@ const SideBar = () => {
         "Angeles City, Pampanga", "+639 566 121 974"
     ]
     return (
-        <Box position={"absolute"} sx={{ width:"250px", boxShadow: "15px", backgroundColor: "#842433", top: 0, left:0}} height={"100vh"}
+        <Box position={"absolute"} sx={{ width:"250px", boxShadow: "15px", backgroundColor: "#b10000", top: 0, left:0}} height={"100vh"}
         
         >
             <Stack direction="column" height="100vh" position={"relative"} justifyContent="space-between" display="flex" alignItems="center">
@@ -69,7 +69,7 @@ const SideBar = () => {
                 </Stack>
                 <Stack sx={{
                     margin:"0",
-                    backgroundColor: "#842433"
+                    backgroundColor: "#b10000"
                 }} direction={{xs: "column", sm: "row"}} paddingY={1} 
                     position={"relative"} width={{ xs: '200px', sm:"100vw" }}  display="flex" 
                     alignContent="center" justifyItems="center" justifyContent={{xs:"center", sm:"space-around", md: "space-evenly"}} 

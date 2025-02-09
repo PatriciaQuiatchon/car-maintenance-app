@@ -26,22 +26,22 @@ const ServicesDisplay:FC<IServicecDisplay> = ({
     
     const getIcon = (label: string) => {
         if (label.toLowerCase().includes("oil")) {
-            return <FaOilCan />
+            return <FaOilCan size={32} />
         }
 
         if (label.toLowerCase().includes("tire")) {
-            return <GiFlatTire />
+            return <GiFlatTire size={32} />
         }
 
         if (label.toLowerCase().includes("filter")) {
-            return <FaFilter />
+            return <FaFilter size={32} />
         }
         
         if (label.toLowerCase().includes("battery")) {
-            return <FaCarBattery />
+            return <FaCarBattery size={32} />
         }
 
-        return <FaCarSide />
+        return <FaCarSide size={32} />
     }
     
     return (

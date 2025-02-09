@@ -33,7 +33,7 @@ const Settings = () => {
                     Settings
                     </Typography>
                 </Grid2>
-        <TabContext value={tabValue} >
+                <TabContext value={tabValue} >
                     <Box sx={{ borderBottom: 2, borderBottomColor: "white", borderColor: 'divider', width:"100%" }}>
                         <TabList onChange={handleChangeTabValue} aria-label="lab API tabs example" 
                             TabIndicatorProps={{

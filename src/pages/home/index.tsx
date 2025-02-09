@@ -116,7 +116,7 @@ const Home = () => {
                         sx={{
                             padding: '12px 24px',
                             fontSize: '16px',
-                            backgroundColor: '#842433',
+                            backgroundColor: '#b10000',
                             // boxShadow: "5px 5px #842400",
                             boxShadow: '7px 10px 20px 4px rgba(0,0,0,0.7)',
                             color: '#fff',
@@ -169,7 +169,7 @@ const Home = () => {
                         padding: '12px 24px',
                         fontSize: '16px',
                         boxShadow: '7px 10px 20px 4px rgba(0,0,0,0.7)',
-                        backgroundColor: '#842433',
+                        backgroundColor: '#b10000',
                         color: '#fff',
                         border: 'none',
                         borderRadius: '4px',

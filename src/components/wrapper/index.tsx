@@ -50,7 +50,7 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
             sx={{
                 boxShadow: "15px",
                 border: "0px",
-                backgroundColor: "#842433",
+                backgroundColor: "#b10000",
                 display: { sm: isAdmin ? "none" : ""}
             }}
             
@@ -100,7 +100,7 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
               "& .MuiDrawer-paper": { 
                 // borderColor: blueGrey[500],
                 // boxShadow: "15px", 
-                // backgroundColor: "#842433",
+                // backgroundColor: "#b10000",
                 boxSizing: "border-box", width: drawerWidth },
             }}
           >

@@ -36,7 +36,7 @@ const SideBar = () => {
     }
 
     return (
-        <Box position={"absolute"} sx={{ width:"250px", boxShadow: "15px", backgroundColor: "#842433", top: 0, left:0}} height={"100vh"}>
+        <Box position={"absolute"} sx={{ width:"250px", boxShadow: "15px", backgroundColor: "#b10000", top: 0, left:0}} height={"100vh"}>
             <Stack height="100vh" position={"relative"} justifyContent="space-evenly" display="flex" alignItems="center">
                 <Avatar sx={{ padding: "15px", backgroundColor: "#1f222a" }}>{auth.user?.name.slice(0,1)}</Avatar>
                 <Stack spacing={2} paddingX={2}>
