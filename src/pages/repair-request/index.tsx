@@ -128,6 +128,11 @@ const RepaireRequest = () => {
         requestHeaders.push("requested_by_id")
     }
 
+    if (auth.role != "customer") {
+        requestHeaders.push("user_notes")
+    } else {
+        requestHeaders.push("notes")
+    }
     requestHeaders.push()
 
     const generateServiceName = (serviceIds: string) => {
@@ -151,6 +156,12 @@ const RepaireRequest = () => {
         if (auth.role !== "customer") {
             data.push(item?.requested_by || "")
             data.push(item?.requested_by_id || "")
+        }
+        
+        if (auth.role != "customer") {
+            data.push(item?.user_notes || "No note")
+        } else {
+            data.push(item?.notes || "No note")
         }
         return data;
     }

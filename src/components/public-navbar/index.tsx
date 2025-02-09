@@ -46,7 +46,7 @@ const NavBar = () => {
                 {
                     businessDetails.map((item) => {
                         return (
-                            <Typography variant="subtitle2" display="flex" justifyContent="center" fontSize={10}> <CircleIcon sx={{ fontSize: "15px", paddingRight: "5px" }} />{item}</Typography>
+                            <Typography variant="subtitle2" display="flex" justifyContent="center" fontSize={14}> <CircleIcon sx={{ fontSize: "15px", paddingRight: "5px" }} />{item}</Typography>
                         )
                     })
                 }

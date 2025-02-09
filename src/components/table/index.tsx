@@ -114,7 +114,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
   const SelectStatus = (data: T, defaultValue: string) => {
     return (
       <FormControl fullWidth  size="small">
-      <InputLabel id="input-role" sx={{ fontSize:"10px" }}>Status</InputLabel>
+      <InputLabel id="input-role" sx={{ fontSize:"12px" }}>Status</InputLabel>
       <Select
           labelId="input-role"
           name="role"
@@ -247,9 +247,9 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                             :
                             SelectStatus(combined, String(cellValue))
                             : 
-                            <Typography display={
+                            <Typography sx={{ fontSize: "18px" }} display={
                               hideLabelID.includes(String(header)) ? 'none' : ''
-                            } key={index} variant="body2" color="textSecondary" gutterBottom>
+                            } key={index} variant="body2" gutterBottom>
                               <strong>
                                 {formatName(formatHeaders(String(header)).toUpperCase())}
 

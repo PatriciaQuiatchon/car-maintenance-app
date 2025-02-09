@@ -59,6 +59,7 @@ export interface IRepairUpdate {
     service_id: string
     preferred_schedule: string,
     notes?: string,
+    user_notes?: string,
     imageFile?: File,
     image?: string,
     service_amount?: number,
@@ -78,6 +79,8 @@ export interface IRepaireRequest extends IBase {
     requested_by?: string,
     requested_by_id?: string,
     request_status?: string,
+    user_notes?: string,
+    notes?: string,
 }
 
 export interface IServiceHistory extends IBase {

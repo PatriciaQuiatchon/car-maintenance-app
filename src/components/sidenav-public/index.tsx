@@ -77,7 +77,7 @@ const SideBar = () => {
                     {
                         businessDetails.map((item) => {
                             return (
-                                <Typography variant="caption" sx={{ color:"whitesmoke" }}> <CircleIcon sx={{ fontSize:"10px", paddingRight: "5px" }} />{item}</Typography>
+                                <Typography variant="caption" sx={{ color:"whitesmoke", fontSize: "12px" }}> <CircleIcon sx={{ fontSize:"12px", paddingRight: "5px" }} />{item}</Typography>
                             )
                         })
                     }

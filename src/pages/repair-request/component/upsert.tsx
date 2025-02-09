@@ -26,6 +26,7 @@ const schema = Yup.object().shape({
     }),
     mechanic_id: Yup.string().required("Mechanic is required"),
     preferred_schedule: Yup.date().required("Date is required"),
+    user_notes: Yup.string(),
 });
 
 const mechanicSchema = Yup.object().shape({
@@ -69,6 +70,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
         service_id:"",
         vehicle_id:"",
         notes:"",
+        user_notes: "",
         request_status:"",
         image:"",
         service_amount: 0,
@@ -304,6 +306,24 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                                     <span className="error">{errors.preferred_schedule}</span>
                                 ) }
                             </FormControl></>)}
+                            {
+                                isCustomer && (
+                                    <TextareaAutosize  
+                                        name="user_notes"
+                                        id="user_notes"
+                                        onBlur={handleBlur}
+                                        value={values.user_notes}
+                                        style={{
+                                            color: "black",
+                                            backgroundColor: "white"
+                                        }}
+                                        onChange={handleChange}
+                                        aria-label="enter note" 
+                                        minRows={3} 
+                                        placeholder="Enter Note" 
+                                    />
+                                )
+                            }
                             {!isCustomer && (
                                 <>
                                 

@@ -169,7 +169,7 @@ const Dashboard = () => {
             labels: history.map(item => item.name),
             datasets: [
             {
-                label: 'Total History',
+                label: 'History',
                 data: history.map(item => item?.count || 0), 
                 backgroundColor: 'rgba(49, 158, 158, 0.8)',
                 borderColor: 'rgba(75, 192, 192, 1)',
@@ -322,7 +322,7 @@ const Dashboard = () => {
                                                     size: 15,
                                                 },
                                             },
-                                            title: { display: true, text: 'Total History', font: {
+                                            title: { display: true, text: 'History', font: {
                                             size: 25, 
                                             weight: "bold", 
                                           },

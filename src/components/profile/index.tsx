@@ -132,7 +132,7 @@ const ProfileForm =() => {
                                     }}
                                 />
                                 
-                                <Grid2 spacing={1} container >
+                                { auth.role !== "admin" &&<Grid2 spacing={1} container >
                                 <Grid2 size={{ xs: 12, sm: 6 }} marginTop={1}>
                                 <FormControl fullWidth>
                                 <InputLabel id="validId">Valid ID Type</InputLabel>
@@ -181,7 +181,7 @@ const ProfileForm =() => {
                                 className="error"
                                 />
                                 </Grid2>
-                                </Grid2>
+                                </Grid2>}
                                 <LoadingButton
                                     type="submit"
                                     loading={isSaving}

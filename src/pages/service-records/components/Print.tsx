@@ -167,7 +167,7 @@ const Print:FC<IPrintModal> = ({
             <h1>Service Records</h1>
             <table border={1} style={{ border: "2px solid black" }} cellPadding="5" cellSpacing="0">
             <thead>
-                <tr style={{ fontSize:"10px" }}>
+                <tr style={{ fontSize:"12px" }}>
                 <th>User Name</th>
                 <th>Car Name</th>
                 <th>Plate Number</th>

@@ -71,7 +71,7 @@ const CardDetails: FC<ICardDetails> = ({
                 <Box py={2}>
                     <DialogContentText
                         sx={{
-                            fontSize: '1.1rem',
+                            fontSize: '1.5rem',
                             lineHeight: 1.6,
                             color: theme.palette.text.secondary,
                             mb: 3
