@@ -28,7 +28,8 @@ const ProfileForm =() => {
                         (value) => value?.toString().length === 10
                     ).typeError("Phone number must be a valid number"),
         validId: Yup.string().required("Valid ID Type is required"),
-        validIdNumber: Yup.string().required("Valid ID Number is required"),
+        validIdNumber: Yup.string().matches(/^[a-zA-Z0-9]+$/, "Valid ID Number must contain only letters and numbers")
+          .required("Valid ID Number is required"),
     });
 
     const initialValues: IUserCredentials = {
