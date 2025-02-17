@@ -28,7 +28,7 @@ const NavBar = () => {
         return location.pathname.includes(tab)
     }
 
-    const businessDetails = ["Work Time: Mon-Sat 8 AM - 5 PM",
+    const businessDetails = ["Mon-Sat 8 AM - 5 PM",
         "Angeles City, Pampanga", "+63 9952 121 6974"
     ]
 

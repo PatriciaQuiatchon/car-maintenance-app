@@ -33,7 +33,7 @@ export interface IUserDetails extends IBase {
     address: string,
     validId?: string,
     validIdNumber?: string,
-
+    image?:string,
 }
 
 export interface IVehicle extends IBase {
@@ -81,6 +81,9 @@ export interface IRepaireRequest extends IBase {
     request_status?: string,
     user_notes?: string,
     notes?: string,
+    image?: string
+    updated_at?: string,
+    mechanic_name?:string,
 }
 
 export interface IServiceHistory extends IBase {

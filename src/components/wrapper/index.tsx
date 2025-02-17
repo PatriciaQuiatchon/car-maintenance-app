@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { Box, Drawer, AppBar, Toolbar, Typography, IconButton, Alert } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAuth } from "../../hooks/authProvider";
@@ -33,7 +33,13 @@ const Wrapper:FC<IWrapper> = ({ children }) => {
   const auth = useAuth();
   const isAdmin = auth.role.toLowerCase() === "admin"
   const isCustomer = auth.role.toLowerCase() === "customer"
-
+  
+  const refreshPage = async () => {
+        await auth.getUserProfile();
+  }
+  useEffect(()=> {
+    refreshPage()
+  },[]) 
   const location = useLocation()
   return (
     <Box sx={{ display: "flex" }}>

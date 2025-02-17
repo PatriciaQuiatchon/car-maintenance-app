@@ -21,6 +21,8 @@ import {
     ChartData,
     ArcElement
   } from 'chart.js';
+import RepairRequestsDashboard from "../../components/dashboard/repair-status";
+import { IRepaireRequest } from "../../interface/shared";
 
 interface ICount {
     name: string
@@ -29,6 +31,7 @@ interface ICount {
 interface IData{
     history: ICount[]
     request: ICount[]
+    repaireResults?: IRepaireRequest[]
 }
 
 interface ISales {
@@ -68,7 +71,7 @@ const Dashboard = () => {
     const auth = useAuth();
     const isAdmin = auth.role === "admin"
     const [dashboardData, setData] = useState<IData>({
-        history: [], request: [],
+        history: [], request: [], repaireResults: []
     })
     const [salesData, setDataSales] = useState<IresponseChart>({
         totalSales: [],
@@ -200,7 +203,7 @@ const Dashboard = () => {
                     isLoading || isLoadingSales ? <Loader /> :
                     <>
                     <Grid2 container sx={{ mY:5, }} spacing={3}>
-                        <GridStyled size={{ xs: 12, md:isAdmin ? 6 : 12 }}>
+                        <GridStyled size={{ xs: 12, md:6 }}>
                         {requestChart  ? 
                         <Stack direction="column" display="flex" justifyContent="center" 
                         // sx={{ height: { xs: "40vh", md: "40vh" } }} 
@@ -278,6 +281,14 @@ const Dashboard = () => {
                                 </Stack>
                             }
                         </GridStyled>}
+                    {
+                        !isAdmin && 
+                        <GridStyled size={{ xs: 12 }}>
+                        <RepairRequestsDashboard 
+                            repaireResults={dashboardData.repaireResults || []}
+                        />
+                        </GridStyled>
+                    }
                     {historyChart ? 
                     <GridStyled size={12}>
                         {

@@ -92,7 +92,7 @@ const NavBar = () => {
                             aria-expanded={open ? 'true' : undefined}
                         
                         >
-                            <Avatar sx={{ width: 32, height: 32,   }}>{auth?.user?.name.slice(0,1)}</Avatar>
+                            <Avatar sx={{ width: 32, height: 32,  }} src={auth?.user?.image}>{auth?.user?.image || auth?.user?.name.slice(0,1)}</Avatar>
                         </IconButton>
                     </Tooltip>
                     </Box>

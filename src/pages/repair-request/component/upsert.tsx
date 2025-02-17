@@ -409,6 +409,19 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                                     onChange={handleChange}
                                     className={errors.service_amount && touched.service_amount ? "input-error" : ""}
                                 />
+                                 <FormControl fullWidth>
+                                <ResponsiveDatePickers 
+                                        label="Select a Date"
+                                        isNew={true}
+                                        value={dayjs(values.preferred_schedule)}
+                                        onChange={(newValue) => setFieldValue('preferred_schedule', newValue)} // Update Formik state
+                                        error={touched.preferred_schedule && Boolean(errors.preferred_schedule)} // Show error if touched and invalid
+                                        helperText={touched.preferred_schedule && errors.preferred_schedule}
+                                    />
+                                    { errors.preferred_schedule && touched.preferred_schedule && (
+                                        <span className="error">{errors.preferred_schedule}</span>
+                                    ) }
+                                </FormControl>
                                 {errors.service_amount && touched.service_amount && (
                                     <span className="error">{errors.service_amount}</span>
                                 )}

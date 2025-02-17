@@ -5,12 +5,13 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import ProfileForm from "../../components/profile";
 import PasswordChangeForm from "../../components/password-form";
 import { useAuth } from "../../hooks/authProvider";
+import ProfileImageUpload from "../../components/change-profile";
 
 const Settings = () => {
 
     const [tabValue, setTabValue] = useState<string>("user")
-    const handleChangeTabValue = () => {
-        setTabValue(tabValue === "user" ? "password" : "user")
+    const handleChangeTabValue = (_event: React.SyntheticEvent, newValue: string) => {
+        setTabValue(newValue)
     }
 
     const auth = useAuth();
@@ -51,6 +52,16 @@ const Settings = () => {
                                   }}
                                 
                             />
+                            <Tab label="Change Profile Image" value="image"
+                                 sx={{
+                                    fontWeight: "700",
+                                    color: "grey", // Inactive tab color
+                                    "&.Mui-selected": {
+                                      color: "white", // Active tab color
+                                    },
+                                  }}
+                                
+                            />
                             <Tab label="Password" value="password" 
                                  sx={{
                                     fontWeight: "700",
@@ -69,6 +80,13 @@ const Settings = () => {
                         }
                     }}>
                         <ProfileForm />
+                    </TabPanel>
+                    <TabPanel value="image" sx={{
+                        '&.MuiTabPanel-root': {
+                            padding: 0,
+                        }
+                    }}>
+                        <ProfileImageUpload />
                     </TabPanel>
                     <TabPanel value="password" sx={{
                         '&.MuiTabPanel-root': {

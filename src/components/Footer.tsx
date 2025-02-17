@@ -42,7 +42,7 @@ const Footer = () => {
             Angeles City, Pampanga
           </Typography>
           <Typography variant="body2" paragraph>
-            Work Time: Mon-Sat 8 am - 5 pm
+            Mon-Sat 8 am - 5 pm
           </Typography>
           <Typography variant="body2">
             <Link href="tel:+6312341542451" 
