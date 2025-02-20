@@ -327,7 +327,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                             {!isCustomer && (
                                 <>
                                 
-                                <div className="flex flex-col">
+                                {/* <div className="flex flex-col">
                                     <button 
                                     type="button"
                                     onClick={() => {
@@ -368,7 +368,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                                   </Box>
                                     )}
                                     <ErrorMessage name="image" component="div" className="text-red-600 text-sm" />
-                                </div>
+                                </div> */}
                                 <TextareaAutosize  
                                     name="notes"
                                     id="notes"

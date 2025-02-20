@@ -282,12 +282,12 @@ const Dashboard = () => {
                             }
                         </GridStyled>}
                     {
-                        !isAdmin && 
-                        <GridStyled size={{ xs: 12 }}>
-                        <RepairRequestsDashboard 
-                            repaireResults={dashboardData.repaireResults || []}
-                        />
-                        </GridStyled>
+                        // !isAdmin && 
+                        // <GridStyled size={{ xs: 12 }}>
+                        // <RepairRequestsDashboard 
+                        //     repaireResults={dashboardData.repaireResults || []}
+                        // />
+                        // </GridStyled>
                     }
                     {historyChart ? 
                     <GridStyled size={12}>

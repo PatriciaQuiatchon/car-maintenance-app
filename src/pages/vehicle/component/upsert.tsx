@@ -58,7 +58,7 @@ const VehicleUpsert:FC<IVehicleUpsert> = (props) => {
                 } catch(err){
                     handleError(err as AxiosError)
                 } finally {
-                    setIsSubmitting(!isSubmitting)
+                    setIsSubmitting(false)
                 }
             }}
             >
