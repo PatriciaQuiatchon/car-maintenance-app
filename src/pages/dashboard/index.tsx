@@ -21,7 +21,7 @@ import {
     ChartData,
     ArcElement
   } from 'chart.js';
-import RepairRequestsDashboard from "../../components/dashboard/repair-status";
+// import RepairRequestsDashboard from "../../components/dashboard/repair-status";
 import { IRepaireRequest } from "../../interface/shared";
 
 interface ICount {

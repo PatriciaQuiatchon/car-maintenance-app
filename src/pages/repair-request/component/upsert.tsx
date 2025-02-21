@@ -1,8 +1,8 @@
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import CustomDialog from "../../../components/dialog";
-import { Box, FormControl, InputAdornment, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField } from "@mui/material";
+import {FormControl, InputAdornment, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField } from "@mui/material";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 
 import { FC, useEffect, useState } from "react";
@@ -61,7 +61,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
     const [carOptions, setCarOptions] = useState<IOptions[]>([])
     const [serviceTypeOptions, setServiceTypeptions] = useState<IOptions[]>([])
     const [mechanicOptions, setMechanics] = useState<IOptions[]>([])
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    // const [_imagePreview, setImagePreview] = useState<string | null>(null);
 
     const [editData, setEditData] = useState<IRepairUpdate>({
         mechanic_id: "",
@@ -108,7 +108,7 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
                 ...response.data,
                 service_amount: price
             })
-            setImagePreview(response.data.image)
+            // setImagePreview(response.data.image)
             setServices(
             response.data.service_id.split(', '),
             );
@@ -120,14 +120,14 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
         
     }
 
-    const [isChangeImage, setIsChangeImage] = useState<boolean>(false);
+    // const [_isChangeImage, setIsChangeImage] = useState<boolean>(false);
     
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) {
-        setImagePreview(URL.createObjectURL(file));
-      }
-    };
+    // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //   const file = e.target.files?.[0];
+    //   if (file) {
+    //     setImagePreview(URL.createObjectURL(file));
+    //   }
+    // };
   
     const handleImageUpload = async (file: File | undefined) => {
       // const file = e.target.files?.[0]; 
