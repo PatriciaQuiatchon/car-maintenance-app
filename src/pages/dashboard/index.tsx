@@ -203,7 +203,7 @@ const Dashboard = () => {
                     isLoading || isLoadingSales ? <Loader /> :
                     <>
                     <Grid2 container sx={{ mY:5, }} spacing={3}>
-                        <GridStyled size={{ xs: 12, md:6 }}>
+                        <GridStyled size={{ xs: 12, md: isAdmin ? 6 : 12 }}>
                         {requestChart  ? 
                         <Stack direction="column" display="flex" justifyContent="center" 
                         // sx={{ height: { xs: "40vh", md: "40vh" } }} 
