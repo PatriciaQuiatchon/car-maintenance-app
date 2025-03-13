@@ -2,13 +2,16 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import CustomDialog from "../../../components/dialog";
-import { Stack, TextField } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { FC, useState } from "react";
 import api from "../../../config/api";
 import { IVehicle } from "../../../interface/shared";
 import { useAuth } from "../../../hooks/authProvider";
 import handleError from "../../../components/error";
 import { AxiosError } from "axios";
+// import { ApiClient } from "../../../config/car_api";
+// import toast from "react-hot-toast";
+import { carMakeList, CarTypeList } from "../../../utils/helper";
 
 const currentYear = new Date().getFullYear();
 
@@ -38,6 +41,92 @@ const VehicleUpsert:FC<IVehicleUpsert> = (props) => {
     const { handleCloseModal, handleSucces } = props
 
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+
+    // const [isTypeLoading, setIsTypeLoading] = useState(false)
+    // const [isModelLoading, setIsModelLoading] = useState(false)
+
+    // const [query, setQuery] = useState("")
+
+    // const [make, setMake] = useState("")
+    // const handleSelectChange = async (event: SelectChangeEvent<unknown>, setFieldValue:(field: string, value: any, shouldValidate?: boolean) => Promise<void | FormikErrors<IVehicle>>) => {
+    //     const make = event.target.value as string;
+    //     setMake(make);
+    //     setFieldValue("make", make)
+    // };
+
+    // const [category, setCategory] = useState("")
+    // const handleSelectCategoryChange = async (event: SelectChangeEvent<unknown>, setFieldValue:(field: string, value: any, shouldValidate?: boolean) => Promise<void | FormikErrors<IVehicle>>) => {
+    //     const value = event.target.value as string;
+    //     setCategory(value);
+    //     setFieldValue("type", value)
+
+    // };
+
+    // const [model, setModel] = useState("")
+    // const handleSelectModelChange = async (event: SelectChangeEvent<unknown>) => {
+    //     const value = event.target.value as string;
+    //     setModel(value);
+
+    // };
+    // const [models, setModels] = useState<string[]>([])
+    // const fetchCarModels = async (make: string, category: string) => {
+    //     try {
+    //         setIsModelLoading(true)
+    //         const response = await axios.get(
+    //             `https://public.opendatasoft.com/api/records/1.0/search/?dataset=all-vehicles-model&q=&refine.make=${encodeURIComponent(make)}&refine.category=${encodeURIComponent(category)}`
+    //         );
+            
+    //         const modelList = new Set<string>();
+    //         response.data.records.forEach((record: any) => {
+    //             if (record.fields.model) {
+    //                 modelList.add(record.fields.model);
+    //             }
+    //         });
+    //         setModels(Array.from(modelList))
+
+    //     } catch (error) {
+    //         toast.error("Car API is unavailable. Please, try again later.")
+    //     } finally {
+    //         setIsModelLoading(false)
+    //     }
+    // };
+
+    // const [types, setTypes] = useState<string[]>([])
+    // const fetchCarTypes = async (make: string) => {
+    //     try {
+    //         setIsTypeLoading(true)
+    //         // const response = await axios.get(
+    //         //     `https://public.opendatasoft.com/api/records/1.0/search/?dataset=all-vehicles-model&q=&refine.make=${encodeURIComponent(make)}`
+    //         // );
+    //         const api = new ApiClient();
+    //         const response = await api.get(`/Car_Model_List_${make}?limit=500`)
+    //         console.log({response})
+    //         const categoryList = new Set<string>();
+    //         // response.results.forEach((record: any) => {
+    //         //     if (record.fields.vclass) {
+    //         //         categoryList.add(record.fields.vclass);
+    //         //     }
+    //         // });
+    //         setTypes(Array.from(categoryList));
+
+    //     } catch (error) {
+    //         toast.error("Car API is unavailable. Please, try again later.")
+    //     } finally {
+    //         setIsTypeLoading(false)
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     if(make && category) {
+    //         fetchCarModels(make, category)
+    //     }
+    // }, [make,category])
+
+    // useEffect(() => {
+    //     if(make) {
+    //         fetchCarTypes(make)
+    //     }
+    // }, [make])
     return (
         <Formik
             key={JSON.stringify(initialData)} 
@@ -76,26 +165,37 @@ const VehicleUpsert:FC<IVehicleUpsert> = (props) => {
                             isSubmitButtonDisabled={!(dirty && isValid)}
                         >
                         <Stack className="form-row" spacing={2} mb={2}>
-                            <TextField
-                                size="medium"
-                                hiddenLabel
-                                type="name"
-                                name="name"
+                            <FormControl fullWidth>
+                            <InputLabel id="name">Enter Brand Name</InputLabel>
+                            <Select
+                                labelId="name"
                                 id="name"
-                                placeholder="Enter Brand Name"
-                                sx={{
-                                    color: "white",
-                                    backgroundColor: "white"
-                                }}
+                                name="name"
                                 value={values.name}
+                                // onChange={(e) => handleSelectChange(e, setFieldValue)}
                                 onChange={handleChange}
-                                error={errors.name && touched.name || undefined}
-                                helperText={errors.name && touched.name && errors.name}
                                 onBlur={handleBlur}
-                                className={errors.name && touched.name ? "input-error" : ""}
-                            />
-                            
-                            <TextField
+                                label="Enter Brand Name"
+                                error={errors.name && touched.name || undefined}
+                                sx={{ textAlign: "start" }}
+                                MenuProps={{
+                                    PaperProps: {
+                                        sx: {
+                                            maxHeight: 250, // Sets minimum height of the dropdown
+                                            mt: 1, // Ensures it appears below the select field
+                                        }
+                                    }
+                                }}
+                            >
+                                {carMakeList.map((item) => (
+                                    <MenuItem key={item} value={item}>
+                                        {item}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+
+                            </FormControl>
+                            {/* <TextField
                                 type="text"
                                 name="type"
                                 id="type"
@@ -110,8 +210,37 @@ const VehicleUpsert:FC<IVehicleUpsert> = (props) => {
                                 value={values.type}
                                 onChange={handleChange}
                                 className={errors.type && touched.type ? "input-error" : ""}
-                            />
-                            
+                            /> */}
+                            <FormControl fullWidth>
+                            <InputLabel id="type">Enter Car Type</InputLabel>
+                            <Select
+                                labelId="type"
+                                id="type"
+                                value={values.type}
+                                name="type"
+                                onChange={handleChange}
+                                // onChange={(e) => handleSelectCategoryChange(e, setFieldValue)}
+                                onBlur={handleBlur}
+                                label="Enter Car type"
+                                error={errors.name && touched.name || undefined}
+                                sx={{ textAlign: "start" }}
+                                MenuProps={{
+                                    PaperProps: {
+                                        sx: {
+                                            maxHeight: 250, // Sets minimum height of the dropdown
+                                            mt: 1, // Ensures it appears below the select field
+                                        }
+                                    }
+                                }}
+                            >
+                                {CarTypeList.map((item) => (
+                                        <MenuItem key={item} value={item}>
+                                            {item}
+                                        </MenuItem>
+                                    ))
+                                }
+                            </Select>
+                            </FormControl>
                             <TextField
                                 label="Model"
                                 error={errors.model && touched.model || undefined}
@@ -124,7 +253,42 @@ const VehicleUpsert:FC<IVehicleUpsert> = (props) => {
                                 placeholder="Enter Car Model"
                                 className="form-control"
                             />
-                            
+                            {/* <FormControl fullWidth>
+                            <InputLabel id="model">Enter Car Model</InputLabel>
+                            <Select
+                                labelId="model"
+                                id="model"
+                                value={values.model}
+                                name="model"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                label="Enter Car model"
+                                error={errors.name && touched.name || undefined}
+                                sx={{ textAlign: "start" }}
+                                MenuProps={{
+                                    PaperProps: {
+                                        sx: {
+                                            maxHeight: 250, // Sets minimum height of the dropdown
+                                            mt: 1, // Ensures it appears below the select field
+                                        }
+                                    }
+                                }}
+                            >
+                                {isModelLoading ? (
+                                    <MenuItem disabled>
+                                        <CircularProgress size={20} sx={{ marginRight: 1 }} /> Loading...
+                                    </MenuItem>
+                                ) : (
+                                    models.map((item) => (
+                                        <MenuItem key={item} value={item}>
+                                            {item}
+                                        </MenuItem>
+                                    ))
+                                )
+                                }
+                            </Select>
+
+                            </FormControl> */}
                             <TextField
                                 label="Year"
                                 error={errors.year && touched.year || undefined}

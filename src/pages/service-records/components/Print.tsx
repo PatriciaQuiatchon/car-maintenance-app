@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import { IServiceHistory } from "../../../interface/shared";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import Logo from '../../../assets/logo.jpg'
 
 interface DateRange {
     startDate: Date | null;
@@ -164,6 +165,9 @@ const Print:FC<IPrintModal> = ({
             </Button>
             </DialogActions>
             <div id="printable-content" style={{ display: 'none' }}>
+            <img src={Logo} style={{
+                width: "auto", height: "50px"
+            }} />
             <h1>Service Records</h1>
             <table border={1} style={{ border: "2px solid black" }} cellPadding="5" cellSpacing="0">
             <thead>
