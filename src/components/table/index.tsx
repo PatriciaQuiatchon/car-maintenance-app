@@ -42,7 +42,7 @@ const StyledTableCell = styled(TableCell)(({ }) => ({
   fontWeight: 'bold',
   backgroundColor: grey[500],
   color: 'white',
-  textAlign: 'left',
+  textAlign: 'center',
 }));
 
 interface CustomRowProps {
@@ -179,7 +179,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                     onClick={(event)=> {
                       statusOptions.includes(String(cell))  && event.stopPropagation();
                     }}
-                    align="center" sx={{ display: cellClass, color: statusOptions.includes(String(cell)) ? formatColor(String(cell)) : "" }}>
+                    align="left" sx={{ display: cellClass, color: statusOptions.includes(String(cell)) ? formatColor(String(cell)) : "" }}>
                     {
                       statusOptionsNoDone.includes(String(cell)) ? 
                         auth.role === "customer"  ?
@@ -193,7 +193,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                 )})}
                 {(hasEditAccess && props.type !== "IServiceHistory") && ( <TableCell onClick={(event) => {
                               event.stopPropagation();
-                }} sx={{ display:"flex", justifyContent: "center" }}>
+                }} sx={{ display:"flex", justifyContent: "left" }}>
                   {(auth.role === "mechanic") ? false : (!(auth.role !== "admin" && selectedStatus === "DONE")) && <Tooltip title="Edit" placement="top">
                     <Button
                       variant='contained'
@@ -233,7 +233,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
 
             return (
               <Grid2 size={{ xs: 12, sm: auth.role === "admin" ? 12 : 6  }} key={rowIndex}>
-                <Card key={rowIndex} sx={{height: "auto", display: "flex", justifyContent: "center", alignItems: "center", padding:"5px" }}>
+                <Card key={rowIndex} sx={{height: "auto", display: "flex", justifyContent: "left", alignItems: "left", padding:"5px" }}>
                   <CardContent sx={{ textAlign: "left" }}>
                     <Stack spacing={1.5}>
                     {headers.slice(1).map((header, index) => {
@@ -261,7 +261,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                       );
                     })}
                   {(hasEditAccess && props.type !== "IServiceHistory") && (
-                    <CardActions sx={{ display: "flex", justifyContent: "center",  marginTop: 'auto', justifyItems: "flex-end" }}>
+                    <CardActions sx={{ display: "flex", justifyContent: "left",  marginTop: 'auto', justifyItems: "flex-end" }}>
                       {!(auth.role !== "admin" && selectedStatus === "DONE ") && (<Button
                         startIcon={<EditIcon />}
                         variant="contained"
