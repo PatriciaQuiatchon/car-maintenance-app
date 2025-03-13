@@ -130,7 +130,7 @@ const Service = () => {
             <Grid2 spacing={1} container padding={0} margin={0} sx={{ display: 'flex', width:"100%", justifyContent: 'end' }}>
                 <Grid2 size={ {xs: 12, sm: 12, md: auth.role === "customer" ? 6 : 4} }>
                     <Typography textAlign="left" variant="h5" textTransform="uppercase" fontWeight={700} color="white" >
-                    Services Offers
+                    Service Offers
                     </Typography>
 
                 </Grid2>

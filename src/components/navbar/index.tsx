@@ -66,7 +66,7 @@ const NavBar = () => {
                         startIcon={<GrServices />}
                         sx={{ backgroundColor: checkCurrentTab("services") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/services") }}
-                    >Services Offers</StyledButton>
+                    >Service Offers</StyledButton>
                     <StyledButton 
                         startIcon={<GiAutoRepair />}
                         sx={{ backgroundColor: checkCurrentTab("repair") ? "#1f222a" : "" }}
@@ -81,7 +81,7 @@ const NavBar = () => {
                         startIcon={<FaHistory />}
                         sx={{ backgroundColor: checkCurrentTab("service-records") ? "#1f222a" : "" }}
                         onClick={() => { navigate("/service-records") }}
-                    >Service Records</StyledButton>
+                    >Transactions</StyledButton>
                     <Box sx={{ justifyContent: "flex-end", display:"flex", width:"100px", paddingRight:"20px"}}>
                     <Tooltip title="Account settings" sx={{ justifyContent: "center", display:"flex" }}>
                         <IconButton

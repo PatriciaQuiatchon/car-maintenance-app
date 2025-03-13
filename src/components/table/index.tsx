@@ -42,7 +42,7 @@ const StyledTableCell = styled(TableCell)(({ }) => ({
   fontWeight: 'bold',
   backgroundColor: grey[500],
   color: 'white',
-  textAlign: 'center',
+  textAlign: 'left',
 }));
 
 interface CustomRowProps {
