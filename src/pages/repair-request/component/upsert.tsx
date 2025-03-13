@@ -78,7 +78,11 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
     const fetchData = async () => {
         try {
             setIsLoading(!isLoading)
-            const response = await api.get(`/api/service-requests/${auth.user?.user_id}`);
+            let apiUrl = `/api/service-requests/${auth.user?.user_id}`
+            if (editData.request_id){
+                apiUrl += `/${editData.request_id}`
+            }
+            const response = await api.get(apiUrl);
             const { mechanics, services, vehicles } = response.data
             const options = vehicles.map((item:IVehicle) => ({ label: `${item.name} ${item.model} ${item.plate_number}`, value: item.vehicle_id }))
             setCarOptions(options.filter((item: any) => item.value === initialData.vehicle_id || !pending.includes(item.value)))
@@ -146,11 +150,10 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
     };
     
     useEffect(() => {
-        if (isModalOpen) {
+        if (isModalOpen || editData.request_id) {
             fetchData()
         }
-    }, [isModalOpen])
-
+    }, [isModalOpen, editData.request_id])
     return (
         <Formik
             initialValues={editData}
@@ -185,9 +188,16 @@ const RepaireRequestUpsert:FC<IRepaireRequestUpsert> = (props) => {
             {(formik) => {
                 const { errors, touched, isValid, dirty, values, handleSubmit, handleBlur, handleChange, setFieldValue } = formik;
                 const handleSelectChange = (event: SelectChangeEvent<typeof services>) => {
+                    
                     const {
                     target: { value },
                     } = event;
+                    
+                    // if (typeof value !== 'string' && value.length > 5) {
+                    //     toast.success("")
+                    //     return; // Prevent selecting more than 5 items
+                    // }
+
                     setServices(
                     typeof value === 'string' ? value.split(',') : value,
                     );

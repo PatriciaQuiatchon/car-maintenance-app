@@ -40,7 +40,8 @@ const RepaireRequest = () => {
     }
     
     const [repaireRequests, setRepaireRequests] = useState<IRepaireRequestDetails[]>([])
-    const [serviceData, setServiceData] = useState<IService[]>([])
+    const [_serviceData, setServiceData] = useState<IService[]>([])
+    const [allServiceData, setAllServiceData] = useState<IService[]>([])
     const [repaireRequest, setRepaireRequest] = useState<IRepaireRequestDetails>(initial)
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDelete, setIsDelete] = useState<boolean>(false);
@@ -57,6 +58,7 @@ const RepaireRequest = () => {
             const response = await api.get(href);
             setRepaireRequests(response.data?.requests)
             setServiceData(response.data?.services)
+            setAllServiceData(response.data?.allServices)
         } catch (error){
             handleError(error as AxiosError); 
         } finally {
@@ -137,7 +139,7 @@ const RepaireRequest = () => {
 
     const generateServiceName = (serviceIds: string) => {
         const dataSplit = serviceIds.split(", ")
-        const serviceNames = dataSplit.map(item => serviceData.find(data => data.service_id === item)?.name || "")
+        const serviceNames = dataSplit.map(item => allServiceData.find(data => data.service_id === item)?.name || "")
         return serviceNames.join(", ")
     }
     const requestRows = repaireRequests?.map(item => {

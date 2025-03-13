@@ -194,7 +194,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                 {(hasEditAccess && props.type !== "IServiceHistory") && ( <TableCell onClick={(event) => {
                               event.stopPropagation();
                 }} sx={{ display:"flex", justifyContent: "center" }}>
-                  {!(auth.role !== "admin" && selectedStatus === "DONE") && <Tooltip title="Edit" placement="top">
+                  {(auth.role === "mechanic") ? false : (!(auth.role !== "admin" && selectedStatus === "DONE")) && <Tooltip title="Edit" placement="top">
                     <Button
                       variant='contained'
                       color='info'
@@ -205,7 +205,7 @@ const CustomTable = <T extends IBase>(props: ITable<T>) => {
                       }
                     ><EditIcon /></Button>
                   </Tooltip>}
-                  {!(auth.role === "customer" && (props.type === "IService" || props.type === "IVehicle")) && <Tooltip title="Remove" placement="top">
+                  {!((auth.role === "customer" || auth.role === "mechanic") && (props.type === "IService" || props.type === "IVehicle")) && <Tooltip title="Remove" placement="top">
                     <Button
                       variant='contained'
                       sx={{ backgroundColor: "#b10000" }}
